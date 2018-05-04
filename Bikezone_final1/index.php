@@ -254,9 +254,9 @@ include_once 'db_connection.php';
 
                         </div>
                          <div class="col-xl-3 col-sm-3 search-col relative">
-                            <select id="autocomplete-ajax" class="form-control" name="BikeCategory">
+                            <select id="autocomplete-ajax" class="form-control" name="BikeCategory" >
                             
-                              <option> Select Category</option>
+                              <option value=""> Select Category</option>
                               <option value="Used Bikes"> Used Bikes</option>
                               <option value="New Bikes"> New Bikes</option>
                               <option value="Scooters"> Scooters</option>
@@ -264,8 +264,8 @@ include_once 'db_connection.php';
                              </select>
                         </div>
                        <div class="col-xl-3 col-sm-3 search-col relative">
-                     <select class="form-control" name="Brand" onchange="fetch_select(this.value);" >
-                  <option> Select Brand </option>
+                     <select class="form-control" name="Brand" onchange="fetch_select(this.value);" placeholder="Select Brand">
+                   <option value=""> Select Brand  </option> 
                     <?php
                     include "db_connection.php";
 
@@ -279,7 +279,7 @@ include_once 'db_connection.php';
                  </div>
                  <div class="col-xl-3 col-sm-3 search-col relative">
     <select name="Model" id="new_select" class="form-control">
-    <option>Select Model</option>
+    <option value="">Select Model</option>
     </select>
                      </div>
                      
@@ -299,7 +299,7 @@ include_once 'db_connection.php';
                         </div>
                         <div class="col-xl-3 col-sm-3 search-col relative">
                             <select id="autocomplete-ajax" class="form-control " name="State" onchange="fetch_selecting(this.value);">                            
-                              <option> Select State</option>
+                              <option value="">Select State</option>
                                   <?php
                                  
                                   $select=mysql_query("SELECT State FROM usedbikes UNION SELECT State FROM dealerbikes");
@@ -312,13 +312,11 @@ include_once 'db_connection.php';
                         </div>
                          <div class="col-xl-3 col-sm-3 search-col relative">
                             <select id="new_select2" class="form-control " name="City">
-                            
-                              <option> Select City</option>
-                                 
+                            <option value="">Select City</option>                                
                              </select>
                         </div>
                         </div>
-    <br>
+                    <br>
                     <div class="row">
                         <div class="col-xl-12 col-sm-12 search-col">
                             <!-- <button class="btn btn-primary btn-search btn-block"><i

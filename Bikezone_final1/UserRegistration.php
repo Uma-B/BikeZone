@@ -29,6 +29,7 @@ if(isset($_SESSION['usr_id'])) {
    }
    else
    {
+    echo mysql_error();
    ?>
 <script>alert('error in adding Record');</script>
 <?php

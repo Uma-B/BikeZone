@@ -3,15 +3,10 @@
 <?php
     session_start();
     include "db_connection.php";
-    if(isset($_GET['userid']) & !empty($_GET['userid'])){
-        $usedbikeid = $_GET['usedbikeid'];
-            $userid = $_GET['userid'];           
-            $brand = $_GET['brand'];
-            $BikeCategory = $_GET['category'];
-            
-             $show=mysql_query("SELECT UsedBikeId, UserId, BikeCategory,Brand, Model, Year, KilometreDriven, Transmission, FuelType, Stroke, EngineSize, Description, Details, Prize, UsedBikeImage1, UsedBikeImage2, UsedBikeImage3, UsedBikeImage4, UserName, ContactNumber, State, City, Location, PostalCode, Status, Date FROM usedbikes  WHERE UsedBikeId='$usedbikeid' AND UserId='$userid' AND Brand = '$brand' AND BikeCategory='$BikeCategory' 
-                UNION 
-                SELECT DealerBikeId, DealerId, BikeCategory,Brand, Model, Year, Transmission, FuelType, Stroke, EngineSize, Description, Details, Prize, KilometreDriven, DealerBikeImage1, DealerBikeImage2, DealerBikeImage3, DealerBikeImage4, Username, ContactNumber, State, City, Location, PostalCode, Status, Date FROM dealerbikes  WHERE DealerBikeId='$usedbikeid' AND DealerId='$userid' AND Brand = '$brand' AND BikeCategory='$BikeCategory' ");
+    if(isset($_GET['id']) & !empty($_GET['id'])){
+            $items = $_GET['id'];
+            echo  $items ;
+             $show=mysql_query("SELECT * FROM usedbikes WHERE UsedBikeId='$items'");
                 $res=mysql_fetch_array($show);
 
             //$_SESSION['cart'] = $items;
@@ -188,13 +183,13 @@
                     <nav aria-label="breadcrumb" role="navigation" class="pull-left">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#"><i class="icon-home fa"></i></a></li>
-                            <li class="breadcrumb-item"><a href="index.php">All Ads</a></li>
+                            <li class="breadcrumb-item"><a href="category.html">All Ads</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Category name</li>
                         </ol>
                     </nav>
 
 
-                    <div class="pull-right backtolist"><a href="index.php"> <i
+                    <div class="pull-right backtolist"><a href="#"> <i
                             class="fa fa-angle-double-left"></i> Back to Results</a></div>
 
                 </div>
@@ -337,14 +332,7 @@
                                         <h3 class="no-margin"><?php echo $res['UserName'];?></h3>
                                         <p>Location: <strong><?php echo $res['Location'];?></strong>
                                         </p>
-                                        <p>Posted Date: <strong><?php 
-                                        $date=mysql_query("select DATE(Date) as date from usedbikes");
-                                        if($row=mysql_fetch_array($date)){
-                                            $cr_date=date_create($row['date']);
-                                            $for_date=date_format($cr_date,'d-m-Y');
-                                        }
-                                        echo $for_date;
-                                        ?></strong>
+                                        <p>Posted Date: <strong><?php echo $res['Date'];?></strong>
                                         </p>
                                     </div>
                                     <div class="user-ads-action"><a href="#contactAdvertiser" data-toggle="modal"

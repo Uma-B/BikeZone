@@ -10,7 +10,7 @@ include_once 'db_connection.php';
 //check if form is submitted
 if (isset($_POST['login'])) {
 
-    $email = mysqli_real_escape_string($_POST['email']);
+    $email = mysql_real_escape_string($_POST['email']);
     $password = mysql_real_escape_string($_POST['password']);
     $result = mysql_query("SELECT * FROM userregistration WHERE MailId = '" . $email. "' and Password = '" . $password . "' and Status = '".'Unblock'."'");
 
