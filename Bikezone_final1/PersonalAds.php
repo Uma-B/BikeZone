@@ -2,7 +2,7 @@
 session_start();
 include "db_connection.php";
 
-if(isset($_SESSION['Keyword'])) {
+if(isset($_SESSION['BikeCategory'])) {
 
         $Keyword=$_SESSION['Keyword'];
         $BikeCategory=$_SESSION['BikeCategory'];

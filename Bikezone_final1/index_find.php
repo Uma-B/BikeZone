@@ -3,27 +3,51 @@ session_start();
 
 include "db_connection.php";
 
-if (isset($_POST['BtnSubmit'])){
-       $Keyword=$_POST['Keyword'];
-       $BikeCategory=$_POST['BikeCategory'];
-       $Brand=$_POST['Brand'];
-       $Model=$_POST['Model'];
-       $State=$_POST['State'];
-       $City=$_POST['City'];
-       $Prize_Minimum=$_POST['Prize_Minimum'];
-       $Prize_Maximum=$_POST['Prize_Maximum'];     
-}
+ // if(isset($_POST['BtnSubmit'])) {
 
-else{
-        $Keyword="";
-        $BikeCategory="";
-        $Brand="";
-        $Model="";
-        $State="";
-        $City="";
-        $Prize_Minimum="";
-        $Prize_Maximum="";
-}
+ //       $_SESSON['Keyword']=$_POST['Keyword'];
+ //       $_SESSION['BikeCategory']=$_POST['BikeCategory'];
+ //       $_SESSION['Brand']=$_POST['Brand'];
+ //       $_SESSION['Model']=$_POST['Model'];
+ //       $_SESSION['State']=$_POST['State'];
+ //       $_SESSION['City']=$_POST['City'];
+ //       $_SESSION['Prize_Minimum']=$_POST['Prize_Minimum'];
+ //       $_SESSION['Prize_Maximum']=$_POST['Prize_Maximum']; 
+
+ if(isset($_SESSION['BikeCategory'])) {
+
+    $Keyword = $_SESSION['Keyword'];
+    $BikeCategory= $_SESSION['BikeCategory'];
+    $Brand = $_SESSION['Brand'];
+    $Model = $_SESSION['Model'];
+    $State = $_SESSION['State'];
+    $City = $_SESSION['City'];
+    $Prize_Minimum = $_SESSION['Prize_Minimum'];
+    $Prize_Maximum= $_SESSION['Prize_Maximum'];
+        
+       }
+
+// if (isset($_POST['BtnSubmit'])){
+//        $Keyword=$_POST['Keyword'];
+//        $BikeCategory=$_POST['BikeCategory'];
+//        $Brand=$_POST['Brand'];
+//        $Model=$_POST['Model'];
+//        $State=$_POST['State'];
+//        $City=$_POST['City'];
+//        $Prize_Minimum=$_POST['Prize_Minimum'];
+//        $Prize_Maximum=$_POST['Prize_Maximum'];     
+// }
+
+// else{
+//         $Keyword="";
+//         $BikeCategory="";
+//         $Brand="";
+//         $Model="";
+//         $State="";
+//         $City="";
+//         $Prize_Minimum="";
+//         $Prize_Maximum="";
+// }
         // $Keyword=$_SESSION['Keyword'];
         // $BikeCategory=$_SESSION['BikeCategory'];
         // $Brand=$_SESSION['Brand'];
@@ -110,6 +134,16 @@ $filterQuery = $filterQuery1." UNION ".$filterQuery2;
     $_SESSION['City'] = $City;
     $_SESSION['Prize_Minimum'] = $Prize_Minimum;
     $_SESSION['Prize_Maximum'] = $Prize_Maximum;
+
+    $_SESSION['Keyword'] = $_SESSION['Keyword'];
+    $_SESSION['BikeCategory'] = $_SESSION['BikeCategory'];
+    $_SESSION['Brand'] = $_SESSION['Brand'];
+    $_SESSION['Model'] = $_SESSION['Model'];
+     $_SESSION['State'] = $_SESSION['State'];
+    $_SESSION['City'] = $_SESSION['City'];
+    $_SESSION['Prize_Minimum'] = $_SESSION['Prize_Minimum'];
+    $_SESSION['Prize_Maximum'] = $_SESSION['Prize_Maximum'];
+
 
     // $_SESSION['Keyword'] = $_SESSION['Keyword'];
     // $_SESSION['BikeCategory'] = $_SESSION['BikeCategory'];
@@ -239,7 +273,7 @@ $filterQuery = $filterQuery1." UNION ".$filterQuery2;
                         </li> -->
                         <li class="dropdown no-arrow nav-item"><a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
 
-                            <span>User Name</span> <i class="icon-user fa"></i> <i class=" icon-down-open-big fa"></i></a>
+                            </a>
                             <ul
                                     class="dropdown-menu user-menu dropdown-menu-right">
                                 <!-- <li class="active dropdown-item"><a href="account-home.html"><i class="icon-home"></i> Personal Home
@@ -267,8 +301,48 @@ $filterQuery = $filterQuery1." UNION ".$filterQuery2;
                                 </li>
                             </ul>
                         </li>
-                        <li class="postadd nav-item"><a class="btn btn-block   btn-border btn-post btn-danger nav-link" href="post-ads.html">Sell Your Bike</a>
+                        <?php if (isset($_SESSION['usr_name'])) { ?>
+                         <li class="dropdown no-arrow nav-item"><a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+
+                            <span><p class="navbar-text">Signed in as <?php echo $_SESSION['usr_name']; ?></p></span> <i class="icon-user fa"></i> <i class=" icon-down-open-big fa"></i></a>
+                            <ul
+                                    class="dropdown-menu user-menu dropdown-menu-right">
+                                <li class="dropdown-item"><a href="logout.php"><i class=" icon-logout "></i> Log out </a>
+                                </li>
+                            </ul>
                         </li>
+                        <li><div class="btn-group">
+  <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" style="height: 45px; width: 120px;">
+    Sell your bike
+  </button>
+  <div class="dropdown-menu">
+    <a class="dropdown-item" href="customer_post.php">Customer</a>
+    <a class="dropdown-item" href="dealer_post.php">Dealer</a>
+    
+  </div>
+</div></li>
+                <?php } else { ?>
+                <li><div class="btn-group">
+  <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" style="height: 45px; width: 120px;">
+    Login
+  </button>
+  <div class="dropdown-menu">
+    <a class="dropdown-item" href="UserLogin.php">User</a>
+    <a class="dropdown-item" href="CompanyLogin.php">Company</a>
+    
+  </div>
+</div>  </li>
+                <li><div class="btn-group">
+  <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" style=" height: 45px; width: 120px; margin-left: 20px;">
+    Register
+  </button>
+  <div class="dropdown-menu">
+    <a class="dropdown-item" href="UserRegistration.php">User</a>
+    <a class="dropdown-item" href="delear.php">Company</a>
+    
+  </div>
+</div></li>
+                <?php } ?>
                         <li class="dropdown  lang-menu nav-item">
                             <!-- <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
                                 <span class="lang-title">EN</span>

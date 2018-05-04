@@ -1,6 +1,42 @@
 <?php
 session_start();
 include_once 'db_connection.php';
+
+if (isset($_POST['BtnSubmit'])){
+       $Keyword=$_POST['Keyword'];
+       $BikeCategory=$_POST['BikeCategory'];
+       $Brand=$_POST['Brand'];
+       $Model=$_POST['Model'];
+       $State=$_POST['State'];
+       $City=$_POST['City'];
+       $Prize_Minimum=$_POST['Prize_Minimum'];
+       $Prize_Maximum=$_POST['Prize_Maximum'];
+
+$_SESSION['Keyword'] = $Keyword;
+    $_SESSION['BikeCategory'] = $BikeCategory;
+    $_SESSION['Brand'] = $Brand;
+    $_SESSION['Model'] = $Model;
+     $_SESSION['State'] = $State;
+    $_SESSION['City'] = $City;
+    $_SESSION['Prize_Minimum'] = $Prize_Minimum;
+    $_SESSION['Prize_Maximum'] = $Prize_Maximum;
+
+    header("Location: index_find.php");
+}
+
+else{
+        $Keyword="";
+        $BikeCategory="";
+        $Brand="";
+        $Model="";
+        $State="";
+        $City="";
+        $Prize_Minimum="";
+        $Prize_Maximum="";
+}
+
+
+ 
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -244,7 +280,7 @@ include_once 'db_connection.php';
                     <h1 class="intro-title"> Find your next bike </h1>
 
                   
-                    <form action="index_find.php" method="post" name="form">
+                    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" name="form">
                     <div class="row">
                         <div class="col-xl-3 col-sm-3 search-col relative locationicon">
                             <!-- <i class="icon-location-2 icon-append"></i> -->
