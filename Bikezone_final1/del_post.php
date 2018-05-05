@@ -1,4 +1,4 @@
-﻿<?php 
+<?php 
 
  include "db_connection.php";
 
@@ -20,10 +20,10 @@ else
       echo $UserId;
 
 
-      $update=mysql_query("UPDATE usedbikes SET Status='$b' WHERE UsedBikeId='{$_POST['x1']}'");
-      header("Location: cus_post.php?UserId=".$UserId);
+      $update=mysql_query("UPDATE dealerbikes SET Status='$b' WHERE DealerBikeId='{$_POST['x1']}'");
+      header("Location: del_post.php?UserId=".$UserId);
     
-/*("Refresh: 0; url=cus_post.php?UserId=".$id);*/
+
     }
 
 ?>
@@ -112,10 +112,7 @@ else
                 </button>
 
 
-                <!-- <button
-                        class="flag-menu country-flag d-block d-md-none btn btn-secondary hidden pull-right"
-                        href="#select-country" data-toggle="modal"> <span class="flag-icon flag-icon-us"></span>  <span class="caret"></span>
-                </button> -->
+             
 
             </div>
 
@@ -180,7 +177,7 @@ else
       if(isset($_GET['UserId']) & !empty($_GET['UserId'])){
        $items = $_GET['UserId'];
        }
-      $sql = "SELECT * FROM usedbikes WHERE UserId='$items'";
+      $sql = "SELECT * FROM dealerbikes WHERE DealerId='$items'";
       $result =mysql_query($sql);
 
         $row=mysql_fetch_array($result);
@@ -190,18 +187,18 @@ else
 
 
 <div class="container">
-
-  <div class="jumbotron">
- 
-          
-  <h2 style="color:white;text-align :center">Custome Name : <?php echo $row['UserName'];?> <br><br> Custome Post Count : 
+  <div class="jumbotron">  
+  <h2 style="color:white;text-align :center">Custome Name : <?php echo $row['Username'];?> <br><br> Custome Post Count : 
 <?php $num_rows=mysql_num_rows($result); echo $num_rows; ?>
  </h2>
+ <br>
+</div>
 </div>
 
-<a href="view_customer.php">
+<a href="view_dealer.php">
 <button style="float: right;" type="button" class="btn btn-success">Back</button>
 </a>
+
 
    <div class="table-responsive"> 
    <table class="table table-hover" style="background-color :white">
@@ -235,7 +232,7 @@ else
       if(isset($_GET['UserId']) & !empty($_GET['UserId'])){
        $items = $_GET['UserId'];
        }
-      $sql = "SELECT * FROM usedbikes WHERE UserId='$items'";
+      $sql = "SELECT * FROM dealerbikes WHERE DealerId='$items'";
       $result = $conn->query($sql);
       if ($result->num_rows > 0) {
     while($res = $result->fetch_assoc()) {
@@ -258,7 +255,7 @@ else
             <td><?php echo $res['Prize'];?></td>
         
 
- <td><?php echo '<img alt="no img is found" src="data:image/jpeg;base64,'.base64_encode($res['UsedBikeImage1']).'"/>'
+ <td><?php echo '<img alt="no img is found" src="data:image/jpeg;base64,'.base64_encode($res['DealerBikeImage1']).'"/>'
                                 ?></td>
              
 
@@ -278,7 +275,7 @@ else
 
                   <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post"  onSubmit="window.location.reload()">
         <input type="hidden" name="x" value="<?php echo $res['Status']; ?>"><br>
-        <input type="hidden" name="x1" value="<?php echo $res['UsedBikeId']; ?>"><br>
+        <input type="hidden" name="x1" value="<?php echo $res['DealerBikeId']; ?>"><br>
         <input type="hidden" name="send" value="<?php echo $items; ?>"><br>
    <td>
 
@@ -292,13 +289,14 @@ else
            <?php
                     }
             } else {
-                echo "0 results";
+                echo "<h1>No Post</h1>";
             }
             $conn->close();
       ?>    
     </tbody>
-  </table></div>
-</form>
+  </table>
+  
+</div>
 </div>
 
 </div>

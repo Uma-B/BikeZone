@@ -13,6 +13,7 @@ include "db_connection.php";
  //       $_SESSION['City']=$_POST['City'];
  //       $_SESSION['Prize_Minimum']=$_POST['Prize_Minimum'];
  //       $_SESSION['Prize_Maximum']=$_POST['Prize_Maximum']; 
+GLOBAL $filterQuery;
 
  if(isset($_SESSION['BikeCategory'])) {
 
@@ -26,37 +27,6 @@ include "db_connection.php";
     $Prize_Maximum= $_SESSION['Prize_Maximum'];
         
        }
-
-// if (isset($_POST['BtnSubmit'])){
-//        $Keyword=$_POST['Keyword'];
-//        $BikeCategory=$_POST['BikeCategory'];
-//        $Brand=$_POST['Brand'];
-//        $Model=$_POST['Model'];
-//        $State=$_POST['State'];
-//        $City=$_POST['City'];
-//        $Prize_Minimum=$_POST['Prize_Minimum'];
-//        $Prize_Maximum=$_POST['Prize_Maximum'];     
-// }
-
-// else{
-//         $Keyword="";
-//         $BikeCategory="";
-//         $Brand="";
-//         $Model="";
-//         $State="";
-//         $City="";
-//         $Prize_Minimum="";
-//         $Prize_Maximum="";
-// }
-        // $Keyword=$_SESSION['Keyword'];
-        // $BikeCategory=$_SESSION['BikeCategory'];
-        // $Brand=$_SESSION['Brand'];
-        // $Model=$_SESSION['Model'];
-        // $Prize_Minimum=$_SESSION['Prize_Minimum'];
-        // $Prize_Maximum=$_SESSION['Prize_Maximum'];
-        // $State=$_SESSION['State'];
-        // $City=$_SESSION['City'];
-
 
 $filterQuery1 = "select
   usedbikes.UsedBikeId as UsedBikeId,
@@ -92,6 +62,53 @@ from
 where
 ";
 
+if($Keyword != null){
+    $filterQuery = "select
+  usedbikes.UsedBikeId as UsedBikeId,
+  usedbikes.BikeCategory as BikeCategory,
+  usedbikes.UsedBikeImage1 as UsedBikeImage1,
+  usedbikes.Brand as Brand,
+  usedbikes.Model as Model,
+  usedbikes.KilometreDriven as KilometreDriven,
+  usedbikes.Location as Location,
+  usedbikes.UserId as UserId,
+  usedbikes.UserName as UserName,
+  usedbikes.ContactNumber as ContactNumber,
+  usedbikes.Prize as Prize
+from
+  usedbikes
+where
+  usedbikes.BikeCategory LIKE '$Keyword'
+  OR usedbikes.Brand LIKE '$Keyword'
+  OR usedbikes.Model LIKE '$Keyword'
+  OR usedbikes.State LIKE '$Keyword'
+  OR usedbikes.City LIKE '$Keyword'
+UNION
+select
+  dealerbikes.DealerBikeId as UsedBikeId,
+  dealerbikes.BikeCategory as BikeCategory,
+  dealerbikes.DealerBikeImage1 as BikeImage1,
+  dealerbikes.Brand as Brand,
+  dealerbikes.Model as Model,
+  dealerbikes.KilometreDriven as KilometreDriven,
+  dealerbikes.Location as Location,
+  dealerbikes.DealerId as UserId,
+  dealerbikes.UserName as UserName,
+  dealerbikes.ContactNumber as ContactNumber,
+  dealerbikes.Prize as Prize
+from
+  dealerbikes
+where
+  dealerbikes.BikeCategory LIKE '$Keyword'
+  OR dealerbikes.Brand LIKE '$Keyword'
+  OR dealerbikes.Model LIKE '$Keyword'
+  OR dealerbikes.State LIKE '$Keyword'
+  OR dealerbikes.City LIKE '$Keyword'
+";
+
+
+}else{
+
 if($BikeCategory != ""){
     $filterQuery2 = $filterQuery2." dealerbikes.BikeCategory LIKE '$BikeCategory' AND";
     $filterQuery1 = $filterQuery1." usedbikes.BikeCategory LIKE '$BikeCategory' AND";
@@ -126,7 +143,12 @@ if($split[count($split)-1] == "AND"){
 }
 $filterQuery = $filterQuery1." UNION ".$filterQuery2;
 
-        $_SESSION['Keyword'] = $Keyword;
+}
+
+$_SESSION['filterQuery'] = $filterQuery;
+
+
+    $_SESSION['Keyword'] = $Keyword;
     $_SESSION['BikeCategory'] = $BikeCategory;
     $_SESSION['Brand'] = $Brand;
     $_SESSION['Model'] = $Model;
@@ -213,6 +235,9 @@ $filterQuery = $filterQuery1." UNION ".$filterQuery2;
         paceOptions = {
             elements: true
         };
+
+        
+
     </script>
     <script src="assets/js/pace.min.js"></script>
 
@@ -323,7 +348,7 @@ $filterQuery = $filterQuery1." UNION ".$filterQuery2;
 </div></li>
                 <?php } else { ?>
                 <li><div class="btn-group">
-  <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" style="height: 45px; width: 120px;">
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" style="height: 45px; width: 120px;">
     Login
   </button>
   <div class="dropdown-menu">
@@ -409,7 +434,7 @@ $filterQuery = $filterQuery1." UNION ".$filterQuery2;
                                         ?>
                                         <li>                                        
                                         <div margin:0px auto; margin-top:30px;" >
-                                                <select id="category" class="chosen" style="width:80%;" onchange="recp()">
+                                                <select id="category"  style="width:80%;" onchange="recp()" class="chosen form-control ">
                                             <option value=""> Select Category </option>
                                             <option value="Used Bikes"> Used Bikes</option>
                               <option value="New Bikes"> New Bikes</option>
@@ -577,10 +602,10 @@ $filterQuery = $filterQuery1." UNION ".$filterQuery2;
 
 
                             <div class="tab-filter">
-                                <select class="selectpicker select-sort-by" data-style="btn-select" data-width="auto">
-                                    <option>Sort by </option>
-                                    <option>Price: Low to High</option>
-                                    <option>Price: High to Low</option>
+                                <select class="selectpicker select-sort-by" data-style="btn-select" data-width="auto" onchange="sort_by(this.value)">
+                                    <option value="-1">Sort by </option>
+                                    <option value="ASC">Price: Low to High</option>
+                                    <option value="DESC">Price: High to Low</option>
                                 </select>
                             </div>
                         </div>
@@ -659,7 +684,7 @@ $filterQuery = $filterQuery1." UNION ".$filterQuery2;
 <?php
 
 include "db_connection.php";
-echo $split[count($split)-1];
+
 echo "\n Filter Query $filterQuery";
 $sql=mysql_query($filterQuery);
 
@@ -723,13 +748,8 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
     <!--/.add-desc-box-->
 </div>
 
-
-
-
 <div id='myStyle'>
 </div>
-
-
 
 </div>
 <?php } ?>
@@ -933,7 +953,7 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
   // city
 function recp() {
 
-    var category = document.getElementById('category').value;
+        var category = document.getElementById('category').value;
         var city = document.getElementById('city').value;
         var min = document.getElementById('minPrice').value;
         var max = document.getElementById('maxPrice').value;
@@ -941,6 +961,11 @@ function recp() {
         jQuery('.oldList div').html('');
   $('#myStyle').load('fetch_data.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
 
+}
+
+function sort_by(value){
+  jQuery('.oldList div').html('');
+  $('#myStyle').load('fetch_data_sort.php?value=' + encodeURIComponent(value));
 }
 //category
 // function demo(category) {

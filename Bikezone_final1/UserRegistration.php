@@ -18,7 +18,7 @@ if(isset($_SESSION['usr_id'])) {
        $ConfirmPassword=$_POST['ConfirmPassword'];
        $Date=$_POST['Date'];
    
-       $insert=mysql_query("INSERT INTO userregistration (UserName,MailId,PhoneNumber,State,City,Location,PostalCode,Password,ConfirmPassword,Status,Date,) VALUES ('$UserName','$MailId','$PhoneNumber','$State','$City','$Location','$PostalCode','$Password','$ConfirmPassword','Unblock',$Date')");
+       $insert=mysql_query("INSERT INTO userregistration (UserName,MailId,PhoneNumber,State,City,Location,PostalCode,Password,ConfirmPassword,Status,Date) VALUES ('$UserName','$MailId','$PhoneNumber','$State','$City','$Location','$PostalCode','$Password','$ConfirmPassword','$UnBlock','$Date')");
    
    
        if($insert){
@@ -29,7 +29,6 @@ if(isset($_SESSION['usr_id'])) {
    }
    else
    {
-    echo mysql_error();
    ?>
 <script>alert('error in adding Record');</script>
 <?php
@@ -72,25 +71,83 @@ if(isset($_SESSION['usr_id'])) {
          paceOptions = {
              elements: true
          };
-
-         function isNumberKey(evt){  
-    //var e = evt || window.event;
-  var charCode = (evt.which) ? evt.which : evt.keyCode
-   if (charCode != 46 && charCode > 31 
-  && (charCode < 48 || charCode > 57
-    && ((charCode.length)==12)))
+</script>
+<script type="text/javascript">
+         function validateForm() {
+    var x = document.forms["form1"]["UserName"].value;
+    if (x == "") {
+        alert("User name must be filled out");
+        document.form1.UserName.focus();
         return false;
-        return true;
-  }
-
-function ValidateAlpha(evt)
-    {
-        var keyCode = (evt.which) ? evt.which : evt.keyCode
-        if ((keyCode < 65 || keyCode > 90) && (keyCode < 97 || keyCode > 123) && keyCode != 32)
-         
+    }  
+    var x = document.forms["form1"]["MailId"].value;
+     var atpos = x.indexOf("@");
+    var dotpos = x.lastIndexOf(".");
+    if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length) {
+        alert("Not a valid e-mail address");
+        document.form1.MailId.focus();
         return false;
-            return true;
     }
+    // var y = document.forms["form1"]["PhoneNumber"].value; 
+    // if (y == " ") {
+    //     alert("Phone number must be filled out");
+    //     document.form1.PhoneNumber.focus();
+    //     return false;
+    // } 
+    var c = document.forms["form1"]["PhoneNumber"].value;
+    if (c == "") {
+        alert("Phone number must be filled out");
+        document.form1.PhoneNumber.focus();
+        return false;
+    } 
+    if (c.length<10) {
+        alert("Phone number is invalid");
+        document.form1.PhoneNumber.focus();
+        return false;
+    } 
+    var x = document.forms["form1"]["State"].value;
+    if (x == "1") {
+        alert("State must be select out");
+        document.form1.State.focus();
+        return false;
+    } 
+    var x = document.forms["form1"]["City"].value;
+    if (x == "1") {
+        alert("City must be filled out");
+        document.form1.City.focus();
+        return false;
+    }  
+    var x = document.forms["form1"]["Location"].value;
+    if (x == "") {
+        alert("Location must be filled out");
+        document.form1.Location.focus();
+        return false;
+    }  
+    var x = document.forms["form1"]["PostalCode"].value;
+    if (x == "") {
+        alert("Postal Code must be filled out");
+        document.form1.PostalCode.focus();
+        return false;
+    }  
+    var a = document.forms["form1"]["Password"].value;
+    if (a.length<8) {
+        alert("Password should not be less than 8 characters");
+        document.form1.Password.focus();
+        return false;
+    }   
+    var b = document.forms["form1"]["ConfirmPassword"].value;
+    if (b == "") {
+        alert("Confirm Password must be filled out");
+        document.form1.ConfirmPassword.focus();
+        return false;
+    } 
+    if (a!==b) {
+        alert("Password mismatch");
+        document.form1.ConfirmPassword.focus();
+        return false;
+    }  
+    return true;
+  }
       </script>
       <script src="assets/js/pace.min.js"></script>
       <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
@@ -116,7 +173,7 @@ $(document).ready(function(){
                role="navigation">
                <div class="container">
                   <div class="navbar-identity">
-                     <a href="index.php" class="navbar-brand logo logo-title">
+                     <a href="index.html" class="navbar-brand logo logo-title">
                         <span class="logo-icon">
                            <!-- <i class="icon icon-search-1 ln-shadow-logo "></i> -->
                         </span>
@@ -217,7 +274,7 @@ $(document).ready(function(){
                      <div class="inner-box category-content">
                         <div class="row">
                            <div class="col-sm-12">
-                              <form class="form-horizontal" method="post" action="">
+                              <form class="form-horizontal" method="post" action="" name="form1" onSubmit="return validateForm(this)">
                                  <div class="content-subheading"><i class="icon-user fa"></i> <strong>User
                                     Registration</strong>
                                  </div>
@@ -228,7 +285,7 @@ $(document).ready(function(){
                                     <div class="col-sm-8">
                                        <input id="textinput-name" name="UserName"
                                           placeholder="User Name" class="form-control input-md"
-                                          required="" type="text" onKeyPress="return ValidateAlpha(event);">
+                                           type="text">
                                     </div>
                                  </div>
                                  <!-- Appended checkbox -->
@@ -236,7 +293,7 @@ $(document).ready(function(){
                                     <label class="col-sm-3 col-form-label" for="seller-email"> User Email</label>
                                     <div class="col-sm-8">
                                        <input id="user-email" name="MailId" class="form-control"
-                                          placeholder="Email" required="" type="email">
+                                          placeholder="Email" type="text">
                                     </div>
                                  </div>
                                  <!-- Text input-->
@@ -246,7 +303,7 @@ $(document).ready(function(){
                                     <div class="col-sm-8">
                                        <input id="user-Number" name="PhoneNumber"
                                           placeholder="Phone Number" class="form-control input-md"
-                                          required="" type="text" onkeypress="return isNumberKey(event)">
+                                           type="number">
                                     </div>
                                  </div>
                                  
@@ -309,7 +366,7 @@ $(document).ready(function(){
                                     <div class="col-sm-8">
                                        <input id="location" name="Location"
                                           placeholder="Location" class="form-control input-md"
-                                          required="" type="text">
+                                           type="text">
                                     </div>
                                  </div>
                                  <!-- Text input-->
@@ -318,7 +375,7 @@ $(document).ready(function(){
                                     <div class="col-sm-8">
                                        <input id="PostalCode" name="PostalCode"
                                           placeholder="Postal Code" class="form-control input-md"
-                                          required="" type="text">
+                                           type="number">
                                     </div>
                                  </div>
                                     <!-- Password-->
@@ -327,7 +384,7 @@ $(document).ready(function(){
                                     <div class="col-sm-8">
                                        <input id="textinput-name" name="Password"
                                           placeholder="Password" class="form-control input-md"
-                                          required="" type="password">
+                                           type="password">
                                     </div>
                                  </div>
                                  <!-- Confirm Password-->
@@ -336,7 +393,7 @@ $(document).ready(function(){
                                     <div class="col-sm-8">
                                        <input id="textinput-name" name="ConfirmPassword"
                                           placeholder="Confirm Password" class="form-control input-md"
-                                          required="" type="password">
+                                           type="password">
                                     </div>
                                  </div>
                                    

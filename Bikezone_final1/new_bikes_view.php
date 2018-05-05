@@ -1,57 +1,22 @@
-﻿<?php 
-session_start();
 
-// if(isset($_SESSION['usr_id'])) {
-//   header("Location: index.php");
-// }
-   include "db_connection.php";
-   if (isset($_POST['BtnSubmit'])=='Submit'){
-       # code...
-       $UserId=$_SESSION['usr_id'];
-       $BikeCategory="Used Bikes";
-       $Brand=$_POST['Brand'];
-       $Model=$_POST['Model'];
-       $Year=$_POST['Year'];
-       $KilometreDriven=$_POST['KilometreDriven'];
-       $Transmission=$_POST['Transmission'];
-       $FuelType=$_POST['FuelType'];
-       $Stroke=$_POST['Stroke'];
-       $EngineSize=$_POST['EngineSize'];
-       $Description=$_POST['Description'];
-       $Details=$_POST['Details'];
-       $Prize=$_POST['Prize'];
-       $UsedBikeImage1=addslashes(file_get_contents($_FILES['image']['tmp_name'])); //will store the image to fp
-       $UsedBikeImage2=addslashes(file_get_contents($_FILES['image2']['tmp_name'])); //will store the image to fp
-       $UsedBikeImage3=addslashes(file_get_contents($_FILES['image3']['tmp_name'])); //will store the image to fp
-       $UsedBikeImage4=addslashes(file_get_contents($_FILES['image4']['tmp_name'])); //will store the image to fp2
-       $UserName=$_POST['UserName'];
-       $ContactNumber=$_POST['ContactNumber'];
-       $State=$_POST['State'];
-       $City=$_POST['City'];
-       $Location=$_POST['Location'];
-       $PostalCode=$_POST['PostalCode'];
-       $Date=$_POST['Date'];
-   
 
-       $insert=mysql_query("INSERT INTO `usedbikes`(UserId,BikeCategory,Brand, Model, Year, KilometreDriven, Transmission, FuelType, Stroke, EngineSize, Description, Details, Prize, UsedBikeImage1, UsedBikeImage2,UsedBikeImage3,UsedBikeImage4, UserName, ContactNumber, State, City, Location, PostalCode, Status, Date ) VALUES ($UserId,'Used Bikes','$Brand','$Model','$Year',$KilometreDriven,'$Transmission','$FuelType','$Stroke','$EngineSize','$Description','$Details',$Prize,'{$UsedBikeImage1}','{$UsedBikeImage2}','{$UsedBikeImage3}','{$UsedBikeImage4}','$UserName','$ContactNumber','$State','$City','$Location','$PostalCode','Unblock','$Date')");
-   
-   
-       if($insert){
-           ?>
-<script>alert('Registered Successfully..');</script>
-<script>window.open('index.php','_self')</script>;
 <?php
-   }
-   else
-   {
-    echo mysql_error();
-   ?>
-<script>alert(<?php mysql_error();?>);</script>
-<?php
-   }
-   }
-   
+    session_start();
+    include "db_connection.php";
+    if(isset($_GET['id']) & !empty($_GET['id'])){
+            $items = $_GET['id'];
+            echo  $items ;
+             $show=mysql_query("SELECT * FROM dealerbikes WHERE dealerBikeId='$items' ");
+                $res=mysql_fetch_array($show);
+
+            //$_SESSION['cart'] = $items;
+            //header('location: index.php?status=success');
+    }else{
+        echo "Could not get name";
+       // header('location: index.php?status=failed');
+    }
 ?>
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
@@ -86,146 +51,19 @@ session_start();
     <![endif]-->
 
     <!-- include pace script for automatic web page progress bar  -->
-
     <script>
         paceOptions = {
             elements: true
         };
-
-        function fetch_select(val)
-        {
-             $.ajax({
-             type: 'post',
-             url: 'fetch_data.php',
-             data: {
-              get_option3:val
-         },
-         success: function (response) {
-            document.getElementById("new_select").innerHTML=response; 
-         }
-         });
-        }
-
-        function validateForm() {
-    var x = document.forms["form1"]["Brand"].value;
-    if (x == "1") {
-        alert("Brand must be select out");
-        document.form1.Brand.focus();
-        return false;
-    } 
-    var x = document.forms["form1"]["Model"].value;
-    if (x == "1") {
-        alert("Model must be select out");
-        document.form1.Model.focus();
-        return false;
-    } 
-    var x = document.forms["form1"]["Year"].value;
-    if (x == "") {
-        alert("Year must be filled out");
-        document.form1.Year.focus();
-        return false;
-    } 
-    var x = document.forms["form1"]["KilometreDriven"].value;
-    if (x == "") {
-        alert("Kilometre driven must be filled out");
-        document.form1.KilometreDriven.focus();
-        return false;
-    }
-    var c = document.forms["form1"]["Transmission"].value;
-    if (c == "") {
-        alert("Transmissionr must be filled out");
-        document.form1.Transmission.focus();
-        return false;
-    }   
-    var b = document.forms["form1"]["FuelType"].value;
-    if (b == "1") {
-        alert("Fuel type must be select out");
-        document.form1.FuelType.focus();
-        return false;
-    } 
-    var x = document.forms["form1"]["Stroke"].value;
-    if (x == "1") {
-        alert("Stroke must be select out");
-        document.form1.Stroke.focus();
-        return false;
-    }  
-    var x = document.forms["form1"]["EngineSize"].value;
-    if (x == "") {
-        alert("Engine size must be filled out");
-        document.form1.EngineSize.focus();
-        return false;
-    } 
-    var c = document.forms["form1"]["Description"].value;
-    if (c == "") {
-        alert("Description must be filled out");
-        document.form1.Description.focus();
-        return false;
-    } 
-    var x = document.forms["form1"]["Details"].value;
-    if (x == "") {
-        alert("Details must be filled out");
-        document.form1.Details.focus();
-        return false;
-    } 
-    var x = document.forms["form1"]["Prize"].value;
-    if (x == "") {
-        alert("Price must be filled out");
-        document.form1.Prize.focus();
-        return false;
-    }  
-    var x = document.forms["form1"]["UserName"].value;
-    if (x == "") {
-        alert("UserName must be filled out");
-        document.form1.UserName.focus();
-        return false;
-    }  
-    var c = document.forms["form1"]["ContactNumber"].value;
-    if (c == "") {
-        alert("Contact number must be filled out");
-        document.form1.ContactNumber.focus();
-        return false;
-    } 
-    if (c.length<10) {
-        alert("Contact number number is invalid");
-        document.form1.ContactNumber.focus();
-        return false;
-    } 
-    var x = document.forms["form1"]["State"].value;
-    if (x == "1") {
-        alert("State must be select out");
-        document.form1.State.focus();
-        return false;
-    } 
-    var x = document.forms["form1"]["City"].value;
-    if (x == "1") {
-        alert("City must be filled out");
-        document.form1.City.focus();
-        return false;
-    }  
-    var x = document.forms["form1"]["Location"].value;
-    if (x == "") {
-        alert("Location must be filled out");
-        document.form1.Location.focus();
-        return false;
-    }  
-    var x = document.forms["form1"]["PostalCode"].value;
-    if (x == "") {
-        alert("Postal Code must be filled out");
-        document.form1.PostalCode.focus();
-        return false;
-    }   
-    return true;
-  }
-      </script>
     </script>
     <script src="assets/js/pace.min.js"></script>
 
 
 </head>
 <body>
- <div id="wrapper">
+<div id="wrapper">
 
-         <div class="header">
+    <div class="header">
         <nav class="navbar  fixed-top navbar-site navbar-light bg-light navbar-expand-md"
              role="navigation">
             <div class="container">
@@ -275,21 +113,11 @@ session_start();
                         <!-- <li class="nav-item"><a href="category.html" class="nav-link"><i class="icon-th-thumb"></i> All Ads</a>
                         </li> -->
                         <li class="dropdown no-arrow nav-item"><a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                             <?php if (isset($_SESSION['usr_name'])) { ?>
-                         <li class="dropdown no-arrow nav-item"><a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
 
-                            <span><p class="navbar-text">Signed in as <?php echo $_SESSION['usr_name']; ?></p></span> <i class="icon-user fa"></i> <i class=" icon-down-open-big fa"></i></a>
+                            <span>User Name</span> <i class="icon-user fa"></i> <i class=" icon-down-open-big fa"></i></a>
                             <ul
                                     class="dropdown-menu user-menu dropdown-menu-right">
-                                <li class="dropdown-item"><a href="logout.php"><i class=" icon-logout "></i> Log out </a>
-                                </li>
-                            </ul>
-                        </li>
-                <?php }  ?>
-                             </a>
-                             <ul
-                                    class="dropdown-menu user-menu dropdown-menu-right">
-                                <!--<li class="active dropdown-item"><a href="account-home.html"><i class="icon-home"></i> Personal Home
+                                <li class="active dropdown-item"><a href="account-home.html"><i class="icon-home"></i> Personal Home
 
                                 </a>
                                 </li>
@@ -309,13 +137,13 @@ session_start();
                                     approval </a>
                                 </li>
                                 <li class="dropdown-item"><a href="statements.html"><i class=" icon-money "></i> Payment history </a>
-                                </li>-->
+                                </li>
                                 <li class="dropdown-item"><a href="login.html"><i class=" icon-logout "></i> Log out </a>
                                 </li>
-                            </ul> 
+                            </ul>
                         </li>
-                        <!-- <li class="postadd nav-item"><a class="btn btn-block   btn-border btn-post btn-danger nav-link" href="post-ads.html">Sell Your Bike</a>
-                        </li> -->
+                        <li class="postadd nav-item"><a class="btn btn-block   btn-border btn-post btn-danger nav-link" href="post-ads.html">Sell Your Bike</a>
+                        </li>
                         <li class="dropdown  lang-menu nav-item">
                             <!-- <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
                                 <span class="lang-title">EN</span>
@@ -346,313 +174,201 @@ session_start();
         </nav>
     </div>
     <!-- /.header -->
-    <body>
+
     <div class="main-container">
         <div class="container">
             <div class="row">
-                <div class="col-md-9 page-content">
-                    <div class="inner-box category-content">
-<h2 class="title-2 uppercase"><strong> <i class="icon-docs"></i> Post a Bike
-                            Ad - Customer</strong></h2>
+                <div class="col-md-12">
 
-                        <div class="row">
-                            <div class="col-sm-12">
-
-                                <form name="form1" class="form-horizontal" enctype="multipart/form-data" action="" method="post" onsubmit="return validateForm(this)">
-                                       <?php
-
-                                        if(isset($_SESSION['usr_id'])) {
-                                            $UserId=$_SESSION['usr_id'];
-                                        }
-                                        $show=mysql_query("SELECT UserName, PhoneNumber, State, City, Location, PostalCode FROM userregistration WHERE UserId='$UserId'");
-                                        $res=mysql_fetch_array($show);
-                                        
-                                    ?>
-                                        <br />
-                                    
-                                 <!--    <div class="form-group row">
-                                        <label  class="col-sm-3 col-form-label"> Bike Category</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="BikeCategory" name="BikeCategory" value="Used Bikes" disabled>
-                                        </div>
-                                    </div> -->
-                                      <div class="form-group row">
-                                        <label  class="col-sm-3 col-form-label"> Brand</label>
-                                        <div class="col-sm-8">
-                                            <select name="Brand" class="form-control" onchange="fetch_select(this.value);" >
-                                              <option value="1"> Select Brand</option>
-                                                  <?php
-                                                 
-                                                  $select=mysql_query("select Brand from bikemodel group by Brand");
-                                                  while($row=mysql_fetch_array($select))
-                                                  {
-                                                   echo "<option>".$row['Brand']."</option>";
-                                                  }
-                                                 ?>
-                                             </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label  class="col-sm-3 col-form-label"> Model</label>
-                                        <div class="col-sm-8">
-                                            <select name="Model" id="new_select" class="form-control">
-                                              
-                                                     </select>
-                                        </div>
-                                    </div>
-                                     <div class="form-group row">
-                                        <label  class="col-sm-3 col-form-label">Year</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="Text1" name="Year" placeholder="Year...">
-                                            
-                                        </div>
-                                    </div>
-                                     <div class="form-group row">
-                                        <label  class="col-sm-3 col-form-label">Kilometer Driven</label>
-                                        <div class="col-sm-8">
-                                            <input type="number" name="KilometreDriven" class="form-control" id="Text7" placeholder="Kilometer Driven">
-                                            
-                                        </div>
-                                    </div>
-                                     
-                                        <div class="form-group row">
-                                        <label  class="col-sm-3 col-form-label"> Transmission</label>
-                                        <div class="col-sm-8">
-                                            <select name="Transmission" id="Select3" class="form-control">
-                                                <option value="1" selected="selected"> Select Transmission...</option>
-                                                  <option value="Manual"> Manual</option>
-                                                <option value="Automatic"> Automatic</option>
-                                                 
-                                                     </select>
-                                        </div>
-                                    </div>
-
-                                        <div class="form-group row">
-                                        <label  class="col-sm-3 col-form-label"> Fuel Type</label>
-                                        <div class="col-sm-8">
-                                            <select name="FuelType" id="Select4" class="form-control">
-                                                <option value="1" selected="selected"> Select Fuel Type...</option>
-                                                  <option value="Petrol"> Petrol</option>
-                                                <option value="Diesel"> Diesel</option>
-                                                 
-                                                     </select>
-                                        </div>
-                                    </div>
-                                     <div class="form-group row">
-                                        <label  class="col-sm-3 col-form-label"> Stroke</label>
-                                        <div class="col-sm-8">
-                                            <select name="Stroke" id="Select5" class="form-control">
-                                                <option value="1" selected="selected"> Select Stroke Type...</option>
-                                                  <option value="2 Stroke"> 2 Stroke</option>
-                                                <option value="4 Stroke"> 4 Stroke</option>
-                                                
-                                                     </select>
-                                        </div>
-                                    </div>
-
-                                     <div class="form-group row">
-                                        <label  class="col-sm-3 col-form-label"> Engine Size</label>
-                                            <div class="col-sm-8">
-                                            <input type="text" class="form-control" name="EngineSize" id="Text2" placeholder="Engine Size">
-                                            
-                                        </div>
-                                    </div>
-                                      <div class="form-group row">
-                                        <label  class="col-sm-3 col-form-label">Description</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" name="Description" class="form-control" id="Text4" placeholder="Description">
-                                          
-                                        </div>
-                                    </div>
-                                      <div class="form-group row">
-                                        <label  class="col-sm-3 col-form-label">Details</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" name="Details" class="form-control" id="Text5" placeholder="Details">
-                                            
-                                        </div>
-                                    </div>
-                                  <!--    <div class="form-group row">
-                                        <label  class="col-sm-3 col-form-label">Price</label>
-                                        <div class="col-sm-4">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">Rs.</span>
-                                                <input type="text" class="form-control" aria-label="Price">
-                                            </div>
-                                        </div>
-                                
-                                    </div>-->
-
-                                    <!-- <div class="form-group row">
-                                        <label  class="col-sm-3 col-form-label">Web site link</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="Text6" placeholder="Web site link">
-                                            
-                                        </div>
-                                    </div>-->
+                    <nav aria-label="breadcrumb" role="navigation" class="pull-left">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#"><i class="icon-home fa"></i></a></li>
+                            <li class="breadcrumb-item"><a href="category.html">All Ads</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Category name</li>
+                        </ol>
+                    </nav>
 
 
-                                       <div class="form-group row">
-                                        <label  class="col-sm-3 col-form-label">Price</label>
-                                        <div class="col-sm-4">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">Rs.</span>
-                                                <input type="number" class="form-control" aria-label="Price" name="Prize">
-                                            </div>
-                                        </div>
-                                
-                                    </div>
+                    <div class="pull-right backtolist"><a href="#"> <i
+                            class="fa fa-angle-double-left"></i> Back to Results</a></div>
 
-                                     <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label" for="textarea">Picture</label>
-                                        <div class="col-lg-8">
-                                            <div class="mb10">
-                                                <input class="file" data-preview-file-type="text" name="image" id="image" accept="image/JPEG" type="file">
-                                            </div>
-                                            <div class="mb10">
-                                                <input class="file" data-preview-file-type="text" name="image2" id="image2" accept="image/JPEG" type="file">
-                                            </div>
-                                            <div class="mb10">
-                                                <input class="file" data-preview-file-type="text" name="image3" id="image3" accept="image/JPEG" type="file">
-                                            </div>
-                                            <div class="mb10">
-                                                <input class="file" data-preview-file-type="text" name="image4"  id="image4" accept="image/JPEG" type="file">
-                                            </div>
-                                            
-                                            <p  class="form-text text-muted">
-                                                Add up to 3 photos. Use a real image of your product, not catalogs
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <!--<div class="form-group row">
-                                        <label  class="col-sm-3 col-form-label">Price</label>
-                                        <div class="col-sm-4">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">Rs.</span>
-                                                <input type="text" class="form-control" aria-label="Price">
-                                            </div>
-                                        </div>
-                                        
-                                    </div>-->
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9 page-content col-thin-right">
+                    <div class="inner inner-box ads-details-wrapper">
+                        <h2> <?php echo $res['Brand'].' - ' .$res['Model'];?>
+                            <small class="label label-default adlistingtype">Company ad</small>
+                        </h2>
+                        <span class="info-row"> <span class="date"><i class=" icon-clock"> </i>KM's Driven <?php echo $res['KilometreDriven'];?></span> - <!-- <span
+                                class="category">Category name </span> -->- <span class="item-location"><i
+                                class="fa fa-map-marker"></i> <?php echo $res['State'];?></span> </span>
 
-                                 <!--   <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label" for="textarea">Picture</label>
-                                        <div class="col-lg-8">
-                                            <div class="mb10">
-                                                <input id="input-upload-img1" type="file" class="file" data-preview-file-type="text">
-                                            </div>
-                                            <div class="mb10">
-                                                <input id="input-upload-img2" type="file" class="file" data-preview-file-type="text">
-                                            </div>
-                                            <div class="mb10">
-                                                <input id="input-upload-img3" type="file" class="file" data-preview-file-type="text">
-                                            </div>
-                                            <div class="mb10">
-                                                <input id="input-upload-img4" type="file" class="file" data-preview-file-type="text">
-                                            </div>
-                                            <div class="mb10">
-                                                <input id="input-upload-img5" type="file" class="file" data-preview-file-type="text">
-                                            </div>
-                                            <p  class="form-text text-muted">
-                                                Add up to 5 photos. Use a real image of your product, not catalogs
-                                            </p>
-                                        </div>
-                                    </div>-->
-                                    <!-- Text input-->
-                                 <div class="form-group row">
-                                        <label  class="col-sm-3 col-form-label">Phone number</label>
-                                        <div class="col-sm-8">
-                                            <input type="number" class="form-control" name="ContactNumber" id="Text5" placeholder="Phone number" value="<?php echo $res['PhoneNumber'];?>">
-                                            
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label  class="col-sm-3 col-form-label">User name</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" name="UserName" id="Text3" placeholder="info2" value="<?php echo $res['UserName'];?>">
-                                            
-                                        </div>
-                                    </div>
-                                     <div class="form-group row">
-                                        <label  class="col-sm-3 col-form-label">State</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" name="State" id="Text3" placeholder="info2" value="<?php echo $res['State'];?>">
-                                            
-                                        </div>
-                                    </div>
-                                     <div class="form-group row">
-                                        <label  class="col-sm-3 col-form-label">City</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" name="City" id="Text7" placeholder="info3" value="<?php echo $res['City'];?>">
-                                            
-                                        </div>
-                                    </div>
-                                     <div class="form-group row">
-                                        <label  class="col-sm-3 col-form-label">Location</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" name="Location" id="Text8" placeholder="info4" value="<?php echo $res['Location'];?>">
-                                            
-                                        </div>
-                                    </div>
-                                     <div class="form-group row">
-                                        <label  class="col-sm-3 col-form-label">Postal Code</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" name="PostalCode" id="Text9" placeholder="info5" value="<?php echo $res['PostalCode'];?>">
-                                            
-                                        </div>
-                                 <!-- Date-->
-                                 <div class="form-group row">
-                                    <div class="col-sm-8">
-                                       <input id="textinput-name" style="display: none;" name="Date"
-                                          placeholder="Date" class="form-control input-md" value="<?php echo date("Y-m-d"); ?>" type="text">
-                                    </div>
-                                 </div>
-   <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label"></label>
-
-                                        <div class="col-sm-8"><input type="submit" id="button1id" name="BtnSubmit" value="Submit" id="button1id" class="btn btn-success btn-lg"></div>
-                                    </div>
-
-
-                                </form>
-
+                        <div class="ads-image">
+                            <h1 class="pricetag"> Rs.<?php echo $res['Prize'];?></h1>
+                            <ul class="bxslider">
+                                <li><?php 
+                                echo '<img alt="no img is found" src="data:image/jpeg;base64,'.base64_encode($res['DealerBikeImage1']).'"/>'
+                                ?>
+                                </li>
+                                <li>
+                                    <?php 
+                                echo '<img alt="no img is found" src="data:image/jpeg;base64,'.base64_encode($res['DealerBikeImage2']).'"/>'
+                                ?>
+                                </li>
+                                <li>
+                                    <?php 
+                                echo '<img alt="no img is found" src="data:image/jpeg;base64,'.base64_encode($res['DealerBikeImage3']).'"/>'
+                                ?>
+                                </li>
+                            </ul>
+                            <div id="bx-pager">
+                                <a class="thumb-item-link" data-slide-index="0" href="#">
+                                <?php 
+                                echo '<img alt="no img is found" src="data:image/jpeg;base64,'.base64_encode($res['DealerBikeImage1']).'"/>'
+                                ?>
+                                </a>
+                                <a class="thumb-item-link" data-slide-index="1" href="#">
+                                    <?php 
+                                echo '<img alt="no img is found" src="data:image/jpeg;base64,'.base64_encode($res['DealerBikeImage2']).'"/>'
+                                ?>
+                                </a>
+                                <a class="thumb-item-link" data-slide-index="2" href="#">
+                                    <?php 
+                                echo '<img alt="no img is found" src="data:image/jpeg;base64,'.base64_encode($res['DealerBikeImage3']).'"/>'
+                                ?>
+                                </a>
                             </div>
+                        </div>
+                        <!--ads-image-->
+
+                        <div class="Ads-Details">
+                            <h5 class="list-title"><strong>Ads Description</strong></h5>
+
+                            <div class="row">
+                                <div class="ads-details-info col-md-8">
+                                <br/>
+                                    <h4><?php echo $res['Description']; ?></h4>
+                                    
+
+                                    <br/>
+
+
+                                     <h5 class="list-title"><strong>Ads Details</strong></h5><br/>
+                                     <h4><?php echo $res['Details']; ?></h4>
+                                    <h3><b>Seller Address </b></h3>
+                                    <ul>
+                                        <li><b>Location </b> <?php echo $res['Location']; ?></li>
+                                        <li><b>City </b><?php echo $res['City']; ?></li>
+                                        <li><b>State </b><?php echo $res['State']; ?></li>
+                                        <li><b>Postal Code </b><?php echo $res['PostalCode']; ?></li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4">
+                                    <aside class="panel panel-body panel-details">
+                                        <ul>
+                                            <li>
+                                                <p class=" no-margin "><strong>Price:</strong> Rs. <?php echo $res['Prize'];?></p>
+                                            </li>
+                                            <li>
+                                                <p class="no-margin"><strong>Brand:</strong> <?php echo $res['Brand'];?></p>
+                                            </li>
+                                            <li>
+                                                <p class="no-margin"><strong>Model:</strong> <?php echo $res['Model'];?> </p>
+                                            </li>
+                                            <li>
+                                                <p class=" no-margin "><strong>Year:</strong> <?php echo $res['Year'];?></p>
+                                            </li>
+                                            <li>
+                                                <p class="no-margin"><strong>Kilometre Driven:</strong> <?php echo $res['KilometreDriven'];?></p>
+                                            </li>
+                                            <li>
+                                                <p class="no-margin"><strong>Transmission:</strong> <?php echo $res['Transmission'];?></p>
+                                            </li>
+                                            <li>
+                                                <p class="no-margin"><strong>Fuel Type:</strong> <?php echo $res['FuelType'];?></p>
+                                            </li>
+                                            <li>
+                                                <p class="no-margin"><strong>Stroke:</strong> <?php echo $res['Stroke'];?></p>
+                                            </li>
+                                            <li>
+                                                <p class="no-margin"><strong>Engine Size:</strong> <?php echo $res['EngineSize'];?></p>
+                                            </li>
+                                            
+
+                                        </ul>
+                                    </aside>
+                                    <div class="ads-action">
+                                        <ul class="list-border">
+                                            <!-- <li><a href="#"> <i class=" fa fa-user"></i> More ads by User </a></li>
+                                            <li><a href="#"> <i class=" fa fa-heart"></i> Save ad </a></li> -->
+                                            <li><a href="#"> <i class="fa fa-share-alt"></i> Share ad </a></li>
+                                            <li><a href="#reportAdvertiser" data-toggle="modal"> <i
+                                                    class="fa icon-info-circled-alt"></i> Report abuse </a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="content-footer text-left"><a class="btn  btn-default" data-toggle="modal"
+                                                                     href="#contactAdvertiser"><i
+                                    class=" icon-mail-2"></i> Send a message </a> <a class="btn  btn-info"><i
+                                    class=" icon-phone-1"></i> +91 <?php echo $res['ContactNumber'];?></a></div>
                         </div>
                     </div>
+                    <!--/.ads-details-wrapper-->
+
                 </div>
-                <!-- /.page-content -->
+                <!--/.page-content-->
 
-                <div class="col-md-3 reg-sidebar">
-                    <div class="reg-sidebar-inner text-center">
-                        <div class="promo-text-box"><i class=" icon-picture fa fa-4x icon-color-1"></i>
-
-                            <h3><strong>Post a Free Bike Ad</strong></h3>
-
-                            <p> Post your free bike ads with us. </p>
-                        </div>
-
-                        <div class="card sidebar-card">
-                            <div class="card-header uppercase">
-                                <small><strong>How to sell quickly?</strong></small>
-                            </div>
-                            <div class="card-content">
-                                <div class="card-body text-left">
-                                    <ul class="list-check">
-                                        <li> Use a brief title and description of the item</li>
-                                        <li> Make sure you post in the correct category</li>
-                                        <li> Add nice photos to your ad</li>
-                                        <li> Put a reasonable price</li>
-                                        <li> Check the item before publish</li>
-
-                                    </ul>
+                <div class="col-md-3  page-sidebar-right">
+                    <aside>
+                        <div class="card sidebar-card  bg-contact-seller">
+                            <div class="card-header">Contact Seller</div>
+                            <div class="card-content user-info">
+                                <div class="card-body text-center">
+                                    <div class="seller-info">
+                                        <h3 class="no-margin"><?php echo $res['UserName'];?></h3>
+                                        <p>Location: <strong><?php echo $res['Location'];?></strong>
+                                        </p>
+                                        <p>Posted Date: <strong><?php echo $res['Date'];?></strong>
+                                        </p>
+                                    </div>
+                                    <div class="user-ads-action"><a href="#contactAdvertiser" data-toggle="modal"
+                                                                    class="btn   btn-secondary btn-block"><i
+                                            class=" icon-mail-2"></i> Send a message </a>
+                                        <a
+                                                class="btn  btn-info btn-block"><i class=" icon-phone-1"></i> +91 <?php echo $res['ContactNumber'];?></a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="card sidebar-panel">
+                            <div class="card-header">Safety Tips for Buyers</div>
+                            <div class="card-content">
+                                <div class="card-body text-left">
+                                    <ul class="list-check">
+                                        <li>Meet seller at a public place</li>
+                                        <li>Check the item before you buy</li>
+                                        <li>Pay only after collecting the item</li>
+                                    </ul>
+                                    <p><a class="float-right" href="#"> Know more <i
+                                            class="fa fa-angle-double-right"></i> </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/.categories-list-->
+                    </aside>
+                </div>
+                <!--/.page-side-bar-->
+            </div>
+        </div>
+    </div>
+    <!-- /.main-container -->
 
-
-                    </div>
-                </div></div></div>
-                
-<footer class="main-footer">
+   <footer class="main-footer">
     <div class="footer-content">
         <div class="container">
             <div class="row">
@@ -792,6 +508,142 @@ session_start();
     <!-- /.footer -->
 </div>
 <!-- /.wrapper -->
+
+<!-- Modal Change City -->
+
+<div class="modal fade modalHasList" id="selectRegion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+	 aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="exampleModalLabel"><i class=" icon-map"></i> Select your region </h4>
+
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+						class="sr-only">Close</span></button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-sm-12">
+
+						<p>Popular cities in <strong>New York</strong>
+						</p>
+
+						<div style="clear:both"></div>
+						<div class="col-sm-6 no-padding">
+							<select class="form-control selecter  " id="region-state" name="region-state">
+								<option value="">All States/Provinces</option>
+								<option value="Alabama">Alabama</option>
+								<option value="Alaska">Alaska</option>
+								<option value="Arizona">Arizona</option>
+								<option value="Arkansas">Arkansas</option>
+								<option value="California">California</option>
+								<option value="Colorado">Colorado</option>
+								<option value="Connecticut">Connecticut</option>
+								<option value="Delaware">Delaware</option>
+								<option value="District of Columbia">District of Columbia</option>
+								<option value="Florida">Florida</option>
+								<option value="Georgia">Georgia</option>
+								<option value="Hawaii">Hawaii</option>
+								<option value="Idaho">Idaho</option>
+								<option value="Illinois">Illinois</option>
+								<option value="Indiana">Indiana</option>
+								<option value="Iowa">Iowa</option>
+								<option value="Kansas">Kansas</option>
+								<option value="Kentucky">Kentucky</option>
+								<option value="Louisiana">Louisiana</option>
+								<option value="Maine">Maine</option>
+								<option value="Maryland">Maryland</option>
+								<option value="Massachusetts">Massachusetts</option>
+								<option value="Michigan">Michigan</option>
+								<option value="Minnesota">Minnesota</option>
+								<option value="Mississippi">Mississippi</option>
+								<option value="Missouri">Missouri</option>
+								<option value="Montana">Montana</option>
+								<option value="Nebraska">Nebraska</option>
+								<option value="Nevada">Nevada</option>
+								<option value="New Hampshire">New Hampshire</option>
+								<option value="New Jersey">New Jersey</option>
+								<option value="New Mexico">New Mexico</option>
+								<option selected value="New York">New York</option>
+								<option value="North Carolina">North Carolina</option>
+								<option value="North Dakota">North Dakota</option>
+								<option value="Ohio">Ohio</option>
+								<option value="Oklahoma">Oklahoma</option>
+								<option value="Oregon">Oregon</option>
+								<option value="Pennsylvania">Pennsylvania</option>
+								<option value="Rhode Island">Rhode Island</option>
+								<option value="South Carolina">South Carolina</option>
+								<option value="South Dakota">South Dakota</option>
+								<option value="Tennessee">Tennessee</option>
+								<option value="Texas">Texas</option>
+								<option value="Utah">Utah</option>
+								<option value="Vermont">Vermont</option>
+								<option value="Virgin Islands">Virgin Islands</option>
+								<option value="Virginia">Virginia</option>
+								<option value="Washington">Washington</option>
+								<option value="West Virginia">West Virginia</option>
+								<option value="Wisconsin">Wisconsin</option>
+								<option value="Wyoming">Wyoming</option>
+							</select>
+						</div>
+						<div style="clear:both"></div>
+
+						<hr class="hr-thin">
+					</div>
+					<div class="col-md-4">
+						<ul class="list-link list-unstyled">
+							<li><a href="#" title="">All Cities</a></li>
+							<li><a href="#" title="Albany">Albany</a></li>
+							<li><a href="#" title="Altamont">Altamont</a></li>
+							<li><a href="#" title="Amagansett">Amagansett</a></li>
+							<li><a href="#" title="Amawalk">Amawalk</a></li>
+							<li><a href="#" title="Bellport">Bellport</a></li>
+							<li><a href="#" title="Centereach">Centereach</a></li>
+							<li><a href="#" title="Chappaqua">Chappaqua</a></li>
+							<li><a href="#" title="East Elmhurst">East Elmhurst</a></li>
+							<li><a href="#" title="East Greenbush">East Greenbush</a></li>
+							<li><a href="#" title="East Meadow">East Meadow</a></li>
+
+						</ul>
+					</div>
+					<div class="col-md-4">
+						<ul class="list-link list-unstyled">
+							<li><a href="#" title="Elmont">Elmont</a></li>
+							<li><a href="#" title="Elmsford">Elmsford</a></li>
+							<li><a href="#" title="Farmingville">Farmingville</a></li>
+							<li><a href="#" title="Floral Park">Floral Park</a></li>
+							<li><a href="#" title="Flushing">Flushing</a></li>
+							<li><a href="#" title="Fonda">Fonda</a></li>
+							<li><a href="#" title="Freeport">Freeport</a></li>
+							<li><a href="#" title="Fresh Meadows">Fresh Meadows</a></li>
+							<li><a href="#" title="Fultonville">Fultonville</a></li>
+							<li><a href="#" title="Gansevoort">Gansevoort</a></li>
+							<li><a href="#" title="Garden City">Garden City</a></li>
+
+
+						</ul>
+					</div>
+					<div class="col-md-4">
+						<ul class="list-link list-unstyled">
+							<li><a href="#" title="Oceanside">Oceanside</a></li>
+							<li><a href="#" title="Orangeburg">Orangeburg</a></li>
+							<li><a href="#" title="Orient">Orient</a></li>
+							<li><a href="#" title="Ozone Park">Ozone Park</a></li>
+							<li><a href="#" title="Palatine Bridge">Palatine Bridge</a></li>
+							<li><a href="#" title="Patterson">Patterson</a></li>
+							<li><a href="#" title="Pearl River">Pearl River</a></li>
+							<li><a href="#" title="Peekskill">Peekskill</a></li>
+							<li><a href="#" title="Pelham">Pelham</a></li>
+							<li><a href="#" title="Penn Yan">Penn Yan</a></li>
+							<li><a href="#" title="Peru">Peru</a></li>
+
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
 
 <!-- Modal contactAdvertiser -->
@@ -2053,17 +1905,16 @@ session_start();
 <script src="assets/js/script.js"></script>
 
 
-<!-- include jquery file upload plugin  -->
-<script src="assets/js/fileinput.min.js" type="text/javascript"></script>
+
+<!-- bxSlider Javascript file -->
+<script src="assets/plugins/bxslider/jquery.bxslider.min.js"></script>
 <script>
-    // initialize with defaults
-    $("#input-upload-img1").fileinput();
-    $("#input-upload-img2").fileinput();
-    $("#input-upload-img3").fileinput();
-    $("#input-upload-img4").fileinput();
-    $("#input-upload-img5").fileinput();
-</script></div>
+    $('.bxslider').bxSlider({
+        pagerCustom: '#bx-pager'
+    });
+
+</script>
+
 </body>
 
 </html>
-           

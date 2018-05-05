@@ -7,7 +7,7 @@ if(isset($_POST['get_option']))
  $brand_name = $_POST['get_option'];
  $find=mysql_query("select Model from usedbikes where Brand='$brand_name' union select Model from dealerbikes where Brand='$brand_name'");
  ?>
-<option value=""> Select Model</option>
+<option value="-1"> Select Model</option>
  <?php
  while($row=mysql_fetch_array($find))
  {
@@ -23,7 +23,7 @@ if(isset($_POST['get_option2']))
  $state = $_POST['get_option2'];
  $find=mysql_query("select City from usedbikes where State='$state' union select City from dealerbikes where State='$state'");
  ?>
-<option value=""> Select City</option>
+<option value="-1"> Select City</option>
  <?php
  while($row=mysql_fetch_array($find))
  {
@@ -31,6 +31,23 @@ if(isset($_POST['get_option2']))
  }
  exit;
 }
+
+if(isset($_POST['get_option3']))
+{
+ include "db_connection.php";
+
+ $brand_name = $_POST['get_option3'];
+ $find=mysql_query("select Model from bikemodel where Brand='$brand_name'");
+ ?>
+<option value="-1"> Select Model</option>
+ <?php
+ while($row=mysql_fetch_array($find))
+ {
+  echo "<option>".$row['Model']."</option>";
+ }
+ exit;
+}
+
 ?>
 <?php
 
@@ -146,6 +163,5 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
 
 //category
 
-//city
 ?>
 

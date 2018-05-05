@@ -2,6 +2,7 @@
 session_start();
 include "db_connection.php";
 
+GLOBAL $filterQuery1;
 if(isset($_SESSION['BikeCategory'])) {
 
         $Keyword=$_SESSION['Keyword'];
@@ -12,7 +13,6 @@ if(isset($_SESSION['BikeCategory'])) {
         $Prize_Maximum=$_SESSION['Prize_Maximum'];
         $State=$_SESSION['State'];
         $City=$_SESSION['City'];
-
        }
 
         // $Keyword=$_SESSION['Keyword'];
@@ -23,7 +23,6 @@ if(isset($_SESSION['BikeCategory'])) {
         // $Prize_Maximum=$_SESSION['Prize_Maximum'];
         // $State=$_SESSION['State'];
         // $City=$_SESSION['City'];
-
 
 $filterQuery1 = "select
   usedbikes.UsedBikeId as UsedBikeId,
@@ -58,6 +57,54 @@ where
 //   dealerbikes
 // where
 // ";
+
+if($Keyword != null){
+    $filterQuery1 = "select
+  usedbikes.UsedBikeId as UsedBikeId,
+  usedbikes.BikeCategory as BikeCategory,
+  usedbikes.UsedBikeImage1 as UsedBikeImage1,
+  usedbikes.Brand as Brand,
+  usedbikes.Model as Model,
+  usedbikes.KilometreDriven as KilometreDriven,
+  usedbikes.Location as Location,
+  usedbikes.UserId as UserId,
+  usedbikes.UserName as UserName,
+  usedbikes.ContactNumber as ContactNumber,
+  usedbikes.Prize as Prize
+from
+  usedbikes
+where
+  usedbikes.BikeCategory LIKE '$Keyword'
+  OR usedbikes.Brand LIKE '$Keyword'
+  OR usedbikes.Model LIKE '$Keyword'
+  OR usedbikes.State LIKE '$Keyword'
+  OR usedbikes.City LIKE '$Keyword'
+UNION
+select
+  dealerbikes.DealerBikeId as UsedBikeId,
+  dealerbikes.BikeCategory as BikeCategory,
+  dealerbikes.DealerBikeImage1 as BikeImage1,
+  dealerbikes.Brand as Brand,
+  dealerbikes.Model as Model,
+  dealerbikes.KilometreDriven :as KilometreDriven,
+  dealerbikes.Location as Location,
+  dealerbikes.DealerId as UserId,
+  dealerbikes.UserName as UserName,
+  dealerbikes.ContactNumber as ContactNumber,
+  dealerbikes.Prize as Prize
+from
+  dealerbikes
+where
+  dealerbikes.BikeCategory LIKE '$Keyword'
+  OR dealerbikes.Brand LIKE '$Keyword'
+  OR dealerbikes.Model LIKE '$Keyword'
+  OR dealerbikes.State LIKE '$Keyword'
+  OR dealerbikes.City LIKE '$Keyword'
+";
+
+
+}else{
+
 
 if($BikeCategory != ""){
     // $filterQuery2 = $filterQuery2." dealerbikes.BikeCategory LIKE '$BikeCategory' AND";
@@ -94,7 +141,9 @@ if($split[count($split)-1] == "AND"){
     $filterQuery1 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filterQuery1);
     // $filterQuery2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filterQuery2);
 }
+}
 // $filterQuery = $filterQuery1." UNION ".$filterQuery2;
+$_SESSION['filterQuery1'] = $filterQuery1;
 
         $_SESSION['Keyword'] = $Keyword;
     $_SESSION['BikeCategory'] = $BikeCategory;
@@ -470,10 +519,10 @@ if($split[count($split)-1] == "AND"){
                                 </li>  </ul>
 
                             <div class="tab-filter">
-                                <select class="selectpicker select-sort-by" data-style="btn-select" data-width="auto">
-                                    <option>Sort by </option>
-                                    <option>Price: Low to High</option>
-                                    <option>Price: High to Low</option>
+                                <select class="selectpicker select-sort-by" data-style="btn-select" data-width="auto" onchange="sort_by(this.value)">
+                                    <option value="-1">Sort by </option>
+                                    <option value="ASC">Price: Low to High</option>
+                                    <option value="DESC">Price: High to Low</option>
                                 </select>
                             </div>
                         </div>
@@ -552,7 +601,7 @@ if($split[count($split)-1] == "AND"){
 <?php
 
 include "db_connection.php";
-echo $split[count($split)-1];
+
 echo "\n Filter Query $filterQuery1";
 $sql=mysql_query($filterQuery1);
 while($row=mysql_fetch_array($sql))
@@ -969,6 +1018,11 @@ function recp() {
         jQuery('.oldList div').html('');
   $('#myStyle').load('fetch_data.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
 
+}
+
+function sort_by(value){
+  jQuery('.oldList div').html('');
+  $('#myStyle').load('fetch_sort_personal.php?value=' + encodeURIComponent(value));
 }
 //category
 // function demo(category) {

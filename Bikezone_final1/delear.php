@@ -17,7 +17,7 @@
        $PostalCode=$_POST['PostalCode'];
        $Date=$_POST['Date'];
    
-       $insert=mysql_query("INSERT INTO dealerregistration (DealerName,BikesCategory, EmailID,MobileNumber,Password,ConfirmPassword,DealerType,CompanyName,CompanyEmail,CompanyMobileNum,State,City,Location,PostalCode,Status,Date) VALUES ('$DealerName','$EmailID','$MobileNumber','$Password','$ConfirmPassword','$DealerType','$CompanyName','$CompanyEmail','$CompanyMobileNumber','$State','$City','$Location','$PostalCode','Unblock','$Date')");
+       $insert=mysql_query("INSERT INTO dealerregistration (DealerName, EmailID,MobileNumber,Password,ConfirmPassword,DealerType,CompanyName,CompanyEmail,CompanyMobileNum,State,City,Location,PostalCode,Status,Date) VALUES ('$DealerName','$EmailID','$MobileNumber','$Password','$ConfirmPassword','$DealerType','$CompanyName','$CompanyEmail','$CompanyMobileNumber','$State','$City','$Location','$PostalCode','UnBlock','$Date')");
    
    
        if($insert){
@@ -90,10 +90,112 @@ $(document).ready(function(){
         });
     });
 });
-</script>
+
+
+function validateForm() {
+    var x = document.forms["form1"]["DealerName"].value;
+    if (x == "") {
+        alert("Dealer name must be filled out");
+        document.form1.DealerName.focus();
+        return false;
+    }  
+    var x = document.forms["form1"]["EmailID"].value;
+     var atpos = x.indexOf("@");
+    var dotpos = x.lastIndexOf(".");
+    if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length) {
+        alert("Not a valid e-mail address");
+        document.form1.EmailID.focus();
+        return false;
+    }
+    var c = document.forms["form1"]["MobileNumber"].value;
+    if (c == "") {
+        alert("Phone number must be filled out");
+        document.form1.MobileNumber.focus();
+        return false;
+    } 
+    if (c.length<10) {
+        alert("Phone number is invalid");
+        document.form1.MobileNumber.focus();
+        return false;
+    } 
+    var a = document.forms["form1"]["Password"].value;
+    if (a.length<8) {
+        alert("Password should not be less than 8 characters");
+        document.form1.Password.focus();
+        return false;
+    }   
+    var b = document.forms["form1"]["ConfirmPassword"].value;
+    if (b == "") {
+        alert("Confirm Password must be filled out");
+        document.form1.ConfirmPassword.focus();
+        return false;
+    } 
+    if (a!==b) {
+        alert("Password mismatch");
+        document.form1.ConfirmPassword.focus();
+        return false;
+    } 
+    var x = document.forms["form1"]["DealerType"].value;
+    if (x == "1") {
+        alert("DealerType must be select out");
+        document.form1.DealerType.focus();
+        return false;
+    }  
+    var x = document.forms["form1"]["CompanyName"].value;
+    if (x == "") {
+        alert("Company name must be filled out");
+        document.form1.CompanyName.focus();
+        return false;
+    } 
+    var x = document.forms["form1"]["CompanyEmail"].value;
+     var atpos = x.indexOf("@");
+    var dotpos = x.lastIndexOf(".");
+    if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length) {
+        alert("Not a valid e-mail address");
+        document.form1.CompanyEmail.focus();
+        return false;
+    }
+    var c = document.forms["form1"]["CompanyMobileNumber"].value;
+    if (c == "") {
+        alert("Company Mobile number must be filled out");
+        document.form1.CompanyMobileNumber.focus();
+        return false;
+    } 
+    if (c.length<10) {
+        alert("Company Mobile number is invalid");
+        document.form1.CompanyMobileNumber.focus();
+        return false;
+    } 
+    var x = document.forms["form1"]["State"].value;
+    if (x == "1") {
+        alert("State must be select out");
+        document.form1.State.focus();
+        return false;
+    } 
+    var x = document.forms["form1"]["City"].value;
+    if (x == "1") {
+        alert("City must be filled out");
+        document.form1.City.focus();
+        return false;
+    }  
+    var x = document.forms["form1"]["Location"].value;
+    if (x == "") {
+        alert("Location must be filled out");
+        document.form1.Location.focus();
+        return false;
+    }  
+    var x = document.forms["form1"]["PostalCode"].value;
+    if (x == "") {
+        alert("Postal Code must be filled out");
+        document.form1.PostalCode.focus();
+        return false;
+    }  
+    return true;
+  }
+      </script>
 </head>
 <body>
-<div id="wrapper">
+ <div id="wrapper">
 
          <div class="header">
         <nav class="navbar  fixed-top navbar-site navbar-light bg-light navbar-expand-md"
@@ -144,9 +246,9 @@ $(document).ready(function(){
                     <ul class="nav navbar-nav ml-auto navbar-right">
                         <!-- <li class="nav-item"><a href="category.html" class="nav-link"><i class="icon-th-thumb"></i> All Ads</a>
                         </li> -->
-                        <!-- <li class="dropdown no-arrow nav-item"><a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                        <li class="dropdown no-arrow nav-item"><a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
 
-                            <span>User Name</span> <i class="icon-user fa"></i> <i class=" icon-down-open-big fa"></i></a>
+                           </a>
                             <ul
                                     class="dropdown-menu user-menu dropdown-menu-right">
                                 <li class="active dropdown-item"><a href="account-home.html"><i class="icon-home"></i> Personal Home
@@ -173,7 +275,7 @@ $(document).ready(function(){
                                 <li class="dropdown-item"><a href="login.html"><i class=" icon-logout "></i> Log out </a>
                                 </li>
                             </ul>
-                        </li> -->
+                        </li>
                         <!-- <li class="postadd nav-item"><a class="btn btn-block   btn-border btn-post btn-danger nav-link" href="post-ads.html">Sell Your Bike</a>
                         </li> -->
                         <li class="dropdown  lang-menu nav-item">
@@ -218,7 +320,7 @@ $(document).ready(function(){
                         <div class="row">
                             <div class="col-sm-12">
 
-                                <form class="form-horizontal" method="post" action="">
+                                <form name="form1" class="form-horizontal" method="post" action=""  onSubmit="return validateForm(this)">
 
                                     <div class="content-subheading"><i class="icon-user fa"></i> <strong>Dealer
                                         Registration</strong></div>
@@ -231,7 +333,7 @@ $(document).ready(function(){
                                         <div class="col-sm-8">
                                             <input id="text7" name="DealerName"
                                                    placeholder="DealerName" class="form-control input-md"
-                                                   required="" type="text">
+                                                    type="text">
                                         </div>
                                     </div>
                                     <!-- Appended checkbox -->
@@ -241,7 +343,7 @@ $(document).ready(function(){
 
                                         <div class="col-sm-8">
                                             <input id="Text5" name="EmailID" class="form-control"
-                                                   placeholder="Email ID" required="" type="text">
+                                                   placeholder="Email ID"  type="text">
                                         </div>
                                     </div>
 
@@ -253,7 +355,7 @@ $(document).ready(function(){
                                         <div class="col-sm-8">
                                             <input id="Text6" name="MobileNumber"
                                                    placeholder="Mobile Number" class="form-control input-md"
-                                                   required="" type="text">
+                                                    type="number">
                                         </div>
                                     </div>
                                      <div class="form-group row">
@@ -263,7 +365,7 @@ $(document).ready(function(){
                                         <div class="col-sm-8">
                                             <input id="Text8" name="Password"
                                                    placeholder="password" type="password" class="form-control input-md"
-                                                   required="" >
+                                                    >
                                         </div>
                                     </div>
                                      <div class="form-group row">
@@ -273,7 +375,7 @@ $(document).ready(function(){
                                         <div class="col-sm-8">
                                             <input id="Text9" name="ConfirmPassword"
                                                    placeholder="Confirm Password" class="form-control input-md"
-                                                   required="" type="password">
+                                                    type="password">
                                         </div>
                                     </div>
                                     <hr />
@@ -286,10 +388,10 @@ $(document).ready(function(){
                                         <div class="col-sm-8">
                                             <select name="DealerType"                                                     class="form-control1">
                                                 <option value="1">Select</option>
-                                                <option value="2">Retailer</option>
-                                                <option value="3">Insurance</option>
-                                                <option value="4">Services</option>
-                                                <option value="5">Showroom</option>
+                                                <option value="Retailer">Retailer</option>
+                                                <option value="Insurance">Insurance</option>
+                                                <option value="Services">Services</option>
+                                                <option value="Showroom">Showroom</option>
                                             </select>
                                         </div>
                                     </div>
@@ -299,7 +401,7 @@ $(document).ready(function(){
                                         <div class="col-sm-8">
                                             <input id="textinput-company" name="CompanyName"
                                                    placeholder="Company Name" class="form-control input-md"
-                                                   required="" type="text">
+                                                    type="text">
                                         </div>
                                     </div>
 
@@ -310,7 +412,7 @@ $(document).ready(function(){
 
                                         <div class="col-sm-8">
                                             <input id="seller-email" name="CompanyEmail" class="form-control"
-                                                   placeholder="Company Email" required="" type="email">
+                                                   placeholder="Company Email" type="email">
 
                                         
                                         </div>
@@ -323,7 +425,7 @@ $(document).ready(function(){
                                         <div class="col-sm-8">
                                             <input id="seller-Number" name="CompanyMobileNumber"
                                                    placeholder="Phone Number" class="form-control input-md"
-                                                   required="" type="text">
+                                                    type="number">
                                         </div>
                                     </div>
                                  <!-- Select Basic -->
@@ -387,7 +489,7 @@ $(document).ready(function(){
 
                                         <div class="col-sm-8">
                                             <input id="Text3" name="Location" class="form-control"
-                                                   placeholder="Location" required="" type="text">
+                                                   placeholder="Location" type="text">
 
                                         
                                         </div>
@@ -398,7 +500,7 @@ $(document).ready(function(){
 
                                         <div class="col-sm-8">
                                             <input id="Text10" name="PostalCode" class="form-control"
-                                                   placeholder="Postal Code" required="" type="text">
+                                                   placeholder="Postal Code"  type="number">
                                         </div>
                                     </div>
                                     <!-- Date-->

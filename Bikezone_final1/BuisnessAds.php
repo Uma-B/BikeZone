@@ -2,7 +2,7 @@
 session_start();
 include "db_connection.php";
 
-
+GLOBAL $filterQuery2;
        if(isset($_SESSION['BikeCategory'])) {
 
         $Keyword=$_SESSION['Keyword'];
@@ -52,6 +52,55 @@ from
 where
 ";
 
+//keyword
+if($Keyword != null){
+    $filterQuery2 = "select
+  usedbikes.UsedBikeId as UsedBikeId,
+  usedbikes.BikeCategory as BikeCategory,
+  usedbikes.UsedBikeImage1 as UsedBikeImage1,
+  usedbikes.Brand as Brand,
+  usedbikes.Model as Model,
+  usedbikes.KilometreDriven as KilometreDriven,
+  usedbikes.Location as Location,
+  usedbikes.UserId as UserId,
+  usedbikes.UserName as UserName,
+  usedbikes.ContactNumber as ContactNumber,
+  usedbikes.Prize as Prize
+from
+  usedbikes
+where
+  usedbikes.BikeCategory LIKE '$Keyword'
+  OR usedbikes.Brand LIKE '$Keyword'
+  OR usedbikes.Model LIKE '$Keyword'
+  OR usedbikes.State LIKE '$Keyword'
+  OR usedbikes.City LIKE '$Keyword'
+UNION
+select
+  dealerbikes.DealerBikeId as UsedBikeId,
+  dealerbikes.BikeCategory as BikeCategory,
+  dealerbikes.DealerBikeImage1 as BikeImage1,
+  dealerbikes.Brand as Brand,
+  dealerbikes.Model as Model,
+  dealerbikes.KilometreDriven as KilometreDriven,
+  dealerbikes.Location as Location,
+  dealerbikes.DealerId as UserId,
+  dealerbikes.UserName as UserName,
+  dealerbikes.ContactNumber as ContactNumber,
+  dealerbikes.Prize as Prize
+from
+  dealerbikes
+where
+  dealerbikes.BikeCategory LIKE '$Keyword'
+  OR dealerbikes.Brand LIKE '$Keyword'
+  OR dealerbikes.Model LIKE '$Keyword'
+  OR dealerbikes.State LIKE '$Keyword'
+  OR dealerbikes.City LIKE '$Keyword'
+";
+
+
+}
+else{
+
 if($BikeCategory != ""){
     $filterQuery2 = $filterQuery2." dealerbikes.BikeCategory LIKE '$BikeCategory' AND";
     // $filterQuery1 = $filterQuery1." usedbikes.BikeCategory LIKE '$BikeCategory' AND";
@@ -87,6 +136,29 @@ if($split[count($split)-1] == "AND"){
     // $filterQuery1 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filterQuery1);
     $filterQuery2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filterQuery2);
 }
+}
+
+$_SESSION['filterQuery2'] = $filterQuery2;
+
+
+    $_SESSION['Keyword'] = $Keyword;
+    $_SESSION['BikeCategory'] = $BikeCategory;
+    $_SESSION['Brand'] = $Brand;
+    $_SESSION['Model'] = $Model;
+     $_SESSION['State'] = $State;
+    $_SESSION['City'] = $City;
+    $_SESSION['Prize_Minimum'] = $Prize_Minimum;
+    $_SESSION['Prize_Maximum'] = $Prize_Maximum;
+
+    $_SESSION['Keyword'] = $_SESSION['Keyword'];
+    $_SESSION['BikeCategory'] = $_SESSION['BikeCategory'];
+    $_SESSION['Brand'] = $_SESSION['Brand'];
+    $_SESSION['Model'] = $_SESSION['Model'];
+     $_SESSION['State'] = $_SESSION['State'];
+    $_SESSION['City'] = $_SESSION['City'];
+    $_SESSION['Prize_Minimum'] = $_SESSION['Prize_Minimum'];
+    $_SESSION['Prize_Maximum'] = $_SESSION['Prize_Maximum'];
+
 // $filterQuery = $filterQuery1." UNION ".$filterQuery2;
 
         // $Keyword=$_SESSION['Keyword'];
@@ -480,10 +552,10 @@ if($split[count($split)-1] == "AND"){
 
 
                             <div class="tab-filter">
-                                <select class="selectpicker select-sort-by" data-style="btn-select" data-width="auto">
-                                    <option>Sort by </option>
-                                    <option>Price: Low to High</option>
-                                    <option>Price: High to Low</option>
+                                <select class="selectpicker select-sort-by" data-style="btn-select" data-width="auto" onchange="sort_by(this.value)">
+                                    <option value="-1">Sort by </option>
+                                    <option value="ASC">Price: Low to High</option>
+                                    <option value="DESC">Price: High to Low</option>
                                 </select>
                             </div>
                         </div>
@@ -562,7 +634,6 @@ if($split[count($split)-1] == "AND"){
 <?php
 
 include "db_connection.php";
-echo $split[count($split)-1];
 echo "\n Filter Query $filterQuery2";
 $sql=mysql_query($filterQuery2);
 while($row=mysql_fetch_array($sql))
@@ -839,16 +910,19 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
   <script type="text/javascript">
   // city
 function recp() {
-
     var category = document.getElementById('category').value;
         var city = document.getElementById('city').value;
         var min = document.getElementById('minPrice').value;
         var max = document.getElementById('maxPrice').value;
-        //alert( min + max);
         jQuery('.oldList div').html('');
   $('#myStyle').load('fetch_data.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
-
 }
+
+function sort_by(value){
+  jQuery('.oldList div').html('');
+  $('#myStyle').load('fetch_sort_buisness.php?value=' + encodeURIComponent(value));
+}
+
 //category
 // function demo(category) {
 //   $('#myStyle2').load('fetch_data.php?category=' + category);
