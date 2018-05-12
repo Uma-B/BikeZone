@@ -95,7 +95,7 @@ $rs_result = mysql_query ($sql);
             <div class="navbar-identity">
 
 
-                <a href="index.html" class="navbar-brand logo logo-title">
+                <a href="index.php" class="navbar-brand logo logo-title">
                 <span class="logo-icon"><!-- <i class="icon icon-search-1 ln-shadow-logo "></i> -->
                 </span>BIKE<span>ZONE </span> </a>
 
@@ -227,12 +227,15 @@ $rs_result = mysql_query ($sql);
                                                                                 
                                         ?>
                                         <li>                                        
-                                       <select class="form-control" onchange="recp('<?php echo $row['BikeCategory']?>')">
-                                            <option value="">-select--</option>
-                                            <option value="Used Bikes">Used Bikes</option>
-                                            <option value="New Bikes">New Bikes</option>
-                                            <option value="Scooters">Scooters</option>
-                                        </select>                                        
+                                        <div margin:0px auto; margin-top:30px;" >
+                                                <select id="category"  style="width:80%;" onchange="recp()" class="chosen form-control ">
+                                            <option value=""> Select Category </option>
+                                            <option value="Used Bikes"> Used Bikes</option>
+                              <option value="New Bikes"> New Bikes</option>
+                              <option value="Scooter"> Scooter</option>
+                                        </select>
+                                        </div>
+
                                         </li>
                                      
                                 </ul>
@@ -244,58 +247,73 @@ $rs_result = mysql_query ($sql);
                                 <ul class="browse-list list-unstyled long-list">
                                      <?php
                                         include_once 'db_connection.php';
-
+                                        ?>
+                                        <div margin:0px auto; margin-top:30px;" >
+                                                <select id="city" class="chosen" style="width:80%;" onchange="recp()">
+                                                <option value=""> Select City </option>
+                                                <?php
                                         $query ="SELECT City FROM usedbikes UNION SELECT City FROM dealerbikes Group by City  ";
                                         $result= mysql_query($query);
 
                                         while($row=mysql_fetch_array($result))
                                         {                                         
                                         ?>
-                                        <li>
-                                        <a onClick="recp('<?php echo $row['City']?>')" href="#">
-                                            <button id="button"><?php echo $row['City']?></button>
+                                        <li><a href="#">
+                                            <option><?php echo $row['City']?></option>
                                         </a>
                                         </li>
-                                      <?php 
+                                        <?php 
                                          }
-                                      ?>  
-                                </ul>
+                                      ?>
+                                                </select>
+                                                </div>
+                                                </ul>
                             </div>
                             <!--/.locations-list-->
 
-                            <div class="locations-list  list-filter">
+                           <div class="locations-list  list-filter" class="form-inline ">
                                 <h5 class="list-title"><strong><a href="#">Price range</a></strong></h5>
 
-                                <form role="form" class="form-inline ">
-                                    <div class="form-group col-lg-4 col-md-12 no-padding">
-                                        <input type="text" placeholder="Rs.2000" id="minPrice" class="form-control">
+                                <!-- <form role="form" class="form-inline "> -->
+                                    <div class="form-inline" >
+                                        <input type="text" placeholder="Min value" id="minPrice" class="form-control">
+                                   <br><br><br>
+                                   
+                                        <input type="text" placeholder="Max value" id="maxPrice" class="form-control">
                                     </div>
-                                    <div class="form-group col-lg-1 col-md-12 no-padding text-center hidden-md"> -</div>
-                                    <div class="form-group col-lg-4 col-md-12 no-padding">
-                                        <input type="text" placeholder="Rs.3000" id="maxPrice" class="form-control">
-                                    </div>
+                                    <br>
                                     <div class="form-group col-lg-3 col-md-12 no-padding">
-                                        <button class="btn btn-default pull-right btn-block-md" type="submit">GO
+                                        <button class="btn btn-default pull-right btn-block-md" onclick="recp()" type="submit" >GO
                                         </button>
                                     </div>
-                                </form>
+                              <!--   </form> -->
                                 <div style="clear:both"></div>
                             </div>
                             <!--/.list-filter-->
                             <div class="locations-list  list-filter">
                                 <h5 class="list-title"><strong><a href="#">Seller</a></strong></h5>
                                 <ul class="browse-list list-unstyled long-list">
-                                    <li><a href=""><strong>All Ads</strong> <span
+                                    <li><a href="index_find.php"><strong>All Ads</strong> <span
                                             class="count"><?php
 
-                                            $count=mysql_query("SELECT UserId FROM usedbikes");
-                                                $num_rows=mysql_num_rows($count);
-                                             echo $num_rows+1;
+                                            $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes) + (SELECT COUNT(*) FROM dealerbikes) as count");
+                                                $res=mysql_fetch_array($count);
+                                             echo  $res['count'];
                                              ?></span></a></li>
-                                    <li><a href="index_find.php">Business <span
-                                            class="count">28,70 5</span></a></li>
-                                    <li><a href="">Personal <span
-                                            class="count">18,705</span></a></li>
+                                    <li><a href="BuisnessAds.php">Business <span
+                                            class="count"><?php
+
+                                            $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count");
+                                                $res=mysql_fetch_array($count);
+                                             echo  $res['COUNT(*)'];
+                                             ?></span></a></li>
+                                    <li><a href="PersonalAds.php">Personal <span
+                                            class="count"><?php
+
+                                            $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count");
+                                                $res=mysql_fetch_array($count);
+                                             echo  $res['COUNT(*)'];
+                                             ?></span></a></li>
                                 </ul>
                             </div>
                             <!--/.list-filter-->
@@ -471,6 +489,8 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
         </a> <a class="btn btn-default  btn-sm make-favorite"> <i class="fa fa-heart"></i> <span>Save</span> </a></div>
  
 </div>
+<div id='myStyle'>
+</div>
 </div>
 
 
@@ -522,12 +542,10 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
 
                         <div class="tab-box  save-search-bar text-center"><a href="#"> <i class=" icon-star-empty"></i>
                             Save Search </a></div>
-                    </div>
-
-                    <div class="post-promo text-center">
+                        <div class="post-promo text-center">
                         <h2> Do you get any bike for sell ? </h2>
                         <h5>Sell your bikes online FOR FREE. It's easier than you think !</h5>
-                        <a href="post-ads.html" class="btn btn-lg btn-border btn-post btn-danger">Sell my bike free</a>
+                        <a href="pop.php " class="btn btn-lg btn-border btn-post btn-danger">Sell my bike free</a>
                     </div>
                     <!--/.post-promo-->
 
@@ -537,7 +555,64 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
             </div>
         </div>
     </div>
-  
+    <!-- /.main-container -->
+
+<?php
+include 'footer.php';
+?>
+
+
+
+<!-- Placed at the end of the document so the pages load faster -->
+
+<script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/js/vendors.min.js"></script>
+
+<!-- include custom script for site  -->
+<script src="assets/js/script.js"></script>
+
+
+
+<script src="choosen.js"></script>
+  <script type="text/javascript">
+  // city
+function recp() {
+
+        var category = document.getElementById('category').value;
+        var city = document.getElementById('city').value;
+        var min = document.getElementById('minPrice').value;
+        var max = document.getElementById('maxPrice').value;
+        //alert( min + max);
+        jQuery('.oldList div').html('');
+  $('#myStyle').load('fetch_data.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
+
+}
+
+function sort_by(value){
+  jQuery('.oldList div').html('');
+  $('#myStyle').load('fetch_data_sort.php?value=' + encodeURIComponent(value));
+}
+//category
+// function demo(category) {
+//   $('#myStyle2').load('fetch_data.php?category=' + category);
+// }
+</script>
+<script type="text/javascript">
+$(".chosen").chosen();
+</script>
+<link rel="stylesheet" href="style.css">
+<!-- grid problem -->
+<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
+<!-- <script
+  src="https://code.jquery.com/jquery-1.11.2.js"
+  integrity="sha256-WMJwNbei5YnfOX5dfgVCS5C4waqvc+/0fV7W2uy3DyU="
+  crossorigin="anonymous"></script> -->
+<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script> -->
+<!-- <script src="choosen.js"></script> -->
+
+
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
@@ -547,7 +622,35 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
 <!-- include custom script for site  -->
 <script src="assets/js/script.js"></script>
 
+<script src="choosen.js"></script>
 
+<script type="text/javascript">
+$(".chosen").chosen();
+</script>
+ <script type="text/javascript">
+  // city
+function recp() {
+
+        var category = document.getElementById('category').value;
+        var city = document.getElementById('city').value;
+        var min = document.getElementById('minPrice').value;
+        var max = document.getElementById('maxPrice').value;
+        //alert( min + max);
+        jQuery('.oldList div').html('');
+  $('#myStyle').load('fetch_data.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
+
+}
+
+function sort_by(value){
+  jQuery('.oldList div').html('');
+  $('#myStyle').load('fetch_data_sort.php?value=' + encodeURIComponent(value));
+}
+//category
+// function demo(category) {
+//   $('#myStyle2').load('fetch_data.php?category=' + category);
+// }
+</script>
+<link rel="stylesheet" href="style.css">
 
 
 </body>

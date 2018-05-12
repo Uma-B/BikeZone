@@ -105,7 +105,9 @@
             </div>
 
 
-
+<a href="Admin_home.html">
+<button style="float: right;" type="button" class="btn btn-success">Back</button>
+</a>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-left">
                         
@@ -129,14 +131,20 @@
     <br />
     <div class="container">
 
-  <div class="jumbotron">
- 
+   <div class="search-row-wrapper">
+          <div class="container ">
+            <h1 style="color: white;">Admin</h1>
+            <!-- <h2>Customer Count</h2> -->
+           <!--  <?php
 
-  <h1 style="color:white;text-align :center">Customes Details</h1><br /><br /></div>
+                                            $count=mysql_query("SELECT COUNT(*) FROM  as count");
+                                                $res=mysql_fetch_array($count);
+                                             echo  $res['COUNT(*)'];
+                                             ?>
+    -->       </div>
+        </div>
 
-<a href="Admin_home.html">
-<button style="float: right;" type="button" class="btn btn-success">Back</button>
-</a>
+
   <p id="new_select2"></p>
   <form action="" method="POST">
    <div class="table-responsive">    

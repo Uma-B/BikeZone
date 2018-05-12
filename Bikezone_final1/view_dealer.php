@@ -104,7 +104,9 @@
 
             </div>
 
-
+ <a href="Admin_home.html">
+<button style="float: right;" type="button" class="btn btn-success">Back</button>
+</a>
 
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-left">
@@ -127,16 +129,15 @@
      }
     </style>
     <br />
-    <div class="container">
+   <div class="container">
 
-  <div class="jumbotron">
+   <div class="search-row-wrapper">
+          <div class="container ">
+          
+     
+  <h1 style="color:white;text-align :center">Dealer Details</h1><br /><br /></div></div>
+
  
-
-  <h1 style="color:white;text-align :center">Dealer Details</h1><br /><br /></div>
-
-  <a href="Admin_home.html">
-<button style="float: right;" type="button" class="btn btn-success">Back</button>
-</a>
   <p id="new_select2"></p>
   <form action="" method="POST">
    <div class="table-responsive">    

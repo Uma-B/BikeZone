@@ -23,7 +23,7 @@ $value= $_GET['value'];
 
 if($value != null){
   
-$filterQuery = "SELECT (". $filterQuery . ") ORDER BY dealerbikes.Prize $value";
+$filterQuery =  $filterQuery . " ORDER BY Prize $value";
 echo $filterQuery;
 }
 $result = $conn->query($filterQuery);

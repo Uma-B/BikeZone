@@ -16,7 +16,7 @@ if (isset($_POST['BtnSubmit'])) {
       }
       else {
         ?>
-        <script>alert("Error")</script>
+        <script>alert("Fill your fields correctly")</script>
         <?php
       }
       }

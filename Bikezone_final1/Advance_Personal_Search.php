@@ -1,69 +1,79 @@
 <?php
 session_start();
-
 include "db_connection.php";
 
- // if(isset($_POST['BtnSubmit'])) {
+GLOBAL $filterQuery1;
+if(isset($_SESSION['BikeCategory'])) {
 
- //       $_SESSON['Keyword']=$_POST['Keyword'];
- //       $_SESSION['BikeCategory']=$_POST['BikeCategory'];
- //       $_SESSION['Brand']=$_POST['Brand'];
- //       $_SESSION['Model']=$_POST['Model'];
- //       $_SESSION['State']=$_POST['State'];
- //       $_SESSION['City']=$_POST['City'];
- //       $_SESSION['Prize_Minimum']=$_POST['Prize_Minimum'];
- //       $_SESSION['Prize_Maximum']=$_POST['Prize_Maximum']; 
-GLOBAL $filterQuery;
-
- if(isset($_SESSION['BikeCategory'])) {
-
-    $Keyword = $_SESSION['Keyword'];
-    $BikeCategory= $_SESSION['BikeCategory'];
-    $Brand = $_SESSION['Brand'];
-    $Model = $_SESSION['Model'];
-    $State = $_SESSION['State'];
-    $City = $_SESSION['City'];
-    $Prize_Minimum = $_SESSION['Prize_Minimum'];
-    $Prize_Maximum= $_SESSION['Prize_Maximum'];
-        
+        $Keyword=$_SESSION['Keyword'];
+        $BikeCategory=$_SESSION['BikeCategory'];
+        $Brand=$_SESSION['Brand'];
+        $Model=$_SESSION['Model'];
+        $Prize_Minimum=$_SESSION['Prize_Minimum'];
+        $Prize_Maximum=$_SESSION['Prize_Maximum'];
+        $State=$_SESSION['State'];
+        $City=$_SESSION['City'];
+        $Year=$_SESSION['Year'];
+       $KilometreDriven=$_SESSION['KilometreDriven'];
+       $Transmission=$_SESSION['Transmission'];
+       $FuelType=$_SESSION['FuelType'];
+       $Stroke=$_SESSION['Stroke'];
+       $EngineSize=$_SESSION['EngineSize'];
+       $Location=$_SESSION['Location'];
+       $PostalCode=$_SESSION['PostalCode'];
        }
 
+        // $Keyword=$_SESSION['Keyword'];
+        // $BikeCategory=$_SESSION['BikeCategory'];
+        // $Brand=$_SESSION['Brand'];
+        // $Model=$_SESSION['Model'];
+        // $Prize_Minimum=$_SESSION['Prize_Minimum'];
+        // $Prize_Maximum=$_SESSION['Prize_Maximum'];
+        // $State=$_SESSION['State'];
+        // $City=$_SESSION['City'];
+
 $filterQuery1 = "select
-  usedbikes.UsedBikeId as UsedBikeId,
-  usedbikes.BikeCategory as BikeCategory,
-  usedbikes.UsedBikeImage1 as UsedBikeImage1,
-  usedbikes.Brand as Brand,
-  usedbikes.Model as Model,
-  usedbikes.KilometreDriven as KilometreDriven,
-  usedbikes.Location as Location,
-  usedbikes.UserId as UserId,
-  usedbikes.UserName as UserName,
-  usedbikes.ContactNumber as ContactNumber,
-  usedbikes.Prize as Prize
+usedbikes.UsedBikeId as UsedBikeId,
+usedbikes.BikeCategory as BikeCategory,
+usedbikes.UsedBikeImage1 as UsedBikeImage1,
+usedbikes.Brand as Brand,
+usedbikes.Model as Model,
+usedbikes.UserId as UserId,
+usedbikes.UserName as UserName,
+usedbikes.ContactNumber as ContactNumber,
+usedbikes.Prize as Prize,
+usedbikes.Year as Year,
+usedbikes.Transmission as Transmission,
+usedbikes.FuelType as FuelType,
+usedbikes.EngineSize as EngineSize,
+usedbikes.KilometreDriven as KilometreDriven,
+usedbikes.Stroke as Stroke,
+usedbikes.Location as Location,
+usedbikes.PostalCode as PostalCode
 from
-  usedbikes
+usedbikes
 where
 ";
 
-$filterQuery2 = "select
-  dealerbikes.DealerBikeId as UsedBikeId,
-  dealerbikes.BikeCategory as BikeCategory,
-  dealerbikes.DealerBikeImage1 as BikeImage1,
-  dealerbikes.Brand as Brand,
-  dealerbikes.Model as Model,
-  dealerbikes.KilometreDriven as KilometreDriven,
-  dealerbikes.Location as Location,
-  dealerbikes.DealerId as UserId,
-  dealerbikes.UserName as UserName,
-  dealerbikes.ContactNumber as ContactNumber,
-  dealerbikes.Prize as Prize
-from
-  dealerbikes
-where
-";
+// $filterQuery2 = "select
+//   dealerbikes.DealerBikeId as UsedBikeId,
+//   dealerbikes.BikeCategory as BikeCategory,
+//   dealerbikes.DealerBikeImage1 as BikeImage1,
+//   dealerbikes.Brand as Brand,
+//   dealerbikes.Model as Model,
+//   dealerbikes.KilometreDriven as KilometreDriven,
+//   dealerbikes.Location as Location,
+//   dealerbikes.DealerId as UserId,
+//   dealerbikes.UserName as UserName,
+//   dealerbikes.ContactNumber as ContactNumber,
+//   dealerbikes.Prize as Prize
+// from
+//   dealerbikes
+// where
+// ";
 
 if($Keyword != null){
-    $filterQuery = "select
+    $filterQuery1 = "select
   usedbikes.UsedBikeId as UsedBikeId,
   usedbikes.BikeCategory as BikeCategory,
   usedbikes.UsedBikeImage1 as UsedBikeImage1,
@@ -78,60 +88,52 @@ if($Keyword != null){
 from
   usedbikes
 where
-  usedbikes.BikeCategory LIKE '$Keyword'
+ usedbikes.BikeCategory LIKE '$Keyword'
   OR usedbikes.Brand LIKE '$Keyword'
   OR usedbikes.Model LIKE '$Keyword'
+  OR usedbikes.Prize LIKE '$Keyword'
   OR usedbikes.State LIKE '$Keyword'
   OR usedbikes.City LIKE '$Keyword'
-UNION
-select
-  dealerbikes.DealerBikeId as UsedBikeId,
-  dealerbikes.BikeCategory as BikeCategory,
-  dealerbikes.DealerBikeImage1 as BikeImage1,
-  dealerbikes.Brand as Brand,
-  dealerbikes.Model as Model,
-  dealerbikes.KilometreDriven as KilometreDriven,
-  dealerbikes.Location as Location,
-  dealerbikes.DealerId as UserId,
-  dealerbikes.UserName as UserName,
-  dealerbikes.ContactNumber as ContactNumber,
-  dealerbikes.Prize as Prize
-from
-  dealerbikes
-where
-  dealerbikes.BikeCategory LIKE '$Keyword'
-  OR dealerbikes.Brand LIKE '$Keyword'
-  OR dealerbikes.Model LIKE '$Keyword'
-  OR dealerbikes.State LIKE '$Keyword'
-  OR dealerbikes.City LIKE '$Keyword'
+  OR usedbikes.Year LIKE '$Keyword'
+  OR usedbikes.KilometreDriven LIKE '$Keyword'
+  OR usedbikes.Transmission LIKE '$Keyword'
+  OR usedbikes.FuelType LIKE '$Keyword'
+  OR usedbikes.Stroke LIKE '$Keyword'
+  OR usedbikes.EngineSize LIKE '$Keyword'
+  OR usedbikes.Location LIKE '$Keyword'
+  OR usedbikes.PostalCode LIKE '$Keyword'
 ";
 
 
 }else{
 
+
 if($BikeCategory != ""){
-    $filterQuery2 = $filterQuery2." dealerbikes.BikeCategory LIKE '$BikeCategory' AND";
+    // $filterQuery2 = $filterQuery2." dealerbikes.BikeCategory LIKE '$BikeCategory' AND";
     $filterQuery1 = $filterQuery1." usedbikes.BikeCategory LIKE '$BikeCategory' AND";
 }
 if($Brand != ""){
-     $filterQuery2 = $filterQuery2." dealerbikes.Brand LIKE '$Brand' AND";
+     // $filterQuery2 = $filterQuery2." dealerbikes.Brand LIKE '$Brand' AND";
     $filterQuery1 = $filterQuery1." usedbikes.Brand LIKE '$Brand' AND";
 }
 if($Model != ""){
-    $filterQuery2 = $filterQuery2." dealerbikes.Model LIKE '$Model' AND";
+    // $filterQuery2 = $filterQuery2." dealerbikes.Model LIKE '$Model' AND";
     $filterQuery1 = $filterQuery1." usedbikes.Model LIKE '$Model' AND";
 }
-
+// if($KilometreDriven != ""){
+//     $filterQuery2 = $filterQuery2." dealerbikes.KilometreDriven LIKE '$KilometreDriven' AND";
+//     $filterQuery1 = $filterQuery1." usedbikes.KilometreDriven LIKE '$KilometreDriven' AND";
+// }
 if($State != ""){
-    $filterQuery2 = $filterQuery2." dealerbikes.State LIKE '$State' AND";
+    // $filterQuery2 = $filterQuery2." dealerbikes.State LIKE '$State' AND";
     $filterQuery1 = $filterQuery1." usedbikes.State LIKE '$State' AND";
 }
 if($City != ""){
-    $filterQuery2 = $filterQuery2." dealerbikes.City LIKE '$City' AND";
+    // $filterQuery2 = $filterQuery2." dealerbikes.City LIKE '$City' AND";
     $filterQuery1 = $filterQuery1." usedbikes.City LIKE '$City' AND";
 }
 if($Prize_Minimum != "" && $Prize_Maximum != ""){
-    $filterQuery2 = $filterQuery2." dealerbikes.Prize IN (SELECT Prize from dealerbikes WHERE Prize BETWEEN $Prize_Minimum AND $Prize_Maximum)";
+    // $filterQuery2 = $filterQuery2." dealerbikes.Prize IN (SELECT Prize from dealerbikes WHERE Prize BETWEEN $Prize_Minimum AND $Prize_Maximum)";
     $filterQuery1 = $filterQuery1." usedbikes.Prize IN (SELECT Prize from usedbikes WHERE Prize BETWEEN $Prize_Minimum AND $Prize_Maximum)";
 }
 /*trim($filterQuery1);
@@ -139,16 +141,13 @@ trim($filterQuery2);*/
 $split = explode(" ", $filterQuery1);
 if($split[count($split)-1] == "AND"){
     $filterQuery1 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filterQuery1);
-    $filterQuery2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filterQuery2);
+    // $filterQuery2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filterQuery2);
 }
-$filterQuery = $filterQuery1." UNION ".$filterQuery2;
-
 }
+// $filterQuery = $filterQuery1." UNION ".$filterQuery2;
+$_SESSION['filterQuery1'] = $filterQuery1;
 
-$_SESSION['filterQuery'] = $filterQuery;
-
-
-    $_SESSION['Keyword'] = $Keyword;
+       $_SESSION['Keyword'] = $Keyword;
     $_SESSION['BikeCategory'] = $BikeCategory;
     $_SESSION['Brand'] = $Brand;
     $_SESSION['Model'] = $Model;
@@ -156,6 +155,14 @@ $_SESSION['filterQuery'] = $filterQuery;
     $_SESSION['City'] = $City;
     $_SESSION['Prize_Minimum'] = $Prize_Minimum;
     $_SESSION['Prize_Maximum'] = $Prize_Maximum;
+    $_SESSION['Year'] = $Year;
+    $_SESSION['KilometreDriven'] = $KilometreDriven;
+    $_SESSION['Transmission'] = $Transmission;
+    $_SESSION['FuelType'] = $FuelType;
+    $_SESSION['Stroke'] = $Stroke;
+    $_SESSION['EngineSize'] = $EngineSize;
+    $_SESSION['Location'] = $Location;
+    $_SESSION['PostalCode'] = $PostalCode;
 
     $_SESSION['Keyword'] = $_SESSION['Keyword'];
     $_SESSION['BikeCategory'] = $_SESSION['BikeCategory'];
@@ -165,39 +172,19 @@ $_SESSION['filterQuery'] = $filterQuery;
     $_SESSION['City'] = $_SESSION['City'];
     $_SESSION['Prize_Minimum'] = $_SESSION['Prize_Minimum'];
     $_SESSION['Prize_Maximum'] = $_SESSION['Prize_Maximum'];
-
-
-    // $_SESSION['Keyword'] = $_SESSION['Keyword'];
-    // $_SESSION['BikeCategory'] = $_SESSION['BikeCategory'];
-    // $_SESSION['Brand'] = $_SESSION['Brand'];
-    // $_SESSION['Model'] = $_SESSION['Model'];
-    //  $_SESSION['State'] = $_SESSION['State'];
-    // $_SESSION['City'] = $_SESSION['City'];
-    // $_SESSION['Prize_Minimum'] = $_SESSION['Prize_Minimum'];
-    // $_SESSION['Prize_Maximum'] = $_SESSION['Prize_Maximum'];
+    $_SESSION['Year'] = $_SESSION['Year'];
+    $_SESSION['KilometreDriven'] = $_SESSION['KilometreDriven'];
+    $_SESSION['Transmission'] = $_SESSION['Transmission'];
+    $_SESSION['FuelType'] = $_SESSION['FuelType'];
+    $_SESSION['Stroke'] = $_SESSION['Stroke'];
+    $_SESSION['EngineSize'] = $_SESSION['EngineSize'];
+    $_SESSION['Location'] = $_SESSION['Location'];
+    $_SESSION['PostalCode'] = $_SESSION['PostalCode'];
 
     
-    // $_SESSION['Keyword'] = $Keyword;
-    // $_SESSION['BikeCategory'] = $BikeCategory;
-    // $_SESSION['Brand'] = $Brand;
-    // $_SESSION['Model'] = $Model;
-    // $_SESSION['State'] = $State;
-    // $_SESSION['City'] = $City;
-    // $_SESSION['Prize_Minimum'] = $Prize_Minimum;
-    // $_SESSION['Prize_Maximum'] = $Prize_Maximum;
 
-    //  $_SESSION['Keyword'] = $_SESSION['Keyword'];
-    // $_SESSION['BikeCategory'] = $_SESSION['BikeCategory'];
-    // $_SESSION['Brand'] = $_SESSION['Brand'];
-    // $_SESSION['Model'] = $_SESSION['Model'];
-    //  $_SESSION['State'] = $_SESSION['State'];
-    // $_SESSION['City'] = $_SESSION['City'];
-    // $_SESSION['Prize_Minimum'] = $_SESSION['Prize_Minimum'];
-    // $_SESSION['Prize_Maximum'] = $_SESSION['Prize_Maximum'];
-    
-                           
+                            
 ?>
-
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
@@ -215,7 +202,6 @@ $_SESSION['filterQuery'] = $filterQuery;
     <link href="assets/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-
     <!-- styles needed for carousel slider -->
     <link href="assets/plugins/owl-carousel/owl.carousel.css" rel="stylesheet">
     <link href="assets/plugins/owl-carousel/owl.theme.css" rel="stylesheet">
@@ -235,9 +221,6 @@ $_SESSION['filterQuery'] = $filterQuery;
         paceOptions = {
             elements: true
         };
-
-        
-
     </script>
     <script src="assets/js/pace.min.js"></script>
 
@@ -288,7 +271,7 @@ $_SESSION['filterQuery'] = $filterQuery;
                         </a>
                         </li> -->
                       <li><a href="" class="glyphicon glyphicon-home"></a></li>
-                      <li><a href="category.html">Bike for sale</a></li>
+                      <li><a href="index_find.php">Bike for sale</a></li>
                       <li><a href="">Insurance</a></li>
                       <li><a href="">Service</a></li>
                       <li><a href="">Help</a></li>
@@ -298,7 +281,7 @@ $_SESSION['filterQuery'] = $filterQuery;
                         </li> -->
                         <li class="dropdown no-arrow nav-item"><a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
 
-                            </a>
+                            <span>User Name</span> <i class="icon-user fa"></i> <i class=" icon-down-open-big fa"></i></a>
                             <ul
                                     class="dropdown-menu user-menu dropdown-menu-right">
                                 <!-- <li class="active dropdown-item"><a href="account-home.html"><i class="icon-home"></i> Personal Home
@@ -326,48 +309,8 @@ $_SESSION['filterQuery'] = $filterQuery;
                                 </li>
                             </ul>
                         </li>
-                        <?php if (isset($_SESSION['usr_name'])) { ?>
-                         <li class="dropdown no-arrow nav-item"><a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-
-                            <span><p class="navbar-text">Signed in as <?php echo $_SESSION['usr_name']; ?></p></span> <i class="icon-user fa"></i> <i class=" icon-down-open-big fa"></i></a>
-                            <ul
-                                    class="dropdown-menu user-menu dropdown-menu-right">
-                                <li class="dropdown-item"><a href="logout.php"><i class=" icon-logout "></i> Log out </a>
-                                </li>
-                            </ul>
+                        <li class="postadd nav-item"><a class="btn btn-block   btn-border btn-post btn-danger nav-link" href="post-ads.html">Sell Your Bike</a>
                         </li>
-                        <li><div class="btn-group">
-  <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" style="height: 45px; width: 120px;">
-    Sell your bike
-  </button>
-  <div class="dropdown-menu">
-    <a class="dropdown-item" href="customer_post.php">Customer</a>
-    <a class="dropdown-item" href="dealer_post.php">Dealer</a>
-    
-  </div>
-</div></li>
-                <?php } else { ?>
-                <li><div class="btn-group">
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" style="height: 45px; width: 120px;">
-    Login
-  </button>
-  <div class="dropdown-menu">
-    <a class="dropdown-item" href="UserLogin.php">User</a>
-    <a class="dropdown-item" href="CompanyLogin.php">Company</a>
-    
-  </div>
-</div>  </li>
-                <li><div class="btn-group">
-  <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" style=" height: 45px; width: 120px; margin-left: 20px;">
-    Register
-  </button>
-  <div class="dropdown-menu">
-    <a class="dropdown-item" href="UserRegistration.php">User</a>
-    <a class="dropdown-item" href="delear.php">Company</a>
-    
-  </div>
-</div></li>
-                <?php } ?>
                         <li class="dropdown  lang-menu nav-item">
                             <!-- <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
                                 <span class="lang-title">EN</span>
@@ -411,7 +354,7 @@ $_SESSION['filterQuery'] = $filterQuery;
             </div>
         </div>
 
-    <!-- /.search-row -->
+     <!-- /.search-row -->
     <div class="main-container">
         <div class="container">
             <div class="row">
@@ -434,7 +377,7 @@ $_SESSION['filterQuery'] = $filterQuery;
                                         ?>
                                         <li>                                        
                                         <div margin:0px auto; margin-top:30px;" >
-                                                <select id="category"  style="width:80%;" onchange="recp()" class="chosen form-control ">
+                                                <select id="category" class="chosen" style="width:80%;" onchange="recp()">
                                             <option value=""> Select Category </option>
                                             <option value="Used Bikes"> Used Bikes</option>
                               <option value="New Bikes"> New Bikes</option>
@@ -474,7 +417,9 @@ $_SESSION['filterQuery'] = $filterQuery;
                                                 </select>
                                                 </div>
                                                 </ul>
-                            
+
+                             </select>
+                            </div>
                             <!--/.locations-list-->
 
                             <div class="locations-list  list-filter" class="form-inline ">
@@ -499,21 +444,21 @@ $_SESSION['filterQuery'] = $filterQuery;
                             <div class="locations-list  list-filter">
                                 <h5 class="list-title"><strong><a href="#">Seller</a></strong></h5>
                                 <ul class="browse-list list-unstyled long-list">
-                                    <li><a href="index_find.php"><strong>All Ads</strong> <span
+                                    <li><a href="Advance_Search_Find.php">All Ads<span
                                             class="count"><?php
 
                                             $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes) + (SELECT COUNT(*) FROM dealerbikes) as count");
                                                 $res=mysql_fetch_array($count);
                                              echo  $res['count'];
                                              ?></span></a></li>
-                                    <li><a href="BuisnessAds.php">Business <span
+                                    <li><a href="Advance_Business_Search.php">Business <span
                                             class="count"><?php
 
                                             $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count");
                                                 $res=mysql_fetch_array($count);
                                              echo  $res['COUNT(*)'];
                                              ?></span></a></li>
-                                    <li><a href="PersonalAds.php">Personal <span
+                                    <li><a href="Advance_Personal_Search.php"><strong> Personal </strong><span
                                             class="count"><?php
 
                                             $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count");
@@ -540,7 +485,6 @@ $_SESSION['filterQuery'] = $filterQuery;
                             </div>
                             <!--/.list-filter-->
                             <div style="clear:both"></div>
-
                         </div>
 
                         <!--/.categories-list-->
@@ -552,14 +496,28 @@ $_SESSION['filterQuery'] = $filterQuery;
                         <div class="tab-box " >
 
                             <!-- Nav tabs -->
-                            <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
-                                <li class="active nav-item">
-                                    <a  class="nav-link" href="ajax/ee.html" data-url="ajax/33.html" role="tab" data-toggle="tab">All Ads 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
+                                <li class="nav-item">
+                                   <a  href="Advance_Search_Find.php" class= "nav-link" role="tab" >All Ads 
                                     <span class="badge badge-secondary">
                                     <?php
-                                            $count=mysql_query($filterQuery);
+                                            $count=mysql_query("SELECT UserId FROM usedbikes");
                                                 $num_rows=mysql_num_rows($count);
-                                             echo $num_rows;
+                                             echo $num_rows+1;
                                     ?>
                                                  
                                     </span>
@@ -567,10 +525,10 @@ $_SESSION['filterQuery'] = $filterQuery;
                                 </li>
 
                                 <li class="nav-item ">
-                                    <a  href="BuisnessAds.php" class= "nav-link" role="tab" >Business Ads 
+                                    <a  href="Advance_Business_Search.php" class= "nav-link" role="tab" >Business Ads 
                                     <span class="badge badge-secondary">
                                     <?php
-                                            $count=mysql_query($filterQuery2);
+                                            $count=mysql_query("SELECT UserId FROM usedbikes");
                                                 $num_rows=mysql_num_rows($count);
                                              echo $num_rows+1;
                                     ?>
@@ -578,11 +536,11 @@ $_SESSION['filterQuery'] = $filterQuery;
                                     </span>
                                     </a>
                                 </li>
-                               <li class="nav-item ">
-                                 <a href="PersonalAds.php" class="nav-link" role="tab">Personal
+                               <li class="active nav-item ">
+                                 <a href="Advance_Personal_Search.php" class="nav-link" role="tab">Personal
                                     <span class="badge badge-secondary">
                              <?php
-                                            $count=mysql_query($filterQuery1);
+                                            $count=mysql_query("SELECT UserId FROM usedbikes");
                                                 $num_rows=mysql_num_rows($count);
                                              echo $num_rows+1;
                                     ?>
@@ -590,15 +548,6 @@ $_SESSION['filterQuery'] = $filterQuery;
                                     </span>
                                     </a>
                                 </li>  </ul>
-
-                                <!-- <a href="BuisnessAds.php"><button>Business Ads</button></a> -->
-                                <!-- <li class="nav-item"><a class="nav-link"  href="BuisnessAds.php" role="tab" data-toggle="tab">Business
-                                    <span class="badge badge-secondary">22,805</span></a></li> -->
-<!--                                  <a href="PersonalAds.php"><button>Personal</button></a>
- -->                                <!-- <li class="nav-item"><a class="nav-link"  href="ajax/33.html" data-url="ajax/33.html" role="tab" data-toggle="tab">Personal
-                                    <span class="badge badge-secondary">18,705</span></a></li> -->
-                          
-
 
                             <div class="tab-filter">
                                 <select class="selectpicker select-sort-by" data-style="btn-select" data-width="auto" onchange="sort_by(this.value)">
@@ -610,22 +559,22 @@ $_SESSION['filterQuery'] = $filterQuery;
                         </div>
                         <!--/.tab-box-->
 
-                        <div class="listing-filter">
+                       <!--  <div class="listing-filter">
                             <div class="pull-left col-xs-6">
-                               <!--  <div class="breadcrumb-list"><a href="#" class="current"> <span>All ads</span></a>
+                         -->       <!--  <div class="breadcrumb-list"><a href="#" class="current"> <span>All ads</span></a>
                                     in
 
                                     cityName will replace with selected location/area from location modal 
                                     <span class="cityName"> New York </span> <a href="#selectRegion" id="dropdownMenu1"
                                                                                 data-toggle="modal"> <span
                                             class="caret"></span> </a></div> -->
-                            </div>
+                          <!--   </div>
                             <div class="pull-right col-xs-6 text-right listing-view-action"><span
-                                    class="list-view active"><!-- <i class="  icon-th"></i> --></span> <span
-                                    class="compact-view"><!-- <i class=" icon-th-list  "></i> --></span> <span
-                                    class="grid-view "><!-- <i class=" icon-th-large "></i> --></span></div>
+                                    class="list-view active"><i class="  icon-th"></i></span> <span
+                                    class="compact-view"><i class=" icon-th-list  "></i></span> <span
+                                    class="grid-view "><i class=" icon-th-large "></i></span></div>
                             <div style="clear:both"></div>
-                        </div>
+                        </div> -->
                         <!--/.listing-filter-->
 
 
@@ -641,7 +590,7 @@ $_SESSION['filterQuery'] = $filterQuery;
                                 <li>
 
 
-                                    <div class="dropdown"> <a data-toggle="dropdown"></a>
+                                    <div class="dropdown"> <a data-toggle="dropdown"> </a>
                                         <ul class="dropdown-menu">
                                             <li class="dropdown-item"><a href="#" rel="nofollow">Relevance</a>
                                             </li>
@@ -682,19 +631,11 @@ $_SESSION['filterQuery'] = $filterQuery;
 
 include "db_connection.php";
 
-echo "\n Filter Query $filterQuery";
-$sql=mysql_query($filterQuery);
- 
+echo "\n Filter Query $filterQuery1";
+$sql=mysql_query($filterQuery1);
 while($row=mysql_fetch_array($sql))
 {
-   // $_SESSION['Keyword'] = $row['Keyword'];
-   //  $_SESSION['BikeCategory'] = $row['BikeCategory'];
-   //  $_SESSION['Brand'] = $row['Brand'];
-   //  $_SESSION['Model'] = $row['Model'];
-   //   $_SESSION['State'] = $row['State'];
-   //  $_SESSION['City'] = $row['City'];
-   //  $_SESSION['Prize_Minimum'] = $row['Prize_Minimum'];
-   //  $_SESSION['Prize_Maximum'] = $row['Prize_Maximum'];
+   
 ?>
 
 
@@ -740,12 +681,11 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
     <!--/.add-desc-box-->
     <div class="col-md-3 text-right  price-box">
         <h2 class="item-price">RS:-<?php echo $row['Prize']  ?></h2>
-         <a href="favourite.php?UserId=<?php echo $row['UserId']; ?> &UsedBikeId=<?php echo $row['UsedBikeId']; ?> &Brand=<?php echo $row['Brand'];?> &Category=<?php echo $row['BikeCategory'];?>" class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
-        </a> 
-         <a class="btn btn-default  btn-sm make-favorite"> <i class="fa fa-heart"></i> <span>Save</span> </a></div>
+        <a class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
+        </a> <a class="btn btn-default  btn-sm make-favorite"> <i class="fa fa-heart"></i> <span>Save</span> </a></div>
     <!--/.add-desc-box-->
 </div>
-
+<!-- city -->
 <div id='myStyle'>
 </div>
 
@@ -779,7 +719,7 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
                     <div class="post-promo text-center">
                         <h2> Do you get any bike for sell ? </h2>
                         <h5>Sell your bikes online FOR FREE. It's easier than you think !</h5>
-                        <a href="pop.php " class="btn btn-lg btn-border btn-post btn-danger">Sell my bike free</a>
+                        <a href="pop.php" class="btn btn-lg btn-border btn-post btn-danger">Sell my bike free</a>
                     </div>
                     <!--/.post-promo-->
 
@@ -790,12 +730,161 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
         </div>
     </div>
     <!-- /.main-container -->
-
 <?php
 include 'footer.php';
 ?>
+    <!-- /.footer -->
+
+<!-- /.wrapper -->
+
+<!-- Modal Change City -->
+
+<div class="modal fade modalHasList" id="selectRegion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel"><i class=" icon-map"></i> Select your region </h4>
+
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+
+                        <p>Popular cities in <strong>New York</strong>
+                        </p>
+
+                        <div style="clear:both"></div>
+                        <div class="col-sm-6 no-padding">
+                            <select class="form-control selecter  " id="region-state" name="region-state">
+                                <option value="">All States/Provinces</option>
+                                <option value="Alabama">Alabama</option>
+                                <option value="Alaska">Alaska</option>
+                                <option value="Arizona">Arizona</option>
+                                <option value="Arkansas">Arkansas</option>
+                                <option value="California">California</option>
+                                <option value="Colorado">Colorado</option>
+                                <option value="Connecticut">Connecticut</option>
+                                <option value="Delaware">Delaware</option>
+                                <option value="District of Columbia">District of Columbia</option>
+                                <option value="Florida">Florida</option>
+                                <option value="Georgia">Georgia</option>
+                                <option value="Hawaii">Hawaii</option>
+                                <option value="Idaho">Idaho</option>
+                                <option value="Illinois">Illinois</option>
+                                <option value="Indiana">Indiana</option>
+                                <option value="Iowa">Iowa</option>
+                                <option value="Kansas">Kansas</option>
+                                <option value="Kentucky">Kentucky</option>
+                                <option value="Louisiana">Louisiana</option>
+                                <option value="Maine">Maine</option>
+                                <option value="Maryland">Maryland</option>
+                                <option value="Massachusetts">Massachusetts</option>
+                                <option value="Michigan">Michigan</option>
+                                <option value="Minnesota">Minnesota</option>
+                                <option value="Mississippi">Mississippi</option>
+                                <option value="Missouri">Missouri</option>
+                                <option value="Montana">Montana</option>
+                                <option value="Nebraska">Nebraska</option>
+                                <option value="Nevada">Nevada</option>
+                                <option value="New Hampshire">New Hampshire</option>
+                                <option value="New Jersey">New Jersey</option>
+                                <option value="New Mexico">New Mexico</option>
+                                <option selected value="New York">New York</option>
+                                <option value="North Carolina">North Carolina</option>
+                                <option value="North Dakota">North Dakota</option>
+                                <option value="Ohio">Ohio</option>
+                                <option value="Oklahoma">Oklahoma</option>
+                                <option value="Oregon">Oregon</option>
+                                <option value="Pennsylvania">Pennsylvania</option>
+                                <option value="Rhode Island">Rhode Island</option>
+                                <option value="South Carolina">South Carolina</option>
+                                <option value="South Dakota">South Dakota</option>
+                                <option value="Tennessee">Tennessee</option>
+                                <option value="Texas">Texas</option>
+                                <option value="Utah">Utah</option>
+                                <option value="Vermont">Vermont</option>
+                                <option value="Virgin Islands">Virgin Islands</option>
+                                <option value="Virginia">Virginia</option>
+                                <option value="Washington">Washington</option>
+                                <option value="West Virginia">West Virginia</option>
+                                <option value="Wisconsin">Wisconsin</option>
+                                <option value="Wyoming">Wyoming</option>
+                            </select>
+                        </div>
+                        <div style="clear:both"></div>
+
+                        <hr class="hr-thin">
+                    </div>
+                    <div class="col-md-4">
+                        <ul class="list-link list-unstyled">
+                            <li><a href="#" title="">All Cities</a></li>
+                            <li><a href="#" title="Albany">Albany</a></li>
+                            <li><a href="#" title="Altamont">Altamont</a></li>
+                            <li><a href="#" title="Amagansett">Amagansett</a></li>
+                            <li><a href="#" title="Amawalk">Amawalk</a></li>
+                            <li><a href="#" title="Bellport">Bellport</a></li>
+                            <li><a href="#" title="Centereach">Centereach</a></li>
+                            <li><a href="#" title="Chappaqua">Chappaqua</a></li>
+                            <li><a href="#" title="East Elmhurst">East Elmhurst</a></li>
+                            <li><a href="#" title="East Greenbush">East Greenbush</a></li>
+                            <li><a href="#" title="East Meadow">East Meadow</a></li>
+
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <ul class="list-link list-unstyled">
+                            <li><a href="#" title="Elmont">Elmont</a></li>
+                            <li><a href="#" title="Elmsford">Elmsford</a></li>
+                            <li><a href="#" title="Farmingville">Farmingville</a></li>
+                            <li><a href="#" title="Floral Park">Floral Park</a></li>
+                            <li><a href="#" title="Flushing">Flushing</a></li>
+                            <li><a href="#" title="Fonda">Fonda</a></li>
+                            <li><a href="#" title="Freeport">Freeport</a></li>
+                            <li><a href="#" title="Fresh Meadows">Fresh Meadows</a></li>
+                            <li><a href="#" title="Fultonville">Fultonville</a></li>
+                            <li><a href="#" title="Gansevoort">Gansevoort</a></li>
+                            <li><a href="#" title="Garden City">Garden City</a></li>
 
 
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <ul class="list-link list-unstyled">
+                            <li><a href="#" title="Oceanside">Oceanside</a></li>
+                            <li><a href="#" title="Orangeburg">Orangeburg</a></li>
+                            <li><a href="#" title="Orient">Orient</a></li>
+                            <li><a href="#" title="Ozone Park">Ozone Park</a></li>
+                            <li><a href="#" title="Palatine Bridge">Palatine Bridge</a></li>
+                            <li><a href="#" title="Patterson">Patterson</a></li>
+                            <li><a href="#" title="Pearl River">Pearl River</a></li>
+                            <li><a href="#" title="Peekskill">Peekskill</a></li>
+                            <li><a href="#" title="Pelham">Pelham</a></li>
+                            <li><a href="#" title="Penn Yan">Penn Yan</a></li>
+                            <li><a href="#" title="Peru">Peru</a></li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Change City -->
+
+<div class="modal fade modalHasList" id="select-country" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    
+    </div>
+</div>
+
+<!-- /.modal -->
+
+<!-- Le javascript
+================================================== -->
 
 <!-- Placed at the end of the document so the pages load faster -->
 
@@ -806,15 +895,16 @@ include 'footer.php';
 
 <!-- include custom script for site  -->
 <script src="assets/js/script.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 
-
-
+<!-- dropdown -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
 <script src="choosen.js"></script>
   <script type="text/javascript">
   // city
 function recp() {
 
-        var category = document.getElementById('category').value;
+    var category = document.getElementById('category').value;
         var city = document.getElementById('city').value;
         var min = document.getElementById('minPrice').value;
         var max = document.getElementById('maxPrice').value;
@@ -826,7 +916,7 @@ function recp() {
 
 function sort_by(value){
   jQuery('.oldList div').html('');
-  $('#myStyle').load('fetch_data_sort.php?value=' + encodeURIComponent(value));
+  $('#myStyle').load('fetch_sort_personal.php?value=' + encodeURIComponent(value));
 }
 //category
 // function demo(category) {
@@ -837,14 +927,8 @@ function sort_by(value){
 $(".chosen").chosen();
 </script>
 <link rel="stylesheet" href="style.css">
-<!-- grid problem -->
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<!-- <script
-  src="https://code.jquery.com/jquery-1.11.2.js"
-  integrity="sha256-WMJwNbei5YnfOX5dfgVCS5C4waqvc+/0fV7W2uy3DyU="
-  crossorigin="anonymous"></script> -->
-<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script> -->
-<!-- <script src="choosen.js"></script> -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+<script src="choosen.js"></script>
 </body>
 
 </html>

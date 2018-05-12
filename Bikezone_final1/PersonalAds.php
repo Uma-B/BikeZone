@@ -79,27 +79,6 @@ where
   OR usedbikes.Model LIKE '$Keyword'
   OR usedbikes.State LIKE '$Keyword'
   OR usedbikes.City LIKE '$Keyword'
-UNION
-select
-  dealerbikes.DealerBikeId as UsedBikeId,
-  dealerbikes.BikeCategory as BikeCategory,
-  dealerbikes.DealerBikeImage1 as BikeImage1,
-  dealerbikes.Brand as Brand,
-  dealerbikes.Model as Model,
-  dealerbikes.KilometreDriven :as KilometreDriven,
-  dealerbikes.Location as Location,
-  dealerbikes.DealerId as UserId,
-  dealerbikes.UserName as UserName,
-  dealerbikes.ContactNumber as ContactNumber,
-  dealerbikes.Prize as Prize
-from
-  dealerbikes
-where
-  dealerbikes.BikeCategory LIKE '$Keyword'
-  OR dealerbikes.Brand LIKE '$Keyword'
-  OR dealerbikes.Model LIKE '$Keyword'
-  OR dealerbikes.State LIKE '$Keyword'
-  OR dealerbikes.City LIKE '$Keyword'
 ";
 
 
@@ -129,6 +108,35 @@ if($State != ""){
 if($City != ""){
     // $filterQuery2 = $filterQuery2." dealerbikes.City LIKE '$City' AND";
     $filterQuery1 = $filterQuery1." usedbikes.City LIKE '$City' AND";
+}
+if($KilometreDriven != ""){
+    // $filterQuery2 = $filterQuery2." dealerbikes.KilometreDriven LIKE '$KilometreDriven' AND";
+    $filterQuery1 = $filterQuery1." usedbikes.KilometreDriven LIKE '$KilometreDriven' AND";
+}
+if($Transmission != ""){
+    // $filterQuery2 = $filterQuery2." dealerbikes.Transmission LIKE '$Transmission' AND";
+    $filterQuery1 = $filterQuery1." usedbikes.Transmission LIKE '$Transmission' AND";
+}
+if($FuelType != ""){
+    // $filterQuery2 = $filterQuery2." dealerbikes.FuelType LIKE '$FuelType' AND";
+    $filterQuery1 = $filterQuery1." usedbikes.FuelType LIKE '$FuelType' AND";
+}
+
+if($Stroke != ""){
+    // $filterQuery2 = $filterQuery2." dealerbikes.Stroke LIKE '$Stroke' AND";
+    $filterQuery1 = $filterQuery1." usedbikes.Stroke LIKE '$Stroke' AND";
+}
+if($EngineSize != ""){
+    // $filterQuery2 = $filterQuery2." dealerbikes.EngineSize LIKE '$EngineSize' AND";
+    $filterQuery1 = $filterQuery1." usedbikes.EngineSize LIKE '$EngineSize' AND";
+}
+if($Location != ""){
+    // $filterQuery2 = $filterQuery2." dealerbikes.Location LIKE '$Location' AND";
+    $filterQuery1 = $filterQuery1." usedbikes.Location LIKE '$Location' AND";
+}
+if($PostalCode != ""){
+    // $filterQuery2 = $filterQuery2." dealerbikes.PostalCode LIKE '$PostalCode' AND";
+    $filterQuery1 = $filterQuery1." usedbikes.PostalCode LIKE '$PostalCode' AND";
 }
 if($Prize_Minimum != "" && $Prize_Maximum != ""){
     // $filterQuery2 = $filterQuery2." dealerbikes.Prize IN (SELECT Prize from dealerbikes WHERE Prize BETWEEN $Prize_Minimum AND $Prize_Maximum)";
@@ -253,7 +261,7 @@ $_SESSION['filterQuery1'] = $filterQuery1;
                         </a>
                         </li> -->
                       <li><a href="" class="glyphicon glyphicon-home"></a></li>
-                      <li><a href="category.html">Bike for sale</a></li>
+                      <li><a href="index_find.php">Bike for sale</a></li>
                       <li><a href="">Insurance</a></li>
                       <li><a href="">Service</a></li>
                       <li><a href="">Help</a></li>
@@ -404,44 +412,43 @@ $_SESSION['filterQuery1'] = $filterQuery1;
                             </div>
                             <!--/.locations-list-->
 
-                            <div class="locations-list  list-filter">
+                            <div class="locations-list  list-filter" class="form-inline ">
                                 <h5 class="list-title"><strong><a href="#">Price range</a></strong></h5>
 
                                 <!-- <form role="form" class="form-inline "> -->
-                                    <div class="form-group col-lg-4 col-md-12 no-padding">
-                                        <input type="text" placeholder="Rs.2000" id="minPrice" class="form-control">
+                                    <div class="form-inline" >
+                                        <input type="text" placeholder="Min value" id="minPrice" class="form-control">
+                                   <br><br><br>
+                                   
+                                        <input type="text" placeholder="Max value" id="maxPrice" class="form-control">
                                     </div>
-                                    <div class="form-group col-lg-1 col-md-12 no-padding text-center hidden-md"> -</div>
-                                    <div class="form-group col-lg-4 col-md-12 no-padding">
-                                        <input type="text" placeholder="Rs.3000" id="maxPrice" class="form-control">
-                                    </div>
-                                    
+                                    <br>
                                     <div class="form-group col-lg-3 col-md-12 no-padding">
                                         <button class="btn btn-default pull-right btn-block-md" onclick="recp()" type="submit" >GO
                                         </button>
                                     </div>
-                                </form>
+                              <!--   </form> -->
                                 <div style="clear:both"></div>
                             </div>
                             <!--/.list-filter-->
                             <div class="locations-list  list-filter">
                                 <h5 class="list-title"><strong><a href="#">Seller</a></strong></h5>
                                 <ul class="browse-list list-unstyled long-list">
-                                    <li><a href=""><strong>All Ads</strong> <span
+                                    <li><a href="index_find.php">All Ads<span
                                             class="count"><?php
 
                                             $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes) + (SELECT COUNT(*) FROM dealerbikes) as count");
                                                 $res=mysql_fetch_array($count);
                                              echo  $res['count'];
                                              ?></span></a></li>
-                                    <li><a href="index_find.php">Business <span
+                                    <li><a href="BuisnessAds.php">Business <span
                                             class="count"><?php
 
                                             $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count");
                                                 $res=mysql_fetch_array($count);
                                              echo  $res['COUNT(*)'];
                                              ?></span></a></li>
-                                    <li><a href="">Personal <span
+                                    <li><a href="PersonalAds.php"><strong> Personal </strong><span
                                             class="count"><?php
 
                                             $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count");
@@ -528,22 +535,22 @@ $_SESSION['filterQuery1'] = $filterQuery1;
                         </div>
                         <!--/.tab-box-->
 
-                        <div class="listing-filter">
+                       <!--  <div class="listing-filter">
                             <div class="pull-left col-xs-6">
-                               <!--  <div class="breadcrumb-list"><a href="#" class="current"> <span>All ads</span></a>
+                         -->       <!--  <div class="breadcrumb-list"><a href="#" class="current"> <span>All ads</span></a>
                                     in
 
                                     cityName will replace with selected location/area from location modal 
                                     <span class="cityName"> New York </span> <a href="#selectRegion" id="dropdownMenu1"
                                                                                 data-toggle="modal"> <span
                                             class="caret"></span> </a></div> -->
-                            </div>
+                          <!--   </div>
                             <div class="pull-right col-xs-6 text-right listing-view-action"><span
                                     class="list-view active"><i class="  icon-th"></i></span> <span
                                     class="compact-view"><i class=" icon-th-list  "></i></span> <span
                                     class="grid-view "><i class=" icon-th-large "></i></span></div>
                             <div style="clear:both"></div>
-                        </div>
+                        </div> -->
                         <!--/.listing-filter-->
 
 
@@ -559,9 +566,7 @@ $_SESSION['filterQuery1'] = $filterQuery1;
                                 <li>
 
 
-                                    <div class="dropdown"> <a data-toggle="dropdown" class="dropdown-toggle"> Short
-
-                                        by </a>
+                                    <div class="dropdown"> <a data-toggle="dropdown"> </a>
                                         <ul class="dropdown-menu">
                                             <li class="dropdown-item"><a href="#" rel="nofollow">Relevance</a>
                                             </li>
@@ -667,9 +672,9 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
                         </div>
                         <!--/.adds-wrapper-->
 
-                        <div class="tab-box save-search-bar text-center"><a href="#"> <i class=" icon-star-empty"></i>
+                       <!--  <div class="tab-box save-search-bar text-center"><a href="#"> <i class=" icon-star-empty"></i>
                             Save Search </a></div>
-                    </div>
+                    </div> -->
                     <div class="pagination-bar text-center">
                         <nav aria-label="Page navigation " class="d-inline-b">
                             <ul class="pagination">
@@ -690,7 +695,7 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
                     <div class="post-promo text-center">
                         <h2> Do you get any bike for sell ? </h2>
                         <h5>Sell your bikes online FOR FREE. It's easier than you think !</h5>
-                        <a href="post-ads.html" class="btn btn-lg btn-border btn-post btn-danger">Sell my bike free</a>
+                        <a href="pop.php" class="btn btn-lg btn-border btn-post btn-danger">Sell my bike free</a>
                     </div>
                     <!--/.post-promo-->
 
@@ -701,146 +706,11 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
         </div>
     </div>
     <!-- /.main-container -->
-
-<footer class="main-footer">
-    <div class="footer-content">
-        <div class="container">
-            <div class="row">
-
-                <div class=" col-xl-2 col-xl-2 col-md-2 col-6  ">
-                    <div class="footer-col">
-                        <h4 class="footer-title">About us</h4>
-                        <ul class="list-unstyled footer-nav">
-                            <li><a href="#">About Company</a></li>
-                            <li><a href="#">For Business</a></li>
-                            <li><a href="#">Our Partners</a></li>
-                            <li><a href="#">Press Contact</a></li>
-                            <li><a href="#">Careers</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class=" col-xl-2 col-xl-2 col-md-2 col-6  ">
-                    <div class="footer-col">
-                        <h4 class="footer-title">Help & Contact</h4>
-                        <ul class="list-unstyled footer-nav">
-                            <li><a href="#">
-                                Stay Safe Online
-                            </a></li>
-                            <li><a href="#">
-                                How to Sell</a></li>
-                            <li><a href="#">
-                                How to Buy
-                            </a></li>
-                            <li><a href="#">Posting Rules
-                            </a></li>
-
-                            <li><a href="#">
-                                Promote Your Ad
-                            </a></li>
-
-                        </ul>
-                    </div>
-                </div>
-
-                <div class=" col-xl-2 col-xl-2 col-md-2 col-6  ">
-                    <div class="footer-col">
-                        <h4 class="footer-title">More From Us</h4>
-                        <ul class="list-unstyled footer-nav">
-                            <li><a href="faq.html">FAQ
-                            </a></li>
-                            <li><a href="blogs.html">Blog
-                            </a></li>
-                            <li><a href="#">
-                                Popular Searches
-                            </a></li>
-                            <li><a href="#"> Site Map
-                            </a></li> <li><a href="#"> Customer Reviews
-                        </a></li>
-
-
-                        </ul>
-                    </div>
-                </div>
-                <div class=" col-xl-2 col-xl-2 col-md-2 col-6  ">
-                    <div class="footer-col">
-                        <h4 class="footer-title">Account</h4>
-                        <ul class="list-unstyled footer-nav">
-                            <li><a href="account-home.html"> Manage Account
-                            </a></li>
-                            <li><a href="login.html">Login
-                            </a></li>
-                            <li><a href="signup.html">Register
-                            </a></li>
-                            <li><a href="account-myads.html"> My ads
-                            </a></li>
-                            <li><a href="seller-profile.html"> Profile
-                            </a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class=" col-xl-4 col-xl-4 col-md-4 col-12">
-                    <div class="footer-col row">
-
-                        <!-- <div class="col-sm-12 col-xs-6 col-xxs-12 no-padding-lg">
-                            <div class="mobile-app-content">
-                                <h4 class="footer-title">Mobile Apps</h4>
-                                <div class="row ">
-                                    <div class="col-6  ">
-                                        <a class="app-icon" target="_blank"  href="https://itunes.apple.com/">
-                                            <span class="hide-visually">iOS app</span>
-                                            <img src="images/site/app_store_badge.svg" alt="Available on the App Store">
-                                        </a>
-                                    </div>
-                                    <div class="col-6  ">
-                                        <a class="app-icon"  target="_blank" href="https://play.google.com/store/">
-                                            <span class="hide-visually">Android App</span>
-                                            <img src="images/site/google-play-badge.svg" alt="Available on the App Store">
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
-
-                        <div class="col-sm-12 col-xs-6 col-xxs-12 no-padding-lg">
-                            <div class="hero-subscribe">
-                                <h4 class="footer-title no-margin">Follow us on</h4>
-                                <ul class="list-unstyled list-inline footer-nav social-list-footer social-list-color footer-nav-inline">
-                                    <li><a class="icon-color fb" title="Facebook" data-placement="top" data-toggle="tooltip" href="#"><i class="fa fa-facebook"></i> </a></li>
-                                    <li><a class="icon-color tw" title="Twitter" data-placement="top" data-toggle="tooltip" href="#"><i class="fa fa-twitter"></i> </a></li>
-                                    <li><a class="icon-color gp" title="Google+" data-placement="top" data-toggle="tooltip" href="#"><i class="fa fa-google-plus"></i> </a></li>
-                                    <li><a class="icon-color lin" title="Linkedin" data-placement="top" data-toggle="tooltip" href="#"><i class="fa fa-linkedin"></i> </a></li>
-                                    <li><a class="icon-color pin" title="Linkedin" data-placement="top" data-toggle="tooltip" href="#"><i class="fa fa-pinterest-p"></i> </a></li>
-                                </ul>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div style="clear: both"></div>
-
-                <div class="col-xl-12">
-                    <div class=" text-center paymanet-method-logo">
-
-                        <img src="images/site/payment/master_card.png" alt="img">
-                        <img alt="img" src="images/site/payment/visa_card.png">
-                        <img alt="img" src="images/site/payment/paypal.png">
-                        <img alt="img" src="images/site/payment/american_express_card.png"> <img alt="img" src="images/site/payment/discover_network_card.png">
-                        <img alt="img" src="images/site/payment/google_wallet.png">
-                    </div>
-
-                    <div class="copy-info text-center">
-                        &copy; Bikezone.com All Rights Reserved.
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
-    </div>
-</footer>
+<?php
+include 'footer.php';
+?>
     <!-- /.footer -->
-</div>
+
 <!-- /.wrapper -->
 
 <!-- Modal Change City -->

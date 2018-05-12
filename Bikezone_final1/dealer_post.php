@@ -248,7 +248,7 @@ session_start();
             <div class="navbar-identity">
 
 
-                <a href="index.html" class="navbar-brand logo logo-title">
+                <a href="index.php" class="navbar-brand logo logo-title">
                 <span class="logo-icon"><!-- <i class="icon icon-search-1 ln-shadow-logo "></i> -->
                 </span>BIKE<span>ZONE </span> </a>
 
@@ -665,7 +665,7 @@ session_start();
                     </div>
                 </div></div></div>
                 
-<footer class="main-footer">
+<!-- <footer class="main-footer">
     <div class="footer-content">
         <div class="container">
             <div class="row">
@@ -745,7 +745,7 @@ session_start();
                 <div class=" col-xl-4 col-xl-4 col-md-4 col-12">
                     <div class="footer-col row">
 
-                        <!-- <div class="col-sm-12 col-xs-6 col-xxs-12 no-padding-lg">
+                        <div class="col-sm-12 col-xs-6 col-xxs-12 no-padding-lg">
                             <div class="mobile-app-content">
                                 <h4 class="footer-title">Mobile Apps</h4>
                                 <div class="row ">
@@ -763,7 +763,7 @@ session_start();
                                     </div>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
 
                         <div class="col-sm-12 col-xs-6 col-xxs-12 no-padding-lg">
                             <div class="hero-subscribe">
@@ -802,11 +802,13 @@ session_start();
         </div>
     </div>
 </footer>
-    <!-- /.footer -->
-</div>
-<!-- /.wrapper -->
+     /.footer -->
+<!-- </div> 
+ --><!-- /.wrapper -->
 
-
+<?php
+include 'footer.php';
+?>
 <!-- Modal contactAdvertiser -->
 
 <div class="modal fade" id="contactAdvertiser" tabindex="-1" role="dialog">

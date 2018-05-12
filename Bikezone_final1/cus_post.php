@@ -142,7 +142,7 @@ else
             <div class="navbar-identity">
 
 
-                <a href="index.html" class="navbar-brand logo logo-title">
+                <a href="index.php" class="navbar-brand logo logo-title">
                 <span class="logo-icon"><!-- <i class="icon icon-search-1 ln-shadow-logo "></i> -->
                 </span>BIKE<span>ZONE </span> </a>
 
@@ -156,6 +156,9 @@ else
                 </button>
 
             </div>
+            <a href="view_customer.php">
+<button style="float: right;" type="button" class="btn btn-success">Back</button>
+</a>
 
 
                 <div class="navbar-collapse collapse">
@@ -191,17 +194,18 @@ else
 
 <div class="container">
 
-  <div class="jumbotron">
- 
+   <div class="search-row-wrapper">
+          <div class="container ">
           
+               
   <h2 style="color:white;text-align :center">Custome Name : <?php echo $row['UserName'];?> <br><br> Custome Post Count : 
 <?php $num_rows=mysql_num_rows($result); echo $num_rows; ?>
  </h2>
-</div>
+</div></div>
 
-<a href="view_customer.php">
+<!-- <a href="view_customer.php">
 <button style="float: right;" type="button" class="btn btn-success">Back</button>
-</a>
+</a> -->
 
    <div class="table-responsive"> 
    <table class="table table-hover" style="background-color :white">

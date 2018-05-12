@@ -13,7 +13,7 @@ include "db_connection.php";
  //       $_SESSION['City']=$_POST['City'];
  //       $_SESSION['Prize_Minimum']=$_POST['Prize_Minimum'];
  //       $_SESSION['Prize_Maximum']=$_POST['Prize_Maximum']; 
-GLOBAL $filterQuery;
+GLOBAL $filterQuery, $filterQuery1, $filterQuery2;
 
  if(isset($_SESSION['BikeCategory'])) {
 
@@ -25,38 +25,57 @@ GLOBAL $filterQuery;
     $City = $_SESSION['City'];
     $Prize_Minimum = $_SESSION['Prize_Minimum'];
     $Prize_Maximum= $_SESSION['Prize_Maximum'];
-        
-       }
+    $Year=$_SESSION['Year'];
+   $KilometreDriven=$_SESSION['KilometreDriven'];
+   $Transmission=$_SESSION['Transmission'];
+   $FuelType=$_SESSION['FuelType'];
+   $Stroke=$_SESSION['Stroke'];
+   $EngineSize=$_SESSION['EngineSize'];
+   $Location=$_SESSION['Location'];
+   $PostalCode=$_SESSION['PostalCode'];
+  }
 
 $filterQuery1 = "select
-  usedbikes.UsedBikeId as UsedBikeId,
-  usedbikes.BikeCategory as BikeCategory,
-  usedbikes.UsedBikeImage1 as UsedBikeImage1,
-  usedbikes.Brand as Brand,
-  usedbikes.Model as Model,
-  usedbikes.KilometreDriven as KilometreDriven,
-  usedbikes.Location as Location,
-  usedbikes.UserId as UserId,
-  usedbikes.UserName as UserName,
-  usedbikes.ContactNumber as ContactNumber,
-  usedbikes.Prize as Prize
+usedbikes.UsedBikeId as UsedBikeId,
+usedbikes.BikeCategory as BikeCategory,
+usedbikes.UsedBikeImage1 as UsedBikeImage1,
+usedbikes.Brand as Brand,
+usedbikes.Model as Model,
+usedbikes.UserId as UserId,
+usedbikes.UserName as UserName,
+usedbikes.ContactNumber as ContactNumber,
+usedbikes.Prize as Prize,
+usedbikes.Year as Year,
+usedbikes.Transmission as Transmission,
+usedbikes.FuelType as FuelType,
+usedbikes.EngineSize as EngineSize,
+usedbikes.KilometreDriven as KilometreDriven,
+usedbikes.Stroke as Stroke,
+usedbikes.Location as Location,
+usedbikes.PostalCode as PostalCode
 from
-  usedbikes
+usedbikes
 where
 ";
 
 $filterQuery2 = "select
   dealerbikes.DealerBikeId as UsedBikeId,
   dealerbikes.BikeCategory as BikeCategory,
-  dealerbikes.DealerBikeImage1 as BikeImage1,
+  dealerbikes.DealerBikeImage1 as UsedBikeImage1,
   dealerbikes.Brand as Brand,
   dealerbikes.Model as Model,
-  dealerbikes.KilometreDriven as KilometreDriven,
-  dealerbikes.Location as Location,
-  dealerbikes.DealerId as UserId,
+dealerbikes.DealerId as UserId,
   dealerbikes.UserName as UserName,
-  dealerbikes.ContactNumber as ContactNumber,
-  dealerbikes.Prize as Prize
+dealerbikes.ContactNumber as ContactNumber,
+dealerbikes.Prize as Prize,
+  dealerbikes.Year as Year,
+  dealerbikes.Transmission as Transmission,
+  dealerbikes.FuelType as FuelType,
+  dealerbikes.EngineSize as EngineSize,
+  dealerbikes.KilometreDriven as KilometreDriven,
+  dealerbikes.Stroke as Stroke,
+  dealerbikes.Location as Location,
+  dealerbikes.PostalCode as PostalCode 
 from
   dealerbikes
 where
@@ -64,46 +83,77 @@ where
 
 if($Keyword != null){
     $filterQuery = "select
-  usedbikes.UsedBikeId as UsedBikeId,
-  usedbikes.BikeCategory as BikeCategory,
-  usedbikes.UsedBikeImage1 as UsedBikeImage1,
-  usedbikes.Brand as Brand,
-  usedbikes.Model as Model,
-  usedbikes.KilometreDriven as KilometreDriven,
-  usedbikes.Location as Location,
-  usedbikes.UserId as UserId,
-  usedbikes.UserName as UserName,
-  usedbikes.ContactNumber as ContactNumber,
-  usedbikes.Prize as Prize
+usedbikes.UsedBikeId as UsedBikeId,
+usedbikes.BikeCategory as BikeCategory,
+usedbikes.UsedBikeImage1 as UsedBikeImage1,
+usedbikes.Brand as Brand,
+usedbikes.Model as Model,
+usedbikes.UserId as UserId,
+usedbikes.UserName as UserName,
+usedbikes.ContactNumber as ContactNumber,
+usedbikes.Prize as Prize,
+usedbikes.Year as Year,
+usedbikes.Transmission as Transmission,
+usedbikes.FuelType as FuelType,
+usedbikes.EngineSize as EngineSize,
+usedbikes.KilometreDriven as KilometreDriven,
+usedbikes.Stroke as Stroke,
+usedbikes.Location as Location,
+usedbikes.PostalCode as PostalCode
 from
-  usedbikes
+usedbikes
 where
   usedbikes.BikeCategory LIKE '$Keyword'
   OR usedbikes.Brand LIKE '$Keyword'
   OR usedbikes.Model LIKE '$Keyword'
+  OR usedbikes.Prize LIKE '$Keyword'
   OR usedbikes.State LIKE '$Keyword'
   OR usedbikes.City LIKE '$Keyword'
+  OR usedbikes.Year LIKE '$Keyword'
+  OR usedbikes.KilometreDriven LIKE '$Keyword'
+  OR usedbikes.Transmission LIKE '$Keyword'
+  OR usedbikes.FuelType LIKE '$Keyword'
+  OR usedbikes.Stroke LIKE '$Keyword'
+  OR usedbikes.EngineSize LIKE '$Keyword'
+  OR usedbikes.Location LIKE '$Keyword'
+  OR usedbikes.PostalCode LIKE '$Keyword'
+
 UNION
 select
   dealerbikes.DealerBikeId as UsedBikeId,
   dealerbikes.BikeCategory as BikeCategory,
-  dealerbikes.DealerBikeImage1 as BikeImage1,
+  dealerbikes.DealerBikeImage1 as UsedBikeImage1,
   dealerbikes.Brand as Brand,
   dealerbikes.Model as Model,
-  dealerbikes.KilometreDriven as KilometreDriven,
-  dealerbikes.Location as Location,
   dealerbikes.DealerId as UserId,
   dealerbikes.UserName as UserName,
   dealerbikes.ContactNumber as ContactNumber,
-  dealerbikes.Prize as Prize
+  dealerbikes.Prize as Prize,
+  dealerbikes.Year as Year,
+  dealerbikes.Transmission as Transmission,
+  dealerbikes.FuelType as FuelType,
+  dealerbikes.EngineSize as EngineSize,
+  dealerbikes.KilometreDriven as KilometreDriven,
+  dealerbikes.Stroke as Stroke,
+  dealerbikes.Location as Location,
+  dealerbikes.PostalCode as PostalCode 
 from
   dealerbikes
 where
   dealerbikes.BikeCategory LIKE '$Keyword'
   OR dealerbikes.Brand LIKE '$Keyword'
   OR dealerbikes.Model LIKE '$Keyword'
+  OR dealerbikes.Prize LIKE '$Keyword'
   OR dealerbikes.State LIKE '$Keyword'
   OR dealerbikes.City LIKE '$Keyword'
+  OR dealerbikes.Year LIKE '$Keyword'
+  OR dealerbikes.KilometreDriven LIKE '$Keyword'
+  OR dealerbikes.Transmission LIKE '$Keyword'
+  OR dealerbikes.FuelType LIKE '$Keyword'
+  OR dealerbikes.Stroke LIKE '$Keyword'
+  OR dealerbikes.EngineSize LIKE '$Keyword'
+  OR dealerbikes.Location LIKE '$Keyword'
+  OR dealerbikes.PostalCode LIKE '$Keyword'
 ";
 
 
@@ -130,6 +180,40 @@ if($City != ""){
     $filterQuery2 = $filterQuery2." dealerbikes.City LIKE '$City' AND";
     $filterQuery1 = $filterQuery1." usedbikes.City LIKE '$City' AND";
 }
+if($Year != ""){
+    $filterQuery2 = $filterQuery2." dealerbikes.Year LIKE '$Year' AND";
+    $filterQuery1 = $filterQuery1." usedbikes.Year LIKE '$Year' AND";
+}
+
+if($KilometreDriven != ""){
+    $filterQuery2 = $filterQuery2." dealerbikes.KilometreDriven LIKE '$KilometreDriven' AND";
+    $filterQuery1 = $filterQuery1." usedbikes.KilometreDriven LIKE '$KilometreDriven' AND";
+}
+if($Transmission != ""){
+    $filterQuery2 = $filterQuery2." dealerbikes.Transmission LIKE '$Transmission' AND";
+    $filterQuery1 = $filterQuery1." usedbikes.Transmission LIKE '$Transmission' AND";
+}
+if($FuelType != ""){
+    $filterQuery2 = $filterQuery2." dealerbikes.FuelType LIKE '$FuelType' AND";
+    $filterQuery1 = $filterQuery1." usedbikes.FuelType LIKE '$FuelType' AND";
+}
+
+if($Stroke != ""){
+    $filterQuery2 = $filterQuery2." dealerbikes.Stroke LIKE '$Stroke' AND";
+    $filterQuery1 = $filterQuery1." usedbikes.Stroke LIKE '$Stroke' AND";
+}
+if($EngineSize != ""){
+    $filterQuery2 = $filterQuery2." dealerbikes.EngineSize LIKE '$EngineSize' AND";
+    $filterQuery1 = $filterQuery1." usedbikes.EngineSize LIKE '$EngineSize' AND";
+}
+if($Location != ""){
+    $filterQuery2 = $filterQuery2." dealerbikes.Location LIKE '$Location' AND";
+    $filterQuery1 = $filterQuery1." usedbikes.Location LIKE '$Location' AND";
+}
+if($PostalCode != ""){
+    $filterQuery2 = $filterQuery2." dealerbikes.PostalCode LIKE '$PostalCode' AND";
+    $filterQuery1 = $filterQuery1." usedbikes.PostalCode LIKE '$PostalCode' AND";
+}
 if($Prize_Minimum != "" && $Prize_Maximum != ""){
     $filterQuery2 = $filterQuery2." dealerbikes.Prize IN (SELECT Prize from dealerbikes WHERE Prize BETWEEN $Prize_Minimum AND $Prize_Maximum)";
     $filterQuery1 = $filterQuery1." usedbikes.Prize IN (SELECT Prize from usedbikes WHERE Prize BETWEEN $Prize_Minimum AND $Prize_Maximum)";
@@ -147,8 +231,7 @@ $filterQuery = $filterQuery1." UNION ".$filterQuery2;
 
 $_SESSION['filterQuery'] = $filterQuery;
 
-
-    $_SESSION['Keyword'] = $Keyword;
+ $_SESSION['Keyword'] = $Keyword;
     $_SESSION['BikeCategory'] = $BikeCategory;
     $_SESSION['Brand'] = $Brand;
     $_SESSION['Model'] = $Model;
@@ -156,6 +239,14 @@ $_SESSION['filterQuery'] = $filterQuery;
     $_SESSION['City'] = $City;
     $_SESSION['Prize_Minimum'] = $Prize_Minimum;
     $_SESSION['Prize_Maximum'] = $Prize_Maximum;
+    $_SESSION['Year'] = $Year;
+    $_SESSION['KilometreDriven'] = $KilometreDriven;
+    $_SESSION['Transmission'] = $Transmission;
+    $_SESSION['FuelType'] = $FuelType;
+    $_SESSION['Stroke'] = $Stroke;
+    $_SESSION['EngineSize'] = $EngineSize;
+    $_SESSION['Location'] = $Location;
+    $_SESSION['PostalCode'] = $PostalCode;
 
     $_SESSION['Keyword'] = $_SESSION['Keyword'];
     $_SESSION['BikeCategory'] = $_SESSION['BikeCategory'];
@@ -165,37 +256,14 @@ $_SESSION['filterQuery'] = $filterQuery;
     $_SESSION['City'] = $_SESSION['City'];
     $_SESSION['Prize_Minimum'] = $_SESSION['Prize_Minimum'];
     $_SESSION['Prize_Maximum'] = $_SESSION['Prize_Maximum'];
-
-
-    // $_SESSION['Keyword'] = $_SESSION['Keyword'];
-    // $_SESSION['BikeCategory'] = $_SESSION['BikeCategory'];
-    // $_SESSION['Brand'] = $_SESSION['Brand'];
-    // $_SESSION['Model'] = $_SESSION['Model'];
-    //  $_SESSION['State'] = $_SESSION['State'];
-    // $_SESSION['City'] = $_SESSION['City'];
-    // $_SESSION['Prize_Minimum'] = $_SESSION['Prize_Minimum'];
-    // $_SESSION['Prize_Maximum'] = $_SESSION['Prize_Maximum'];
-
-    
-    // $_SESSION['Keyword'] = $Keyword;
-    // $_SESSION['BikeCategory'] = $BikeCategory;
-    // $_SESSION['Brand'] = $Brand;
-    // $_SESSION['Model'] = $Model;
-    // $_SESSION['State'] = $State;
-    // $_SESSION['City'] = $City;
-    // $_SESSION['Prize_Minimum'] = $Prize_Minimum;
-    // $_SESSION['Prize_Maximum'] = $Prize_Maximum;
-
-    //  $_SESSION['Keyword'] = $_SESSION['Keyword'];
-    // $_SESSION['BikeCategory'] = $_SESSION['BikeCategory'];
-    // $_SESSION['Brand'] = $_SESSION['Brand'];
-    // $_SESSION['Model'] = $_SESSION['Model'];
-    //  $_SESSION['State'] = $_SESSION['State'];
-    // $_SESSION['City'] = $_SESSION['City'];
-    // $_SESSION['Prize_Minimum'] = $_SESSION['Prize_Minimum'];
-    // $_SESSION['Prize_Maximum'] = $_SESSION['Prize_Maximum'];
-    
-                           
+    $_SESSION['Year'] = $_SESSION['Year'];
+    $_SESSION['KilometreDriven'] = $_SESSION['KilometreDriven'];
+    $_SESSION['Transmission'] = $_SESSION['Transmission'];
+    $_SESSION['FuelType'] = $_SESSION['FuelType'];
+    $_SESSION['Stroke'] = $_SESSION['Stroke'];
+    $_SESSION['EngineSize'] = $_SESSION['EngineSize'];
+    $_SESSION['Location'] = $_SESSION['Location'];
+    $_SESSION['PostalCode'] = $_SESSION['PostalCode'];
 ?>
 
 <!DOCTYPE html>
@@ -348,7 +416,7 @@ $_SESSION['filterQuery'] = $filterQuery;
 </div></li>
                 <?php } else { ?>
                 <li><div class="btn-group">
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" style="height: 45px; width: 120px;">
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" style="height: 45px; width: 120px;">
     Login
   </button>
   <div class="dropdown-menu">
@@ -506,14 +574,14 @@ $_SESSION['filterQuery'] = $filterQuery;
                                                 $res=mysql_fetch_array($count);
                                              echo  $res['count'];
                                              ?></span></a></li>
-                                    <li><a href="BuisnessAds.php">Business <span
+                                    <li><a href="Advance_Business_Search.php">Business <span
                                             class="count"><?php
 
                                             $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count");
                                                 $res=mysql_fetch_array($count);
                                              echo  $res['COUNT(*)'];
                                              ?></span></a></li>
-                                    <li><a href="PersonalAds.php">Personal <span
+                                    <li><a href="Advance_Personal_Search.php">Personal <span
                                             class="count"><?php
 
                                             $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count");
@@ -567,24 +635,24 @@ $_SESSION['filterQuery'] = $filterQuery;
                                 </li>
 
                                 <li class="nav-item ">
-                                    <a  href="BuisnessAds.php" class= "nav-link" role="tab" >Business Ads 
+                                    <a  href="Advance_Business_Search.php" class= "nav-link" role="tab" >Business Ads 
                                     <span class="badge badge-secondary">
                                     <?php
-                                            $count=mysql_query($filterQuery2);
+                                            $count=mysql_query($filterQuery);
                                                 $num_rows=mysql_num_rows($count);
-                                             echo $num_rows+1;
+                                             echo $num_rows;
                                     ?>
                                                  
                                     </span>
                                     </a>
                                 </li>
                                <li class="nav-item ">
-                                 <a href="PersonalAds.php" class="nav-link" role="tab">Personal
+                                 <a href="Advance_Personal_Search.php" class="nav-link" role="tab">Personal
                                     <span class="badge badge-secondary">
                              <?php
-                                            $count=mysql_query($filterQuery1);
+                                            $count=mysql_query($filterQuery);
                                                 $num_rows=mysql_num_rows($count);
-                                             echo $num_rows+1;
+                                             echo $num_rows;
                                     ?>
                                                  
                                     </span>
@@ -641,7 +709,9 @@ $_SESSION['filterQuery'] = $filterQuery;
                                 <li>
 
 
-                                    <div class="dropdown"> <a data-toggle="dropdown"></a>
+                                    <div class="dropdown"> <a data-toggle="dropdown" class="dropdown-toggle"> Short
+
+                                        by </a>
                                         <ul class="dropdown-menu">
                                             <li class="dropdown-item"><a href="#" rel="nofollow">Relevance</a>
                                             </li>
@@ -740,9 +810,8 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
     <!--/.add-desc-box-->
     <div class="col-md-3 text-right  price-box">
         <h2 class="item-price">RS:-<?php echo $row['Prize']  ?></h2>
-         <a href="favourite.php?UserId=<?php echo $row['UserId']; ?> &UsedBikeId=<?php echo $row['UsedBikeId']; ?> &Brand=<?php echo $row['Brand'];?> &Category=<?php echo $row['BikeCategory'];?>" class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
-        </a> 
-         <a class="btn btn-default  btn-sm make-favorite"> <i class="fa fa-heart"></i> <span>Save</span> </a></div>
+        <a class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
+        </a> <a class="btn btn-default  btn-sm make-favorite"> <i class="fa fa-heart"></i> <span>Save</span> </a></div>
     <!--/.add-desc-box-->
 </div>
 
@@ -756,9 +825,8 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
                         </div>
                         <!--/.adds-wrapper-->
 
-                       <!--  <div class="tab-box save-search-bar text-center"><a href="#"> <i class=" icon-star-empty"></i>
-                            Save Search </a></div>
-                    </div> -->
+                        
+                    </div>
                     <div class="pagination-bar text-center">
                         <nav aria-label="Page navigation " class="d-inline-b">
                             <ul class="pagination">
@@ -791,9 +859,145 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
     </div>
     <!-- /.main-container -->
 
-<?php
-include 'footer.php';
-?>
+<footer class="main-footer">
+    <div class="footer-content">
+        <div class="container">
+            <div class="row">
+
+                <div class=" col-xl-2 col-xl-2 col-md-2 col-6  ">
+                    <div class="footer-col">
+                        <h4 class="footer-title">About us</h4>
+                        <ul class="list-unstyled footer-nav">
+                            <li><a href="#">About Company</a></li>
+                            <li><a href="#">For Business</a></li>
+                            <li><a href="#">Our Partners</a></li>
+                            <li><a href="#">Press Contact</a></li>
+                            <li><a href="#">Careers</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class=" col-xl-2 col-xl-2 col-md-2 col-6  ">
+                    <div class="footer-col">
+                        <h4 class="footer-title">Help & Contact</h4>
+                        <ul class="list-unstyled footer-nav">
+                            <li><a href="#">
+                                Stay Safe Online
+                            </a></li>
+                            <li><a href="#">
+                                How to Sell</a></li>
+                            <li><a href="#">
+                                How to Buy
+                            </a></li>
+                            <li><a href="#">Posting Rules
+                            </a></li>
+
+                            <li><a href="#">
+                                Promote Your Ad
+                            </a></li>
+
+                        </ul>
+                    </div>
+                </div>
+
+                <div class=" col-xl-2 col-xl-2 col-md-2 col-6  ">
+                    <div class="footer-col">
+                        <h4 class="footer-title">More From Us</h4>
+                        <ul class="list-unstyled footer-nav">
+                            <li><a href="faq.html">FAQ
+                            </a></li>
+                            <li><a href="blogs.html">Blog
+                            </a></li>
+                            <li><a href="#">
+                                Popular Searches
+                            </a></li>
+                            <li><a href="#"> Site Map
+                            </a></li> <li><a href="#"> Customer Reviews
+                        </a></li>
+
+
+                        </ul>
+                    </div>
+                </div>
+                <div class=" col-xl-2 col-xl-2 col-md-2 col-6  ">
+                    <div class="footer-col">
+                        <h4 class="footer-title">Account</h4>
+                        <ul class="list-unstyled footer-nav">
+                            <li><a href="account-home.html"> Manage Account
+                            </a></li>
+                            <li><a href="login.html">Login
+                            </a></li>
+                            <li><a href="signup.html">Register
+                            </a></li>
+                            <li><a href="account-myads.html"> My ads
+                            </a></li>
+                            <li><a href="seller-profile.html"> Profile
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class=" col-xl-4 col-xl-4 col-md-4 col-12">
+                    <div class="footer-col row">
+
+                        <!-- <div class="col-sm-12 col-xs-6 col-xxs-12 no-padding-lg">
+                            <div class="mobile-app-content">
+                                <h4 class="footer-title">Mobile Apps</h4>
+                                <div class="row ">
+                                    <div class="col-6  ">
+                                        <a class="app-icon" target="_blank"  href="https://itunes.apple.com/">
+                                            <span class="hide-visually">iOS app</span>
+                                            <img src="images/site/app_store_badge.svg" alt="Available on the App Store">
+                                        </a>
+                                    </div>
+                                    <div class="col-6  ">
+                                        <a class="app-icon"  target="_blank" href="https://play.google.com/store/">
+                                            <span class="hide-visually">Android App</span>
+                                            <img src="images/site/google-play-badge.svg" alt="Available on the App Store">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <div class="col-sm-12 col-xs-6 col-xxs-12 no-padding-lg">
+                            <div class="hero-subscribe">
+                                <h4 class="footer-title no-margin">Follow us on</h4>
+                                <ul class="list-unstyled list-inline footer-nav social-list-footer social-list-color footer-nav-inline">
+                                    <li><a class="icon-color fb" title="Facebook" data-placement="top" data-toggle="tooltip" href="#"><i class="fa fa-facebook"></i> </a></li>
+                                    <li><a class="icon-color tw" title="Twitter" data-placement="top" data-toggle="tooltip" href="#"><i class="fa fa-twitter"></i> </a></li>
+                                    <li><a class="icon-color gp" title="Google+" data-placement="top" data-toggle="tooltip" href="#"><i class="fa fa-google-plus"></i> </a></li>
+                                    <li><a class="icon-color lin" title="Linkedin" data-placement="top" data-toggle="tooltip" href="#"><i class="fa fa-linkedin"></i> </a></li>
+                                    <li><a class="icon-color pin" title="Linkedin" data-placement="top" data-toggle="tooltip" href="#"><i class="fa fa-pinterest-p"></i> </a></li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div style="clear: both"></div>
+
+                <div class="col-xl-12">
+                    <div class=" text-center paymanet-method-logo">
+
+                        <img src="images/site/payment/master_card.png" alt="img">
+                        <img alt="img" src="images/site/payment/visa_card.png">
+                        <img alt="img" src="images/site/payment/paypal.png">
+                        <img alt="img" src="images/site/payment/american_express_card.png"> <img alt="img" src="images/site/payment/discover_network_card.png">
+                        <img alt="img" src="images/site/payment/google_wallet.png">
+                    </div>
+
+                    <div class="copy-info text-center">
+                        &copy; Bikezone.com All Rights Reserved.
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</footer>
+    <!-- /.footer -->
+</div>
 
 
 

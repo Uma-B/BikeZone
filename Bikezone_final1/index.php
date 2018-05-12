@@ -96,20 +96,20 @@ else{
     		<a target="_blank" href="index.php">  All
     		Pages</a> </h3>
 
-    	<div class="linkinner linkScroll scrollbar">
-    		<a target="_blank" href="blogs.html"> Blog</a>
+    	<div class="linkinner linkScroll scrollbar" style="height: 265px">
+    		<!-- <a target="_blank" href="blogs.html"> Blog</a>
     		<a target="_blank" href="blog-details.html"> Blog Details</a>
-    		<a target="_blank" href=""> about us</a>
+    		 --><a target="_blank" href=""> about us</a>
     		<a target="_blank" href=""> account my ads</a>
     		<a target="_blank" href="ads-details.html"> ads details</a>
-    			<span class="label label-success " style="font-size: 10px"><em>NEW</em></span>
+
     		</a>
-    		<a target="_blank" href=""> Contact</a>
-    		<a target="_blank" href=""> Faq</a>
+    		<!-- <a target="_blank" href=""> Contact</a>
+    		 --><a target="_blank" href=""> Faq</a>
     		<a target="_blank" href=""> Sign Up</a>
-    		<a target="_blank" href="statements.html"> Order Statements  <span class="label label-success " style="font-size: 10px"><em>NEW</em></span></a>
-    		<a target="_blank" href="seller-profile.html"> Seller profile
-    			<span class="label label-success " style="font-size: 10px"><em>NEW</em></span></a>
+    		<a target="_blank" href="statements.html"> Sign In<span class="label label-success " style="font-size: 10px"></span></a>
+    	<!-- 	<a target="_blank" href="seller-profile.html"> Seller profile
+    			<span class="label label-success " style="font-size: 10px"><em>NEW</em></span></a> -->
 
     		
     	</div>
@@ -160,7 +160,7 @@ else{
     					</a>
     					</li> -->
                       <li><a href="" class="glyphicon glyphicon-home"></a></li>
-                      <li><a href="category.html">Bike for sale</a></li>
+                      <li><a href="bike_sale_all.php">Bike for sale</a></li>
                       <li><a href="">Insurance</a></li>
                       <li><a href="">Service</a></li>
                       <li><a href="">Help</a></li>
@@ -220,7 +220,7 @@ else{
 </div></li>
                 <?php } else { ?>
                 <li><div class="btn-group">
-  <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" style="height: 45px; width: 120px;">
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" style="height: 45px; width: 120px;">
     Login
   </button>
   <div class="dropdown-menu">
@@ -365,7 +365,7 @@ else{
         </form>
 
         <div class="col-md-3 bottom-right">
-            <a href="category.html">Advanced Search</a>
+            <a href="Advance_Search.php">Advanced Search</a>
         </div>
                 </div>
             </div>
@@ -380,13 +380,13 @@ else{
                 <div class="row row-featured row-featured-category">
                     <div class="col-xl-12  box-title no-border">
                         <div class="inner"><h2><span>Browse by</span>
-                            Bike type <a href="category.html" class="sell-your-item"> View more <i
+                            Bike type <a href="bike_sale_all.php" class="sell-your-item"> View more <i
                                     class="  icon-th-list"></i> </a></h2>
                         </div>
                     </div>
 
                     <div class="col-xl-4 col-md-4 col-sm-4 col-xs-4 f-category">
-                        <a href="category.html"><img src="images/category/sample_bike.jpg" class="img-responsive" alt="img">
+                        <a href="scooter.php"><img src="images/category/sample_bike.jpg" class="img-responsive" alt="img">
                             <h6>  Scooters </h6></a>
                     </div>
 
@@ -461,7 +461,7 @@ else{
                 <div class="row row-featured">
                     <div class="col-xl-12  box-title ">
                         <div class="inner"><h2><span>Featured </span>
-                            Bike Ads <a href="category.html" class="sell-your-item"> View more <i
+                            Bike Ads <a href="bike_sale_all.php" class="sell-your-item"> View more <i
                                     class="  icon-th-list"></i> </a></h2>
 
                         </div>
@@ -1107,143 +1107,9 @@ else{
         </div>
     </div>
 
-    <footer class="main-footer">
-    	<div class="footer-content">
-    		<div class="container">
-    			<div class="row">
-
-    				<div class=" col-xl-2 col-xl-2 col-md-2 col-6  ">
-    					<div class="footer-col">
-    						<h4 class="footer-title">About us</h4>
-    						<ul class="list-unstyled footer-nav">
-    							<li><a href="#">About Company</a></li>
-    							<li><a href="#">For Business</a></li>
-    							<li><a href="#">Our Partners</a></li>
-    							<li><a href="#">Press Contact</a></li>
-    							<li><a href="#">Careers</a></li>
-    						</ul>
-    					</div>
-    				</div>
-
-    				<div class=" col-xl-2 col-xl-2 col-md-2 col-6  ">
-    					<div class="footer-col">
-    						<h4 class="footer-title">Help & Contact</h4>
-    						<ul class="list-unstyled footer-nav">
-    							<li><a href="#">
-    								Stay Safe Online
-    							</a></li>
-    							<li><a href="#">
-    								How to Sell</a></li>
-    							<li><a href="#">
-    								How to Buy
-    							</a></li>
-    							<li><a href="#">Posting Rules
-    							</a></li>
-
-    							<li><a href="#">
-    								Promote Your Ad
-    							</a></li>
-
-    						</ul>
-    					</div>
-    				</div>
-
-    				<div class=" col-xl-2 col-xl-2 col-md-2 col-6  ">
-    					<div class="footer-col">
-    						<h4 class="footer-title">More From Us</h4>
-    						<ul class="list-unstyled footer-nav">
-    							<li><a href="faq.html">FAQ
-    							</a></li>
-    							<li><a href="blogs.html">Blog
-    							</a></li>
-    							<li><a href="#">
-    								Popular Searches
-    							</a></li>
-    							<li><a href="#"> Site Map
-    							</a></li> <li><a href="#"> Customer Reviews
-    						</a></li>
-
-
-    						</ul>
-    					</div>
-    				</div>
-    				<div class=" col-xl-2 col-xl-2 col-md-2 col-6  ">
-    					<div class="footer-col">
-    						<h4 class="footer-title">Account</h4>
-    						<ul class="list-unstyled footer-nav">
-    							<li><a href="account-home.html"> Manage Account
-    							</a></li>
-    							<li><a href="login.html">Login
-    							</a></li>
-    							<li><a href="signup.html">Register
-    							</a></li>
-    							<li><a href="account-myads.html"> My ads
-    							</a></li>
-    							<li><a href="seller-profile.html"> Profile
-    							</a></li>
-    						</ul>
-    					</div>
-    				</div>
-    				<div class=" col-xl-4 col-xl-4 col-md-4 col-12">
-    					<div class="footer-col row">
-
-    						<!-- <div class="col-sm-12 col-xs-6 col-xxs-12 no-padding-lg">
-    							<div class="mobile-app-content">
-    								<h4 class="footer-title">Mobile Apps</h4>
-    								<div class="row ">
-    									<div class="col-6  ">
-    										<a class="app-icon" target="_blank"  href="https://itunes.apple.com/">
-    											<span class="hide-visually">iOS app</span>
-    											<img src="images/site/app_store_badge.svg" alt="Available on the App Store">
-    										</a>
-    									</div>
-    									<div class="col-6  ">
-    										<a class="app-icon"  target="_blank" href="https://play.google.com/store/">
-    											<span class="hide-visually">Android App</span>
-    											<img src="images/site/google-play-badge.svg" alt="Available on the App Store">
-    										</a>
-    									</div>
-    								</div>
-    							</div>
-    						</div> -->
-
-    						<div class="col-sm-12 col-xs-6 col-xxs-12 no-padding-lg">
-    							<div class="hero-subscribe">
-    								<h4 class="footer-title no-margin">Follow us on</h4>
-    								<ul class="list-unstyled list-inline footer-nav social-list-footer social-list-color footer-nav-inline">
-    									<li><a class="icon-color fb" title="Facebook" data-placement="top" data-toggle="tooltip" href="#"><i class="fa fa-facebook"></i> </a></li>
-    									<li><a class="icon-color tw" title="Twitter" data-placement="top" data-toggle="tooltip" href="#"><i class="fa fa-twitter"></i> </a></li>
-    									<li><a class="icon-color gp" title="Google+" data-placement="top" data-toggle="tooltip" href="#"><i class="fa fa-google-plus"></i> </a></li>
-    									<li><a class="icon-color lin" title="Linkedin" data-placement="top" data-toggle="tooltip" href="#"><i class="fa fa-linkedin"></i> </a></li>
-    									<li><a class="icon-color pin" title="Linkedin" data-placement="top" data-toggle="tooltip" href="#"><i class="fa fa-pinterest-p"></i> </a></li>
-    								</ul>
-    							</div>
-
-    						</div>
-    					</div>
-    				</div>
-    				<div style="clear: both"></div>
-
-    				<div class="col-xl-12">
-    					<div class=" text-center paymanet-method-logo">
-
-    						<img src="images/site/payment/master_card.png" alt="img">
-    						<img alt="img" src="images/site/payment/visa_card.png">
-    						<img alt="img" src="images/site/payment/paypal.png">
-    						<img alt="img" src="images/site/payment/american_express_card.png"> <img alt="img" src="images/site/payment/discover_network_card.png">
-    						<img alt="img" src="images/site/payment/google_wallet.png">
-    					</div>
-
-    					<div class="copy-info text-center">
-    						&copy; Bikezone.com All Rights Reserved.
-    					</div>
-
-    				</div>
-
-    			</div>
-    		</div>
-    	</div>
-    </footer>
+   <?php
+include 'footer.php';
+   ?>
 
 </div>
 <!-- /.wrapper -->
@@ -2416,7 +2282,7 @@ else{
 
 <!-- include jquery autocomplete plugin  -->
 
-<script type="text/javascript" src="assets/plugins/autocomplete/jquery.mockjax.js"></script>
+<!-- <script type="text/javascript" src="assets/plugins/autocomplete/jquery.mockjax.js"></script> -->
 <script type="text/javascript" src="assets/plugins/autocomplete/jquery.autocomplete.js"></script>
 <script type="text/javascript" src="assets/plugins/autocomplete/usastates.js"></script>
 
@@ -2455,5 +2321,5 @@ else{
 
 </body>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
 </html>

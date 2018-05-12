@@ -153,7 +153,9 @@ else
                 </button>
 
             </div>
-
+<a href="view_dealer.php">
+<button style="float: right;" type="button" class="btn btn-success">Back</button>
+</a>
 
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-left">
@@ -185,9 +187,12 @@ else
 
       ?>
 
-
 <div class="container">
-  <div class="jumbotron">  
+
+   <div class="search-row-wrapper">
+          <div class="container ">
+          
+      
   <h2 style="color:white;text-align :center">Custome Name : <?php echo $row['Username'];?> <br><br> Custome Post Count : 
 <?php $num_rows=mysql_num_rows($result); echo $num_rows; ?>
  </h2>
@@ -195,9 +200,7 @@ else
 </div>
 </div>
 
-<a href="view_dealer.php">
-<button style="float: right;" type="button" class="btn btn-success">Back</button>
-</a>
+
 
 
    <div class="table-responsive"> 
