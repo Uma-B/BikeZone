@@ -485,22 +485,38 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
 
     <div class="col-md-3 text-right  price-box">
         <h2 class="item-price">RS:-<?php echo $row['Prize']  ?></h2>
-        <a class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
-        </a> <a class="btn btn-default  btn-sm make-favorite"> <i class="fa fa-heart"></i> <span>Save</span> </a></div>
- 
+       <?php
+        if (isset($_SESSION['usr_id'])) {
+          $id=$_SESSION['usr_id'];
+          ?>
+          <a href="favourite.php?filename=BuisnessAds&UserId=<?php echo $row['UserId']; ?> &UsedBikeId=<?php echo $row['UsedBikeId']; ?> &Brand=<?php echo $row['Brand'];?> &Category=<?php echo $row['BikeCategory'];?> &Price=<?php echo $row['Prize'];?> &ContactNumber=<?php echo $row['ContactNumber'];?> &Fav_Userid=<?php echo $id;?>" class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
+        </a>
+        <?php
+        }
+        else{
+          ?>
+          <a href onclick="myFunction()" class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
+        </a>
+       <!--  <button onclick="myFunction()">Try it</button> -->
+
+<script>
+function myFunction() {
+    alert("Please login before adding favourites");
+}
+</script>
+        <?php
+        }
+        ?>
+         
+        </div>
+    <!--/.add-desc-box-->
 </div>
+
 <div id='myStyle'>
 </div>
+
 </div>
-
-
-<?php  
-};  
-?>  
-
-
-
-
+<?php } ?>
 <!-- <div class="pagination"></div>
  -->
 
@@ -540,8 +556,8 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
                         </div>
                         <!--/.adds-wrapper-->
 
-                        <div class="tab-box  save-search-bar text-center"><a href="#"> <i class=" icon-star-empty"></i>
-                            Save Search </a></div>
+                        <div class="tab-box  save-search-bar text-center"><!-- <a href="#"> <i class=" icon-star-empty"></i>
+                            Save Search </a> --></div>
                         <div class="post-promo text-center">
                         <h2> Do you get any bike for sell ? </h2>
                         <h5>Sell your bikes online FOR FREE. It's easier than you think !</h5>

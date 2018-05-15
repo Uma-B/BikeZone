@@ -784,9 +784,9 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
     <!--/.add-desc-box-->
     <div class="col-md-3 text-right  price-box">
         <h2 class="item-price">RS:-<?php echo $row['Prize']  ?></h2>
-         <a href="favourite.php?UserId=<?php echo $row['UserId']; ?> &UsedBikeId=<?php echo $row['UsedBikeId']; ?> &Brand=<?php echo $row['Brand'];?> &Category=<?php echo $row['BikeCategory'];?> &Price=<?php echo $row['Prize'];?> &ContactNumber=<?php echo $row['ContactNumber'];?> &Fav_Userid=<?php echo $_SESSION['usr_id'];;?>" class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
+         <!-- <a href="favourite.php?UserId=<?php echo $row['UserId']; ?> &UsedBikeId=<?php echo $row['UsedBikeId']; ?> &Brand=<?php echo $row['Brand'];?> &Category=<?php echo $row['BikeCategory'];?> &Price=<?php echo $row['Prize'];?> &ContactNumber=<?php echo $row['ContactNumber'];?> &Fav_Userid=<?php echo $_SESSION['usr_id'];;?>" class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
         </a> 
-         <a class="btn btn-default  btn-sm make-favorite"> <i class="fa fa-heart"></i> <span>Save</span> </a></div>
+         <a class="btn btn-default  btn-sm make-favorite"> <i class="fa fa-heart"></i> <span>Save</span> </a> --></div>
     <!--/.add-desc-box-->
 </div>
 
@@ -801,9 +801,9 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
                         </div>
                         <!--/.adds-wrapper-->
 
-                       <!--  <div class="tab-box save-search-bar text-center"><a href="#"> <i class=" icon-star-empty"></i>
-                            Save Search </a></div>
-                    </div> -->
+                        <div class="tab-box save-search-bar text-center"><!-- <a href="#"> <i class=" icon-star-empty"></i>
+                            Save Search </a> --></div>
+                    </div>
                     <div class="pagination-bar text-center">
                         <nav aria-label="Page navigation " class="d-inline-b">
                             <ul class="pagination">

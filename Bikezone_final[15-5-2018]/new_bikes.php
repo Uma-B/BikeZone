@@ -94,7 +94,7 @@ $rs_result = mysql_query ($sql);
             <div class="navbar-identity">
 
 
-                <a href="index.html" class="navbar-brand logo logo-title">
+                <a href="index.php" class="navbar-brand logo logo-title">
                 <span class="logo-icon"><!-- <i class="icon icon-search-1 ln-shadow-logo "></i> -->
                 </span>BIKE<span>ZONE </span> </a>
 
@@ -127,7 +127,7 @@ $rs_result = mysql_query ($sql);
                         </a>
                         </li> -->
                       <li><a href="" class="glyphicon glyphicon-home"></a></li>
-                      <li><a href="category.html">Bike for sale</a></li>
+                      <li><a href="bike_sale_all.php">Bike for sale</a></li>
                       <li><a href="">Insurance</a></li>
                       <li><a href="">Service</a></li>
                       <li><a href="">Help</a></li>
@@ -349,13 +349,13 @@ $rs_result = mysql_query ($sql);
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
                                 <li class="active nav-item">
                                     <a  class="nav-link" href="ajax/ee.html" data-url="ajax/33.html" role="tab"
-                                                      data-toggle="tab">All Ads <span class="badge badge-secondary">
+                                                      data-toggle="tab">New Bikes <span class="badge badge-secondary">
                                                           
                                                           <?php
 
                                             $count=mysql_query("SELECT DealerBikeId FROM dealerbikes");
                                                 $num_rows=mysql_num_rows($count);
-                                             echo $num_rows+1; ?>
+                                             echo $num_rows; ?>
                                                       </span></a>
                                 </li>
                                <!--  <li class="nav-item"><a class="nav-link"  href="ajax/33.html" data-url="ajax/33.html" role="tab" data-toggle="tab">Business
@@ -379,9 +379,9 @@ $rs_result = mysql_query ($sql);
                             <div class="pull-left col-xs-6">
                             </div>
                             <div class="pull-right col-xs-6 text-right listing-view-action"><span
-                                    class="list-view active"><i class="  icon-th"></i></span> <span
-                                    class="compact-view"><i class=" icon-th-list  "></i></span> <span
-                                    class="grid-view "><i class=" icon-th-large "></i></span></div>
+                                    class="list-view active"><!-- <i class="  icon-th"></i> --></span> <span
+                                    class="compact-view"><!-- <i class=" icon-th-list  "></i> --></span> <span
+                                    class="grid-view "><!-- <i class=" icon-th-large "></i> --></span></div>
                             <div style="clear:both"></div>
                         </div>
                         <!--/.listing-filter-->
@@ -484,21 +484,38 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
 
     <div class="col-md-3 text-right  price-box">
         <h2 class="item-price">RS:-<?php echo $row['Prize']  ?></h2>
-        <a class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
-        </a> <a class="btn btn-default  btn-sm make-favorite"> <i class="fa fa-heart"></i> <span>Save</span> </a></div>
- 
+         <?php
+        if (isset($_SESSION['usr_id'])) {
+          $id=$_SESSION['usr_id'];
+          ?>
+          <a href="favourite.php?filename=new_bikes&UserId=<?php echo $row['UserId']; ?> &UsedBikeId=<?php echo $row['UsedBikeId']; ?> &Brand=<?php echo $row['Brand'];?> &Category=<?php echo $row['BikeCategory'];?> &Price=<?php echo $row['Prize'];?> &ContactNumber=<?php echo $row['ContactNumber'];?> &Fav_Userid=<?php echo $id;?>" class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
+        </a>
+        <?php
+        }
+        else{
+          ?>
+          <a href onclick="myFunction()" class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
+        </a>
+       <!--  <button onclick="myFunction()">Try it</button> -->
+
+<script>
+function myFunction() {
+    alert("Please login before adding favourites");
+}
+</script>
+        <?php
+        }
+        ?>
+         
+        </div>
+    <!--/.add-desc-box-->
 </div>
+
 <div id='myStyle'>
 </div>
+
 </div>
-
-
-<?php  
-};  
-?>  
-
-
-
+<?php } ?>
 
 <!-- <div class="pagination"></div>
  -->
@@ -539,8 +556,8 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
                         </div>
                         <!--/.adds-wrapper-->
 
-                        <div class="tab-box  save-search-bar text-center"><a href="#"> <i class=" icon-star-empty"></i>
-                            Save Search </a></div>
+                        <div class="tab-box  save-search-bar text-center"><a href="#"> <!-- <i class=" icon-star-empty"></i>
+                            Save Search --> </a></div>
                     </div>
 
                     <div class="post-promo text-center">
