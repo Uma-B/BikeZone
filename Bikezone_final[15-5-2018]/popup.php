@@ -1011,7 +1011,7 @@ $(".chosen").chosen();
     <script src="http://www.jacklmoore.com/colorbox/jquery.colorbox.js"></script>
     <script>
         function openColorBox() {
-            $.colorbox({ iframe: true, width: "23%", height: "40%", href: "popup.html" });
+            $.colorbox({ iframe: true, width: "23%", height: "40%", href: "n1.html" });
         }
 
         setTimeout(openColorBox, 000);

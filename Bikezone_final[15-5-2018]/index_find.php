@@ -754,7 +754,20 @@ function myFunction() {
                      <h2> Do you get any bike for sell ? </h2>
                      
                      <h5>Sell your bikes online FOR FREE. It's easier than you think !</h5>
-                     <a href="pop.php " class="btn btn-lg btn-border btn-post btn-danger">Sell my bike free</a>
+                     <?php
+        if (isset($_SESSION['usr_id'])) {
+          $id=$_SESSION['usr_id'];
+          ?>
+          <a href="popup.php " class="btn btn-lg btn-border btn-post btn-danger">Sell my bike free</a>---------9
+          
+        <?php
+        }
+        else{
+          ?>
+         <a href="pop.php " class="btn btn-lg btn-border btn-post btn-danger">Sell my bike free</a>
+        <?php
+        }
+        ?>
                   </div>
                   <!--/.post-promo-->
                </div>
