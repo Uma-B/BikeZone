@@ -456,7 +456,7 @@ $_SESSION['filterQuery1'] = $filterQuery1;
                                         include_once 'db_connection.php';
                                         ?>
                                         <div margin:0px auto; margin-top:30px;" >
-                                                <select id="city" class="chosen" style="width:80%;" onchange="recp()">
+                                                <select id="city" class="chosen form-control" style="width:80%;" onchange="recp()">
                                                 <option value=""> Select City </option>
                                                 <?php
                                         $query ="SELECT City FROM usedbikes UNION SELECT City FROM dealerbikes Group by City  ";
@@ -803,8 +803,21 @@ function myFunction() {
                     <div class="post-promo text-center">
                         <h2> Do you get any bike for sell ? </h2>
                         <h5>Sell your bikes online FOR FREE. It's easier than you think !</h5>
-                        <a href="post-ads.html" class="btn btn-lg btn-border btn-post btn-danger">Sell my bike free</a>
-                    </div>
+                        <?php
+        if (isset($_SESSION['usr_id'])) {
+          $id=$_SESSION['usr_id'];
+          ?>
+          <a href="popup.php " class="btn btn-lg btn-border btn-post btn-danger">Sell my bike free</a>
+          
+        <?php
+        }
+        else{
+          ?>
+         <a href="pop.php " class="btn btn-lg btn-border btn-post btn-danger">Sell my bike free</a>
+        <?php
+        }
+        ?>
+                  </div>
                     <!--/.post-promo-->
 
                 </div>

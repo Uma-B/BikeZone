@@ -2,8 +2,12 @@
 session_start();
 
 
- /*  include "db_connection.php";
+   include "db_connection.php";
+
    if (isset($_POST['BtnSubmit'])=='Submit'){
+
+      echo $name = $_POST['username'];
+       echo $phoneno = $_POST['number'];
      
        $UsedBikeImage1=addslashes(file_get_contents($_FILES['image']['tmp_name'])); //will store the image to fp
        $UsedBikeImage2=addslashes(file_get_contents($_FILES['image2']['tmp_name'])); //will store the image to 
@@ -12,7 +16,7 @@ session_start();
  
    
 
-        $insert=mysql_query("INSERT INTO ");
+        $insert=mysql_query("INSERT INTO bikeads (name, phoneno, image1, image2, image3)values('$name',$phoneno,'{$UsedBikeImage1}','{$UsedBikeImage2}','{$UsedBikeImage3}') ");
    
    
        if($insert){
@@ -28,20 +32,16 @@ session_start();
 <script>alert(<?php mysql_error();?>);</script>
 <?php
    }
-   }*/
+   }
 
-include "db_connection.php";
+
+/*next form*/
 
 
     if (isset($_GET['Btn'])=='Submit'){
      
        echo $B = $_GET["Br"];
        echo $M = $_GET["Mo"];
-
- 
-   
-
-        //$insert=mysql_query("INSERT INTO `bikemodel`(Brand,Model) VALUES ($B,'$M')");
         $insert = mysql_query("INSERT INTO `bikemodel`(`Brand`, `Model`) VALUES ('$B','$M')");
    
    
@@ -60,11 +60,6 @@ include "db_connection.php";
    }
    }
 
-
-
-
-
-   
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -96,6 +91,53 @@ include "db_connection.php";
 
 </head>
 <body>
+  <div id="wrapper">
+
+         <div class="header">
+        <nav class="navbar  fixed-top navbar-site navbar-light bg-light navbar-expand-md"
+             role="navigation">
+            <div class="container">
+
+            <div class="navbar-identity">
+
+
+                <a href="index.php" class="navbar-brand logo logo-title">
+                <span class="logo-icon"><!-- <i class="icon icon-search-1 ln-shadow-logo "></i> -->
+                </span>BIKE<span>ZONE </span> </a>
+
+
+                <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggler pull-right"
+                        type="button">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 30 30" width="30" height="30" focusable="false"><title>Menu</title><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M4 7h22M4 15h22M4 23h22"/></svg>
+
+
+                </button>
+
+
+               
+
+            </div>
+
+
+
+                <div class="navbar-collapse collapse">
+                   
+                </div>
+                <!--/.nav-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+    </div>
+    <!-- /.header -->
+
+        <div class="search-row-wrapper">
+          <div class="container ">
+            <h1 style="color: white;">Admin</h1>
+          </div>
+        </div>
+
+
     <div class="main-container">
         <div class="container">
             <div class="row">
@@ -107,18 +149,37 @@ include "db_connection.php";
                             <div class="col-sm-12">
 
                                 <form class="form-horizontal" enctype="multipart/form-data" action="" method="post">
+                                  <div class="form-group row">
+                                        <label  class="col-sm-3 col-form-label">Name</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="username" id="Text4">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label  class="col-sm-3 col-form-label">Phone No</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="number" id="Text4">
+                                            
+                                        </div>
+                                    </div>
                                      <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label" for="textarea">Picture</label>
+                                        <label class="col-sm-3 col-form-label" for="textarea">ADS Picture</label>
                                         <div class="col-lg-8">
 
                                             <div class="mb10">
-                                                <input class="file" data-preview-file-type="text" name="image" id="image" accept="image/JPEG" type="file">
+                                                <input class="file" data-preview-file-type="text" name="image" id="image" accept="image/JPEG" type="file" placeholder="Big Image">
+                                              
+                                                BIG ADS in Main page (pixel 1920*1080)
+                                        
                                             </div>
                                             <div class="mb10">
-                                                <input class="file" data-preview-file-type="text" name="image2" id="image2" accept="image/JPEG" type="file">
+                                                <input class="file" data-preview-file-type="text" name="image2" id="image2" accept="image/JPEG" type="file" placeholder="Image_1">
+                                                ADS_1 in Main page (pixel 500*300)
                                             </div>
                                             <div class="mb10">
                                                 <input class="file" data-preview-file-type="text" name="image3" id="image3" accept="image/JPEG" type="file">
+                                                ADS_1 in Main page (pixel 500*300)
                                             </div>
                                            
                                             
@@ -186,7 +247,9 @@ include "db_connection.php";
              </div></div>
 
 </div>
-
+<?php
+include "footer.php";
+?>
 
 
 <script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js></script>

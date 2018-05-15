@@ -1,5 +1,3 @@
-
-
 <?php
 session_start();
 include_once 'db_connection.php';
@@ -8,7 +6,7 @@ include_once 'db_connection.php';
 <?php
 
 include('db_connection.php'); 
-$limit = 1; 
+$limit = 10; 
 $sql = "SELECT COUNT(UsedBikeId) FROM usedbikes";  
 $rs_result = mysql_query($sql);  
 $row = mysql_fetch_row($rs_result);  
@@ -16,7 +14,7 @@ $total_records = $row[0];
 $total_pages = ceil($total_records / $limit);
 
 
-$limit = 1;  
+$limit = 10;  
 if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };  
 $start_from = ($page-1) * $limit;  
   
@@ -72,113 +70,10 @@ $rs_result = mysql_query ($sql);
 
 <div id="wrapper">
 
-         <div class="header">
-        <nav class="navbar  fixed-top navbar-site navbar-light bg-light navbar-expand-md"
-             role="navigation">
-            <div class="container">
-
-            <div class="navbar-identity">
-
-
-                <a href="index.php" class="navbar-brand logo logo-title">
-                <span class="logo-icon"><!-- <i class="icon icon-search-1 ln-shadow-logo "></i> -->
-                </span>BIKE<span>ZONE </span> </a>
-
-
-                <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggler pull-right"
-                        type="button">
-
-                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 30 30" width="30" height="30" focusable="false"><title>Menu</title><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M4 7h22M4 15h22M4 23h22"/></svg>
-
-
-                </button>
-
-
-              
-
-            </div>
-
-
-
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav navbar-left">
-                        <!-- <li class="flag-menu country-flag tooltipHere hidden-xs nav-item" data-toggle="tooltip"
-                            data-placement="bottom" title="Select Country"> <a href="#select-country" data-toggle="modal" class="nav-link">
-
-                            <span class="flag-icon flag-icon-us"></span> <span class="caret"></span>
-
-                        </a>
-                        </li> -->
-                      <li><a href="" class="glyphicon glyphicon-home"></a></li>
-                      <li><a href="bike-sale_all.php">Bike for sale</a></li>
-                      <li><a href="">Insurance</a></li>
-                      <li><a href="">Service</a></li>
-                      <li><a href="">Help</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav ml-auto navbar-right">
-                        <!-- <li class="nav-item"><a href="category.html" class="nav-link"><i class="icon-th-thumb"></i> All Ads</a>
-                        </li> -->
-                        <li class="dropdown no-arrow nav-item"><a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-
-                            <span>User Name</span> <i class="icon-user fa"></i> <i class=" icon-down-open-big fa"></i></a>
-                            <ul
-                                    class="dropdown-menu user-menu dropdown-menu-right">
-                                <li class="active dropdown-item"><a href="account-home.html"><i class="icon-home"></i> Personal Home
-
-                                </a>
-                                </li>
-                                <li class="dropdown-item"><a href="account-myads.html"><i class="icon-th-thumb"></i> My ads </a>
-                                </li>
-                                <li class="dropdown-item"><a href="account-favourite-ads.html"><i class="icon-heart"></i> Favourite ads </a>
-                                </li>
-                                <li class="dropdown-item"><a href="account-saved-search.html"><i class="icon-star-circled"></i> Saved search
-
-                                </a>
-                                </li>
-                                <li class="dropdown-item"><a href="account-archived-ads.html"><i class="icon-folder-close"></i> Archived ads
-
-                                </a>
-                                </li>
-                                <li class="dropdown-item"><a href="account-pending-approval-ads.html"><i class="icon-hourglass"></i> Pending
-                                    approval </a>
-                                </li>
-                                <li class="dropdown-item"><a href="statements.html"><i class=" icon-money "></i> Payment history </a>
-                                </li>
-                                <li class="dropdown-item"><a href="login.html"><i class=" icon-logout "></i> Log out </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="postadd nav-item"><a class="btn btn-block   btn-border btn-post btn-danger nav-link" href="post-ads.html">Sell Your Bike</a>
-                        </li>
-                        <li class="dropdown  lang-menu nav-item">
-                            <!-- <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
-                                <span class="lang-title">EN</span>
-
-                            </button> -->
-                            <ul class="dropdown-menu dropdown-menu-right user-menu" role="menu">
-                                <li class="dropdown-item"><a class="active">
-
-                                    <span class="lang-name">English</span></a>
-                                </li>
-                                <li class="dropdown-item"><a><span class="lang-name">Dutch</span></a>
-                                </li>
-                                <li class="dropdown-item"><a><span class="lang-name">fran&#xE7;ais </span></a>
-                                </li>
-                                <li class="dropdown-item"><a><span class="lang-name">Deutsch</span></a>
-                                </li>
-                                <li class="dropdown-item"><a> <span class="lang-name">Arabic</span></a>
-                                </li>
-                                <li class="dropdown-item"><a><span class="lang-name">Spanish</span></a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <!--/.nav-collapse -->
-            </div>
-            <!-- /.container-fluid -->
-        </nav>
-    </div>
+         
+         <?php
+            include "header.php";
+         ?>
     <!-- /.header -->
 
         <div class="search-row-wrapper">
@@ -231,7 +126,7 @@ $rs_result = mysql_query ($sql);
                                         include_once 'db_connection.php';
                                         ?>
                                         <div margin:0px auto; margin-top:30px;" >
-                                                <select id="city" class="chosen" style="width:80%;" onchange="recp()">
+                                                <select id="city" class="chosen form-control" style="width:80%;" onchange="recp()">
                                                 <option value=""> Select City </option>
                                                 <?php
                                         $query ="SELECT City FROM usedbikes UNION SELECT City FROM dealerbikes Group by City  ";
@@ -332,7 +227,7 @@ $rs_result = mysql_query ($sql);
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
                                 <li class="active nav-item">
                                     <a  class="nav-link" href="ajax/ee.html" data-url="ajax/33.html" role="tab"
-                                                      data-toggle="tab">All Ads <span class="badge badge-secondary">
+                                                      data-toggle="tab">Used bikes <span class="badge badge-secondary">
                                                           
                                                           <?php
 
@@ -359,9 +254,9 @@ $rs_result = mysql_query ($sql);
                             <div class="pull-left col-xs-6">
                             </div>
                             <div class="pull-right col-xs-6 text-right listing-view-action"><span
-                                    class="list-view active"><i class="  icon-th"></i></span> <span
-                                    class="compact-view"><i class=" icon-th-list  "></i></span> <span
-                                    class="grid-view "><i class=" icon-th-large "></i></span></div>
+                                    class="list-view active"><!-- <i class="  icon-th"></i> --></span> <span
+                                    class="compact-view"><!-- <i class=" icon-th-list  "></i> --></span> <span
+                                    class="grid-view "><!-- <i class=" icon-th-large "></i> --></span></div>
                             <div style="clear:both"></div>
                         </div>
                         <!--/.listing-filter-->
@@ -400,17 +295,7 @@ $rs_result = mysql_query ($sql);
 
                         <div class="adds-wrapper">
                             <div class="tab-content">
-                                <div class="tab-pane active" id="allAds"><div class="row">
-
-
-
-    
-    <div class="col-sm-7 add-desc-box">
-    </div>
-        </div>
-
-</div>
-
+                               
 
 
 <div>
@@ -427,7 +312,7 @@ while ($row = mysql_fetch_assoc($rs_result)) {
       
 
 
-<div class="item-list">
+<div class="item-list oldList">
     <div class="cornerRibbons featuredAds">
         <!--<a href=""> Featured Ads</a> -->
     </div>
@@ -525,14 +410,8 @@ function myFunction() {
 
 </div>
 </div>
-
-
-
-
-
-
-                            </div>
-                        </div>
+          </div>
+                  </div>
                         <!--/.adds-wrapper-->
 
                         <div class="tab-box  save-search-bar text-center"><!-- <a href="#"> <i class=" icon-star-empty"></i>
@@ -542,8 +421,21 @@ function myFunction() {
                     <div class="post-promo text-center">
                         <h2> Do you get any bike for sell ? </h2>
                         <h5>Sell your bikes online FOR FREE. It's easier than you think !</h5>
-                        <a href="post-ads.html" class="btn btn-lg btn-border btn-post btn-danger">Sell my bike free</a>
-                    </div>
+                        <?php
+        if (isset($_SESSION['usr_id'])) {
+          $id=$_SESSION['usr_id'];
+          ?>
+          <a href="popup.php " class="btn btn-lg btn-border btn-post btn-danger">Sell my bike free</a>
+          
+        <?php
+        }
+        else{
+          ?>
+         <a href="pop.php " class="btn btn-lg btn-border btn-post btn-danger">Sell my bike free</a>
+        <?php
+        }
+        ?>
+                  </div>
                     <!--/.post-promo-->
 
                 </div>
@@ -551,6 +443,10 @@ function myFunction() {
 
             </div>
         </div>
+
+         <?php
+            include "footer.php";
+         ?>
     </div>
    
 

@@ -7,13 +7,13 @@
 	<?php
 include('db_connection.php');
 
-$limit = 1;  
+$limit = 10;  
 if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };  
 $start_from = ($page-1) * $limit;  
   
 $sql = "SELECT * FROM dealerbikes WHERE BikeCategory = 'Scooter' ORDER BY DealerBikeId ASC LIMIT $start_from, $limit";
 
-$rs_result = mysql_query ($sql);  
+$rs_result = mysql_query ($sql);    
 ?>
 
 
