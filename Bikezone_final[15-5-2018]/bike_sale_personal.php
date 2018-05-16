@@ -3,197 +3,34 @@ session_start();
 
 include "db_connection.php";
 
- // if(isset($_POST['BtnSubmit'])) {
 
- //       $_SESSON['Keyword']=$_POST['Keyword'];
- //       $_SESSION['BikeCategory']=$_POST['BikeCategory'];
- //       $_SESSION['Brand']=$_POST['Brand'];
- //       $_SESSION['Model']=$_POST['Model'];
- //       $_SESSION['State']=$_POST['State'];
- //       $_SESSION['City']=$_POST['City'];
- //       $_SESSION['Prize_Minimum']=$_POST['Prize_Minimum'];
- //       $_SESSION['Prize_Maximum']=$_POST['Prize_Maximum']; 
-GLOBAL $filterQuery1;
+GLOBAL $Bike_sale1;
+if(isset($_SESSION['Bike_sale1'])) {
+$filterQuery1 = $_SESSION['Bike_sale1'];
+}
+$limit = 10; 
+$sql = $filterQuery1; 
+/*For No Of Rows Selected*/
+$result=mysql_query($sql);
+$rowcount = mysql_num_rows($result);
+/*----------------------*/
+$rs_result = mysql_query($sql);  
+$row = mysql_fetch_row($rs_result);  
+$total_records = $rowcount;
+$total_pages = ceil($total_records / $limit);
 
- if(isset($_SESSION['BikeCategory'])) {
+ 
+if (isset($_GET["page"])) {
+ $page  = $_GET["page"]; 
+} else { 
+  $page=1; 
+}  
 
-    $Keyword = $_SESSION['Keyword'];
-    $BikeCategory= $_SESSION['BikeCategory'];
-    $Brand = $_SESSION['Brand'];
-    $Model = $_SESSION['Model'];
-    $State = $_SESSION['State'];
-    $City = $_SESSION['City'];
-    $Prize_Minimum = $_SESSION['Prize_Minimum'];
-    $Prize_Maximum= $_SESSION['Prize_Maximum'];
-        
-       }
-
-$filterQuery1 = "select
-  usedbikes.UsedBikeId as UsedBikeId,
-  usedbikes.BikeCategory as BikeCategory,
-  usedbikes.UsedBikeImage1 as UsedBikeImage1,
-  usedbikes.Brand as Brand,
-  usedbikes.Model as Model,
-  usedbikes.KilometreDriven as KilometreDriven,
-  usedbikes.Location as Location,
-  usedbikes.UserId as UserId,
-  usedbikes.UserName as UserName,
-  usedbikes.ContactNumber as ContactNumber,
-  usedbikes.Prize as Prize
-from
-  usedbikes
-
-";
-
-// $filterQuery2 = "select
-//   dealerbikes.DealerBikeId as UsedBikeId,
-//   dealerbikes.BikeCategory as BikeCategory,
-//   dealerbikes.DealerBikeImage1 as BikeImage1,
-//   dealerbikes.Brand as Brand,
-//   dealerbikes.Model as Model,
-//   dealerbikes.KilometreDriven as KilometreDriven,
-//   dealerbikes.Location as Location,
-//   dealerbikes.DealerId as UserId,
-//   dealerbikes.UserName as UserName,
-//   dealerbikes.ContactNumber as ContactNumber,
-//   dealerbikes.Prize as Prize
-// from
-//   dealerbikes
-
-// ";
-
-// if($Keyword != null){
-//     $filterQuery = "select
-//   usedbikes.UsedBikeId as UsedBikeId,
-//   usedbikes.BikeCategory as BikeCategory,
-//   usedbikes.UsedBikeImage1 as UsedBikeImage1,
-//   usedbikes.Brand as Brand,
-//   usedbikes.Model as Model,
-//   usedbikes.KilometreDriven as KilometreDriven,
-//   usedbikes.Location as Location,
-//   usedbikes.UserId as UserId,
-//   usedbikes.UserName as UserName,
-//   usedbikes.ContactNumber as ContactNumber,
-//   usedbikes.Prize as Prize
-// from
-//   usedbikes
-// where
-//   usedbikes.BikeCategory LIKE '$Keyword'
-//   OR usedbikes.Brand LIKE '$Keyword'
-//   OR usedbikes.Model LIKE '$Keyword'
-//   OR usedbikes.State LIKE '$Keyword'
-//   OR usedbikes.City LIKE '$Keyword'
-// UNION
-// select
-//   dealerbikes.DealerBikeId as UsedBikeId,
-//   dealerbikes.BikeCategory as BikeCategory,
-//   dealerbikes.DealerBikeImage1 as BikeImage1,
-//   dealerbikes.Brand as Brand,
-//   dealerbikes.Model as Model,
-//   dealerbikes.KilometreDriven as KilometreDriven,
-//   dealerbikes.Location as Location,
-//   dealerbikes.DealerId as UserId,
-//   dealerbikes.UserName as UserName,
-//   dealerbikes.ContactNumber as ContactNumber,
-//   dealerbikes.Prize as Prize
-// from
-//   dealerbikes
-// where
-//   dealerbikes.BikeCategory LIKE '$Keyword'
-//   OR dealerbikes.Brand LIKE '$Keyword'
-//   OR dealerbikes.Model LIKE '$Keyword'
-//   OR dealerbikes.State LIKE '$Keyword'
-//   OR dealerbikes.City LIKE '$Keyword'
-// ";
+$start_from = ($page-1) * $limit;    
+$sql =  $filterQuery1 . " LIMIT $start_from, $limit";  
+$rs_result = mysql_query ($sql);   
 
 
-// }else{
-
-// if($BikeCategory != ""){
-//     $filterQuery2 = $filterQuery2." dealerbikes.BikeCategory LIKE '$BikeCategory' AND";
-//     $filterQuery1 = $filterQuery1." usedbikes.BikeCategory LIKE '$BikeCategory' AND";
-// }
-// if($Brand != ""){
-//      $filterQuery2 = $filterQuery2." dealerbikes.Brand LIKE '$Brand' AND";
-//     $filterQuery1 = $filterQuery1." usedbikes.Brand LIKE '$Brand' AND";
-// }
-// if($Model != ""){
-//     $filterQuery2 = $filterQuery2." dealerbikes.Model LIKE '$Model' AND";
-//     $filterQuery1 = $filterQuery1." usedbikes.Model LIKE '$Model' AND";
-// }
-
-// if($State != ""){
-//     $filterQuery2 = $filterQuery2." dealerbikes.State LIKE '$State' AND";
-//     $filterQuery1 = $filterQuery1." usedbikes.State LIKE '$State' AND";
-// }
-// if($City != ""){
-//     $filterQuery2 = $filterQuery2." dealerbikes.City LIKE '$City' AND";
-//     $filterQuery1 = $filterQuery1." usedbikes.City LIKE '$City' AND";
-// }
-// if($Prize_Minimum != "" && $Prize_Maximum != ""){
-//     $filterQuery2 = $filterQuery2." dealerbikes.Prize IN (SELECT Prize from dealerbikes WHERE Prize BETWEEN $Prize_Minimum AND $Prize_Maximum)";
-//     $filterQuery1 = $filterQuery1." usedbikes.Prize IN (SELECT Prize from usedbikes WHERE Prize BETWEEN $Prize_Minimum AND $Prize_Maximum)";
-// }
-/*trim($filterQuery1);
-trim($filterQuery2);*/
-// $split = explode(" ", $filterQuery1);
-// if($split[count($split)-1] == "AND"){
-//     $filterQuery1 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filterQuery1);
-//     $filterQuery2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filterQuery2);
-// }
-//$filterQuery = $filterQuery1." UNION ".$filterQuery2;
-
-
-$_SESSION['filterQuery1'] = $filterQuery1;
-
-
-    // $_SESSION['Keyword'] = $Keyword;
-    // $_SESSION['BikeCategory'] = $BikeCategory;
-    // $_SESSION['Brand'] = $Brand;
-    // $_SESSION['Model'] = $Model;
-    //  $_SESSION['State'] = $State;
-    // $_SESSION['City'] = $City;
-    // $_SESSION['Prize_Minimum'] = $Prize_Minimum;
-    // $_SESSION['Prize_Maximum'] = $Prize_Maximum;
-
-    $_SESSION['Keyword'] = $_SESSION['Keyword'];
-    $_SESSION['BikeCategory'] = $_SESSION['BikeCategory'];
-    $_SESSION['Brand'] = $_SESSION['Brand'];
-    $_SESSION['Model'] = $_SESSION['Model'];
-     $_SESSION['State'] = $_SESSION['State'];
-    $_SESSION['City'] = $_SESSION['City'];
-    $_SESSION['Prize_Minimum'] = $_SESSION['Prize_Minimum'];
-    $_SESSION['Prize_Maximum'] = $_SESSION['Prize_Maximum'];
-
-
-    // $_SESSION['Keyword'] = $_SESSION['Keyword'];
-    // $_SESSION['BikeCategory'] = $_SESSION['BikeCategory'];
-    // $_SESSION['Brand'] = $_SESSION['Brand'];
-    // $_SESSION['Model'] = $_SESSION['Model'];
-    //  $_SESSION['State'] = $_SESSION['State'];
-    // $_SESSION['City'] = $_SESSION['City'];
-    // $_SESSION['Prize_Minimum'] = $_SESSION['Prize_Minimum'];
-    // $_SESSION['Prize_Maximum'] = $_SESSION['Prize_Maximum'];
-
-    
-    // $_SESSION['Keyword'] = $Keyword;
-    // $_SESSION['BikeCategory'] = $BikeCategory;
-    // $_SESSION['Brand'] = $Brand;
-    // $_SESSION['Model'] = $Model;
-    // $_SESSION['State'] = $State;
-    // $_SESSION['City'] = $City;
-    // $_SESSION['Prize_Minimum'] = $Prize_Minimum;
-    // $_SESSION['Prize_Maximum'] = $Prize_Maximum;
-
-    //  $_SESSION['Keyword'] = $_SESSION['Keyword'];
-    // $_SESSION['BikeCategory'] = $_SESSION['BikeCategory'];
-    // $_SESSION['Brand'] = $_SESSION['Brand'];
-    // $_SESSION['Model'] = $_SESSION['Model'];
-    //  $_SESSION['State'] = $_SESSION['State'];
-    // $_SESSION['City'] = $_SESSION['City'];
-    // $_SESSION['Prize_Minimum'] = $_SESSION['Prize_Minimum'];
-    // $_SESSION['Prize_Maximum'] = $_SESSION['Prize_Maximum'];
-    
                            
 ?>
 
@@ -680,27 +517,16 @@ $_SESSION['filterQuery1'] = $filterQuery1;
         </div>
 
 </div>
+<div>
+<div id="target-content" >loading...</div>
+</div>
 <?php
-
-include "db_connection.php";
-
-//echo "\n Filter Query $filterQuery1";
-$sql=mysql_query($filterQuery1);
-
-while($row=mysql_fetch_array($sql))
+while($row=mysql_fetch_array($rs_result))
 {
-   // $_SESSION['Keyword'] = $row['Keyword'];
-   //  $_SESSION['BikeCategory'] = $row['BikeCategory'];
-   //  $_SESSION['Brand'] = $row['Brand'];
-   //  $_SESSION['Model'] = $row['Model'];
-   //   $_SESSION['State'] = $row['State'];
-   //  $_SESSION['City'] = $row['City'];
-   //  $_SESSION['Prize_Minimum'] = $row['Prize_Minimum'];
-   //  $_SESSION['Prize_Maximum'] = $row['Prize_Maximum'];
 ?>
 
 
-<div class="item-list oldList">
+<div class="item-list oldList" id="masterdiv">
     <div class="cornerRibbons featuredAds">
         <!--<a href=""> Featured Ads</a> -->
     </div>
@@ -776,6 +602,26 @@ function myFunction() {
 </div>
 <?php } ?>
 
+
+
+<div class="pagination-bar text-center">
+  <nav aria-label="Page navigation " class="d-inline-b">
+  <ul class="pagination" id="pagination" >
+    <?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
+     if($i == 1):?>
+      <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_Bike_Sale_Personal.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+      <?php else:?>
+
+       <li class="page-item" id="<?php echo $i;?>"><a href='pagination_Bike_Sale_Personal.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+
+     <?php endif;?> 
+   <?php endfor;endif;?> 
+ </ul>
+</nav>
+</div>
+
+
+
                             </div>
                         </div>
                         <!--/.adds-wrapper-->
@@ -783,22 +629,7 @@ function myFunction() {
                         <div class="tab-box save-search-bar text-center"><!-- <a href="#"> <i class=" icon-star-empty"></i>
                             Save Search </a> --></div>
                     </div>
-                    <div class="pagination-bar text-center">
-                        <nav aria-label="Page navigation " class="d-inline-b">
-                            <ul class="pagination">
-
-                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                <li class="page-item"><a class="page-link" href="#">...</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">Next</a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                    <!--/.pagination-bar -->
+                    
 
                     <div class="post-promo text-center">
                         <h2> Do you get any bike for sell ? </h2>
@@ -827,162 +658,53 @@ function myFunction() {
         </div>
     </div>
     <!-- /.main-container -->
-
-<footer class="main-footer">
-    <div class="footer-content">
-        <div class="container">
-            <div class="row">
-
-                <div class=" col-xl-2 col-xl-2 col-md-2 col-6  ">
-                    <div class="footer-col">
-                        <h4 class="footer-title">About us</h4>
-                        <ul class="list-unstyled footer-nav">
-                            <li><a href="#">About Company</a></li>
-                            <li><a href="#">For Business</a></li>
-                            <li><a href="#">Our Partners</a></li>
-                            <li><a href="#">Press Contact</a></li>
-                            <li><a href="#">Careers</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class=" col-xl-2 col-xl-2 col-md-2 col-6  ">
-                    <div class="footer-col">
-                        <h4 class="footer-title">Help & Contact</h4>
-                        <ul class="list-unstyled footer-nav">
-                            <li><a href="#">
-                                Stay Safe Online
-                            </a></li>
-                            <li><a href="#">
-                                How to Sell</a></li>
-                            <li><a href="#">
-                                How to Buy
-                            </a></li>
-                            <li><a href="#">Posting Rules
-                            </a></li>
-
-                            <li><a href="#">
-                                Promote Your Ad
-                            </a></li>
-
-                        </ul>
-                    </div>
-                </div>
-
-                <div class=" col-xl-2 col-xl-2 col-md-2 col-6  ">
-                    <div class="footer-col">
-                        <h4 class="footer-title">More From Us</h4>
-                        <ul class="list-unstyled footer-nav">
-                            <li><a href="faq.html">FAQ
-                            </a></li>
-                            <li><a href="blogs.html">Blog
-                            </a></li>
-                            <li><a href="#">
-                                Popular Searches
-                            </a></li>
-                            <li><a href="#"> Site Map
-                            </a></li> <li><a href="#"> Customer Reviews
-                        </a></li>
-
-
-                        </ul>
-                    </div>
-                </div>
-                <div class=" col-xl-2 col-xl-2 col-md-2 col-6  ">
-                    <div class="footer-col">
-                        <h4 class="footer-title">Account</h4>
-                        <ul class="list-unstyled footer-nav">
-                            <li><a href="account-home.html"> Manage Account
-                            </a></li>
-                            <li><a href="login.html">Login
-                            </a></li>
-                            <li><a href="signup.html">Register
-                            </a></li>
-                            <li><a href="account-myads.html"> My ads
-                            </a></li>
-                            <li><a href="seller-profile.html"> Profile
-                            </a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class=" col-xl-4 col-xl-4 col-md-4 col-12">
-                    <div class="footer-col row">
-
-                        <!-- <div class="col-sm-12 col-xs-6 col-xxs-12 no-padding-lg">
-                            <div class="mobile-app-content">
-                                <h4 class="footer-title">Mobile Apps</h4>
-                                <div class="row ">
-                                    <div class="col-6  ">
-                                        <a class="app-icon" target="_blank"  href="https://itunes.apple.com/">
-                                            <span class="hide-visually">iOS app</span>
-                                            <img src="images/site/app_store_badge.svg" alt="Available on the App Store">
-                                        </a>
-                                    </div>
-                                    <div class="col-6  ">
-                                        <a class="app-icon"  target="_blank" href="https://play.google.com/store/">
-                                            <span class="hide-visually">Android App</span>
-                                            <img src="images/site/google-play-badge.svg" alt="Available on the App Store">
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
-
-                        <div class="col-sm-12 col-xs-6 col-xxs-12 no-padding-lg">
-                            <div class="hero-subscribe">
-                                <h4 class="footer-title no-margin">Follow us on</h4>
-                                <ul class="list-unstyled list-inline footer-nav social-list-footer social-list-color footer-nav-inline">
-                                    <li><a class="icon-color fb" title="Facebook" data-placement="top" data-toggle="tooltip" href="#"><i class="fa fa-facebook"></i> </a></li>
-                                    <li><a class="icon-color tw" title="Twitter" data-placement="top" data-toggle="tooltip" href="#"><i class="fa fa-twitter"></i> </a></li>
-                                    <li><a class="icon-color gp" title="Google+" data-placement="top" data-toggle="tooltip" href="#"><i class="fa fa-google-plus"></i> </a></li>
-                                    <li><a class="icon-color lin" title="Linkedin" data-placement="top" data-toggle="tooltip" href="#"><i class="fa fa-linkedin"></i> </a></li>
-                                    <li><a class="icon-color pin" title="Linkedin" data-placement="top" data-toggle="tooltip" href="#"><i class="fa fa-pinterest-p"></i> </a></li>
-                                </ul>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div style="clear: both"></div>
-
-                <div class="col-xl-12">
-                    <div class=" text-center paymanet-method-logo">
-
-                        <img src="images/site/payment/master_card.png" alt="img">
-                        <img alt="img" src="images/site/payment/visa_card.png">
-                        <img alt="img" src="images/site/payment/paypal.png">
-                        <img alt="img" src="images/site/payment/american_express_card.png"> <img alt="img" src="images/site/payment/discover_network_card.png">
-                        <img alt="img" src="images/site/payment/google_wallet.png">
-                    </div>
-
-                    <div class="copy-info text-center">
-                        &copy; Bikezone.com All Rights Reserved.
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
-    </div>
-</footer>
+<?php include 'footer.php'; ?>
     <!-- /.footer -->
 </div>
 
 
 
+
+<!-- Placed at the end of the document so the pages load faster -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+<script src="dist/jquery.simplePagination.js"></script>
+
+
 <!-- Placed at the end of the document so the pages load faster -->
 
-<script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js></script>
+
+<!-- <script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js></script> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 <script src="assets/js/vendors.min.js"></script>
 
-<!-- include custom script for site  -->
-<script src="assets/js/script.js"></script>
+
 
 
 
 <script src="choosen.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+$('.pagination').pagination({
+        items: <?php echo $total_records;?>,
+        itemsOnPage: <?php echo $limit;?>,
+        cssStyle: 'light-theme',
+        currentPage : 1,
+        onPageClick : function(pageNumber) {
+            jQuery('#masterdiv div').html('');
+            jQuery("#target-content").html('loading...');
+            jQuery("#target-content").load("pagination_Bike_Sale_Personal.php?page=" + pageNumber);
+        }
+    });
+});
+</script> 
+
+
   <script type="text/javascript">
   // city
 function recp() {
@@ -1011,7 +733,7 @@ $(".chosen").chosen();
 </script>
 <link rel="stylesheet" href="style.css">
 <!-- grid problem -->
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
 <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script> -->
 <!-- <script src="choosen.js"></script> -->
 

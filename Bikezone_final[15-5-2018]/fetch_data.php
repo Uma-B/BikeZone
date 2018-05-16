@@ -100,7 +100,8 @@ if($split[count($split)-1] == "AND"){
 }
 
 echo $filterQuery = $filter1." UNION ".$filter2;
-
+  
+  $_SESSION['filterQuery']=$filterQuery;
 
 
       // $sql = "select usedbikes.UsedBikeId as UsedBikeId, usedbikes.BikeCategory as BikeCategory, usedbikes.UsedBikeImage1 as UsedBikeImage1, usedbikes.Brand as Brand, usedbikes.Model as Model, usedbikes.KilometreDriven as KilometreDriven, usedbikes.Location as Location, usedbikes.UserId as UserId, usedbikes.UserName as UserName, usedbikes.ContactNumber as ContactNumber, usedbikes.Prize as Prize from usedbikes where usedbikes.City LIKE '$City'

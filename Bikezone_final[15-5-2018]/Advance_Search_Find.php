@@ -3,17 +3,7 @@ session_start();
 
 include "db_connection.php";
 
- // if(isset($_POST['BtnSubmit'])) {
-
- //       $_SESSON['Keyword']=$_POST['Keyword'];
- //       $_SESSION['BikeCategory']=$_POST['BikeCategory'];
- //       $_SESSION['Brand']=$_POST['Brand'];
- //       $_SESSION['Model']=$_POST['Model'];
- //       $_SESSION['State']=$_POST['State'];
- //       $_SESSION['City']=$_POST['City'];
- //       $_SESSION['Prize_Minimum']=$_POST['Prize_Minimum'];
- //       $_SESSION['Prize_Maximum']=$_POST['Prize_Maximum']; 
-GLOBAL $filterQuery, $filterQuery1, $filterQuery2;
+GLOBAL $Advance_Search, $Advance_Search1, $Advance_Search2;
 
  if(isset($_SESSION['BikeCategory'])) {
 
@@ -225,45 +215,46 @@ if($split[count($split)-1] == "AND"){
     $filterQuery1 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filterQuery1);
     $filterQuery2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filterQuery2);
 }
-$filterQuery = $filterQuery1." UNION ".$filterQuery2;
+$_SESSION['Advance_Search1'] = $filterQuery1;
+$_SESSION['Advance_Search2'] = $filterQuery2;
 
+$filterQuery = $filterQuery1." UNION ".$filterQuery2;
 }
 
-$_SESSION['filterQuery'] = $filterQuery;
+$_SESSION['Advance_Search'] = $filterQuery;
 
- $_SESSION['Keyword'] = $Keyword;
-    $_SESSION['BikeCategory'] = $BikeCategory;
-    $_SESSION['Brand'] = $Brand;
-    $_SESSION['Model'] = $Model;
-     $_SESSION['State'] = $State;
-    $_SESSION['City'] = $City;
-    $_SESSION['Prize_Minimum'] = $Prize_Minimum;
-    $_SESSION['Prize_Maximum'] = $Prize_Maximum;
-    $_SESSION['Year'] = $Year;
-    $_SESSION['KilometreDriven'] = $KilometreDriven;
-    $_SESSION['Transmission'] = $Transmission;
-    $_SESSION['FuelType'] = $FuelType;
-    $_SESSION['Stroke'] = $Stroke;
-    $_SESSION['EngineSize'] = $EngineSize;
-    $_SESSION['Location'] = $Location;
-    $_SESSION['PostalCode'] = $PostalCode;
 
-    $_SESSION['Keyword'] = $_SESSION['Keyword'];
-    $_SESSION['BikeCategory'] = $_SESSION['BikeCategory'];
-    $_SESSION['Brand'] = $_SESSION['Brand'];
-    $_SESSION['Model'] = $_SESSION['Model'];
-     $_SESSION['State'] = $_SESSION['State'];
-    $_SESSION['City'] = $_SESSION['City'];
-    $_SESSION['Prize_Minimum'] = $_SESSION['Prize_Minimum'];
-    $_SESSION['Prize_Maximum'] = $_SESSION['Prize_Maximum'];
-    $_SESSION['Year'] = $_SESSION['Year'];
-    $_SESSION['KilometreDriven'] = $_SESSION['KilometreDriven'];
-    $_SESSION['Transmission'] = $_SESSION['Transmission'];
-    $_SESSION['FuelType'] = $_SESSION['FuelType'];
-    $_SESSION['Stroke'] = $_SESSION['Stroke'];
-    $_SESSION['EngineSize'] = $_SESSION['EngineSize'];
-    $_SESSION['Location'] = $_SESSION['Location'];
-    $_SESSION['PostalCode'] = $_SESSION['PostalCode'];
+
+$limit = 10; 
+$sql = $filterQuery; 
+/*For No Of Rows Selected*/
+$result=mysql_query($sql);
+$rowcount = mysql_num_rows($result);
+/*----------------------*/
+$rs_result = mysql_query($sql);  
+$row = mysql_fetch_row($rs_result);  
+$total_records = $rowcount;
+$total_pages = ceil($total_records / $limit);
+
+ 
+if (isset($_GET["page"])) {
+ $page  = $_GET["page"]; 
+} else { 
+  $page=1; 
+}  
+
+$start_from = ($page-1) * $limit;    
+$sql =  $filterQuery . " LIMIT $start_from, $limit";  
+$rs_result = mysql_query ($sql);                            
+?>
+
+
+
+
+
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -600,27 +591,16 @@ $_SESSION['filterQuery'] = $filterQuery;
         </div>
 
 </div>
-<?php
-
-include "db_connection.php";
-
-//echo "\n Filter Query $filterQuery";
-$sql=mysql_query($filterQuery);
- 
-while($row=mysql_fetch_array($sql))
+<div>
+<div id="target-content" >loading...</div>
+</div>
+<?php 
+while($row=mysql_fetch_array($rs_result))
 {
-   // $_SESSION['Keyword'] = $row['Keyword'];
-   //  $_SESSION['BikeCategory'] = $row['BikeCategory'];
-   //  $_SESSION['Brand'] = $row['Brand'];
-   //  $_SESSION['Model'] = $row['Model'];
-   //   $_SESSION['State'] = $row['State'];
-   //  $_SESSION['City'] = $row['City'];
-   //  $_SESSION['Prize_Minimum'] = $row['Prize_Minimum'];
-   //  $_SESSION['Prize_Maximum'] = $row['Prize_Maximum'];
 ?>
 
 
-<div class="item-list oldList">
+<div class="item-list oldList" id="masterdiv">
     <div class="cornerRibbons featuredAds">
         <!--<a href=""> Featured Ads</a> -->
     </div>
@@ -695,6 +675,25 @@ function myFunction() {
 </div>
 <?php } ?>
 
+
+
+
+<div class="pagination-bar text-center">
+  <nav aria-label="Page navigation " class="d-inline-b">
+  <ul class="pagination" id="pagination" >
+    <?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
+     if($i == 1):?>
+      <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_Advance_Search.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+      <?php else:?>
+
+       <li class="page-item" id="<?php echo $i;?>"><a href='pagination_Advance_Search.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+
+     <?php endif;?> 
+   <?php endfor;endif;?> 
+ </ul>
+</nav>
+</div>
+
                             </div>
                         </div>
                         <!--/.adds-wrapper-->
@@ -703,23 +702,7 @@ function myFunction() {
                     <div class="tab-box save-search-bar text-center"><!-- <a href="#"> <i class=" icon-star-empty"></i>
                             Save Search </a> --></div>
                     </div>
-                    <div class="pagination-bar text-center">
-                        <nav aria-label="Page navigation " class="d-inline-b">
-                            <ul class="pagination">
-
-                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                <li class="page-item"><a class="page-link" href="#">...</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">Next</a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                    <!--/.pagination-bar -->
-
+                   
                     <div class="post-promo text-center">
                         <h2> Do you get any bike for sell ? </h2>
                         <h5>Sell your bikes online FOR FREE. It's easier than you think !</h5>
@@ -756,20 +739,49 @@ function myFunction() {
 </div>
 
 
-
 <!-- Placed at the end of the document so the pages load faster -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
+<script src="dist/jquery.simplePagination.js"></script>
+
+
+
+
+<!-- 
 <script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-<script src="assets/js/vendors.min.js"></script>
+<script src="assets/js/vendors.min.js"></script> -->
 
 <!-- include custom script for site  -->
-<script src="assets/js/script.js"></script>
+<!-- <script src="assets/js/script.js"></script> -->
+<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
 
-
-
+<!-- dropdown -->
+<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script> -->
 <script src="choosen.js"></script>
+
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+$('.pagination').pagination({
+        items: <?php echo $total_records;?>,
+        itemsOnPage: <?php echo $limit;?>,
+        cssStyle: 'light-theme',
+        currentPage : 1,
+        onPageClick : function(pageNumber) {
+            jQuery('#masterdiv div').html('');
+            jQuery("#target-content").html('loading...');
+            jQuery("#target-content").load("pagination_Advance_Search.php?page=" + pageNumber);
+        }
+    });
+});
+</script> 
   <script type="text/javascript">
   // city
 function recp() {
@@ -788,23 +800,13 @@ function sort_by(value){
   jQuery('.oldList div').html('');
   $('#myStyle').load('fetch_data_sort.php?value=' + encodeURIComponent(value));
 }
-//category
-// function demo(category) {
-//   $('#myStyle2').load('fetch_data.php?category=' + category);
-// }
+
 </script>
 <script type="text/javascript">
 $(".chosen").chosen();
 </script>
 <link rel="stylesheet" href="style.css">
 <!-- grid problem -->
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<!-- <script
-  src="https://code.jquery.com/jquery-1.11.2.js"
-  integrity="sha256-WMJwNbei5YnfOX5dfgVCS5C4waqvc+/0fV7W2uy3DyU="
-  crossorigin="anonymous"></script> -->
-<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script> -->
-<!-- <script src="choosen.js"></script> -->
 </body>
 
 </html>

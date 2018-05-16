@@ -3,8 +3,7 @@ session_start();
 
 // if(isset($_SESSION['usr_id'])) {
 //   header("Location: index.php");
-// }
-   include "db_connection.php";
+$link=mysqli_connect("localhost","root","","bikezone");
    if (isset($_POST['BtnSubmit'])=='Submit'){
        # code...
        $UserId=$_SESSION['usr_id'];
@@ -33,7 +32,7 @@ session_start();
        $Date=$_POST['Date'];
    
 
-       $insert=mysql_query("INSERT INTO `usedbikes`(UserId,BikeCategory,Brand, Model, Year, KilometreDriven, Transmission, FuelType, Stroke, EngineSize, Description, Details, Prize, UsedBikeImage1, UsedBikeImage2,UsedBikeImage3,UsedBikeImage4, UserName, ContactNumber, State, City, Location, PostalCode, Status, Date ) VALUES ($UserId,'Used Bikes','$Brand','$Model','$Year',$KilometreDriven,'$Transmission','$FuelType','$Stroke','$EngineSize','$Description','$Details',$Prize,'{$UsedBikeImage1}','{$UsedBikeImage2}','{$UsedBikeImage3}','{$UsedBikeImage4}','$UserName','$ContactNumber','$State','$City','$Location','$PostalCode','Unblock','$Date')");
+       $insert=mysqli_query($link, "INSERT INTO `usedbikes`(UserId,BikeCategory,Brand, Model, Year, KilometreDriven, Transmission, FuelType, Stroke, EngineSize, Description, Details, Prize, UsedBikeImage1, UsedBikeImage2,UsedBikeImage3,UsedBikeImage4, UserName, ContactNumber, State, City, Location, PostalCode, Status, Date ) VALUES ($UserId,'Used Bikes','$Brand','$Model','$Year',$KilometreDriven,'$Transmission','$FuelType','$Stroke','$EngineSize','$Description','$Details',$Prize,'{$UsedBikeImage1}','{$UsedBikeImage2}','{$UsedBikeImage3}','{$UsedBikeImage4}','$UserName','$ContactNumber','$State','$City','$Location','$PostalCode','Unblock','$Date')");
    
    
        if($insert){
@@ -44,9 +43,9 @@ session_start();
    }
    else
    {
-    echo mysql_error();
+    echo mysqli_error();
    ?>
-<script>alert(<?php mysql_error();?>);</script>
+<script>alert(<?php mysqli_error();?>);</script>
 <?php
    }
    }
@@ -132,8 +131,8 @@ session_start();
         return false;
     }
     var c = document.forms["form1"]["Transmission"].value;
-    if (c == "") {
-        alert("Transmissionr must be filled out");
+    if (c == "1") {
+        alert("Transmission must be filled out");
         document.form1.Transmission.focus();
         return false;
     }   
@@ -173,12 +172,24 @@ session_start();
         document.form1.Prize.focus();
         return false;
     }  
-    var x = document.forms["form1"]["UserName"].value;
+    var x = document.forms["form1"]["image"].value;
     if (x == "") {
-        alert("UserName must be filled out");
-        document.form1.UserName.focus();
+        alert("first 3 images must be select out");
+        document.form1.image.focus();
         return false;
-    }  
+    } 
+    var x = document.forms["form1"]["image2"].value;
+    if (x == "") {
+        alert("first 3 images must be select out");
+        document.form1.image2.focus();
+        return false;
+    } 
+    var x = document.forms["form1"]["image3"].value;
+    if (x == "") {
+        alert("first 3 images must be select out");
+        document.form1.image3.focus();
+        return false;
+    } 
     var c = document.forms["form1"]["ContactNumber"].value;
     if (c == "") {
         alert("Contact number must be filled out");
@@ -190,14 +201,21 @@ session_start();
         document.form1.ContactNumber.focus();
         return false;
     } 
+    var x = document.forms["form1"]["UserName"].value;
+    if (x == "") {
+        alert("UserName must be filled out");
+        document.form1.UserName.focus();
+        return false;
+    }  
+    
     var x = document.forms["form1"]["State"].value;
-    if (x == "1") {
+    if (x == "") {
         alert("State must be select out");
         document.form1.State.focus();
         return false;
     } 
     var x = document.forms["form1"]["City"].value;
-    if (x == "1") {
+    if (x == "") {
         alert("City must be filled out");
         document.form1.City.focus();
         return false;
@@ -247,8 +265,8 @@ session_start();
                                         if(isset($_SESSION['usr_id'])) {
                                             $UserId=$_SESSION['usr_id'];
                                         }
-                                        $show=mysql_query("SELECT UserName, PhoneNumber, State, City, Location, PostalCode FROM userregistration WHERE UserId='$UserId'");
-                                        $res=mysql_fetch_array($show);
+                                        $show=mysqli_query($link,"SELECT UserName, PhoneNumber, State, City, Location, PostalCode FROM userregistration WHERE UserId='$UserId'");
+                                        $res=mysqli_fetch_array($show);
                                         
                                     ?>
                                         <br />
@@ -266,8 +284,8 @@ session_start();
                                               <option value="1"> Select Brand</option>
                                                   <?php
                                                  
-                                                  $select=mysql_query("select Brand from bikemodel group by Brand");
-                                                  while($row=mysql_fetch_array($select))
+                                                  $select=mysqli_query($link, "select Brand from bikemodel group by Brand");
+                                                  while($row=mysqli_fetch_array($select))
                                                   {
                                                    echo "<option>".$row['Brand']."</option>";
                                                   }

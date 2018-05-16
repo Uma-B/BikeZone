@@ -2,198 +2,32 @@
 session_start();
 
 include "db_connection.php";
+GLOBAL $Bike_sale2;
+if(isset($_SESSION['Bike_sale2'])) {
+$filterQuery1 = $_SESSION['Bike_sale2'];
+}
+$limit = 10; 
+$sql = $filterQuery1; 
+/*For No Of Rows Selected*/
+$result=mysql_query($sql);
+$rowcount = mysql_num_rows($result);
+/*----------------------*/
+$rs_result = mysql_query($sql);  
+$row = mysql_fetch_row($rs_result);  
+$total_records = $rowcount;
+$total_pages = ceil($total_records / $limit);
 
- // if(isset($_POST['BtnSubmit'])) {
+ 
+if (isset($_GET["page"])) {
+ $page  = $_GET["page"]; 
+} else { 
+  $page=1; 
+}  
 
- //       $_SESSON['Keyword']=$_POST['Keyword'];
- //       $_SESSION['BikeCategory']=$_POST['BikeCategory'];
- //       $_SESSION['Brand']=$_POST['Brand'];
- //       $_SESSION['Model']=$_POST['Model'];
- //       $_SESSION['State']=$_POST['State'];
- //       $_SESSION['City']=$_POST['City'];
- //       $_SESSION['Prize_Minimum']=$_POST['Prize_Minimum'];
- //       $_SESSION['Prize_Maximum']=$_POST['Prize_Maximum']; 
-GLOBAL $filterQuery2;
+$start_from = ($page-1) * $limit;    
+$sql =  $filterQuery1 . " LIMIT $start_from, $limit";  
+$rs_result = mysql_query ($sql);   
 
- if(isset($_SESSION['BikeCategory'])) {
-
-    $Keyword = $_SESSION['Keyword'];
-    $BikeCategory= $_SESSION['BikeCategory'];
-    $Brand = $_SESSION['Brand'];
-    $Model = $_SESSION['Model'];
-    $State = $_SESSION['State'];
-    $City = $_SESSION['City'];
-    $Prize_Minimum = $_SESSION['Prize_Minimum'];
-    $Prize_Maximum= $_SESSION['Prize_Maximum'];
-        
-       }
-
-// $filterQuery1 = "select
-//   usedbikes.UsedBikeId as UsedBikeId,
-//   usedbikes.BikeCategory as BikeCategory,
-//   usedbikes.UsedBikeImage1 as UsedBikeImage1,
-//   usedbikes.Brand as Brand,
-//   usedbikes.Model as Model,
-//   usedbikes.KilometreDriven as KilometreDriven,
-//   usedbikes.Location as Location,
-//   usedbikes.UserId as UserId,
-//   usedbikes.UserName as UserName,
-//   usedbikes.ContactNumber as ContactNumber,
-//   usedbikes.Prize as Prize
-// from
-//   usedbikes
-
-// ";
-
-$filterQuery2 = "select
-  dealerbikes.DealerBikeId as UsedBikeId,
-  dealerbikes.BikeCategory as BikeCategory,
-  dealerbikes.DealerBikeImage1 as UsedBikeImage1,
-  dealerbikes.Brand as Brand,
-  dealerbikes.Model as Model,
-  dealerbikes.KilometreDriven as KilometreDriven,
-  dealerbikes.Location as Location,
-  dealerbikes.DealerId as UserId,
-  dealerbikes.UserName as UserName,
-  dealerbikes.ContactNumber as ContactNumber,
-  dealerbikes.Prize as Prize
-from
-  dealerbikes
-
-";
-
-// if($Keyword != null){
-//     $filterQuery = "select
-//   usedbikes.UsedBikeId as UsedBikeId,
-//   usedbikes.BikeCategory as BikeCategory,
-//   usedbikes.UsedBikeImage1 as UsedBikeImage1,
-//   usedbikes.Brand as Brand,
-//   usedbikes.Model as Model,
-//   usedbikes.KilometreDriven as KilometreDriven,
-//   usedbikes.Location as Location,
-//   usedbikes.UserId as UserId,
-//   usedbikes.UserName as UserName,
-//   usedbikes.ContactNumber as ContactNumber,
-//   usedbikes.Prize as Prize
-// from
-//   usedbikes
-// where
-//   usedbikes.BikeCategory LIKE '$Keyword'
-//   OR usedbikes.Brand LIKE '$Keyword'
-//   OR usedbikes.Model LIKE '$Keyword'
-//   OR usedbikes.State LIKE '$Keyword'
-//   OR usedbikes.City LIKE '$Keyword'
-// UNION
-// select
-//   dealerbikes.DealerBikeId as UsedBikeId,
-//   dealerbikes.BikeCategory as BikeCategory,
-//   dealerbikes.DealerBikeImage1 as BikeImage1,
-//   dealerbikes.Brand as Brand,
-//   dealerbikes.Model as Model,
-//   dealerbikes.KilometreDriven as KilometreDriven,
-//   dealerbikes.Location as Location,
-//   dealerbikes.DealerId as UserId,
-//   dealerbikes.UserName as UserName,
-//   dealerbikes.ContactNumber as ContactNumber,
-//   dealerbikes.Prize as Prize
-// from
-//   dealerbikes
-// where
-//   dealerbikes.BikeCategory LIKE '$Keyword'
-//   OR dealerbikes.Brand LIKE '$Keyword'
-//   OR dealerbikes.Model LIKE '$Keyword'
-//   OR dealerbikes.State LIKE '$Keyword'
-//   OR dealerbikes.City LIKE '$Keyword'
-// ";
-
-
-// }else{
-
-// if($BikeCategory != ""){
-//     $filterQuery2 = $filterQuery2." dealerbikes.BikeCategory LIKE '$BikeCategory' AND";
-//     $filterQuery1 = $filterQuery1." usedbikes.BikeCategory LIKE '$BikeCategory' AND";
-// }
-// if($Brand != ""){
-//      $filterQuery2 = $filterQuery2." dealerbikes.Brand LIKE '$Brand' AND";
-//     $filterQuery1 = $filterQuery1." usedbikes.Brand LIKE '$Brand' AND";
-// }
-// if($Model != ""){
-//     $filterQuery2 = $filterQuery2." dealerbikes.Model LIKE '$Model' AND";
-//     $filterQuery1 = $filterQuery1." usedbikes.Model LIKE '$Model' AND";
-// }
-
-// if($State != ""){
-//     $filterQuery2 = $filterQuery2." dealerbikes.State LIKE '$State' AND";
-//     $filterQuery1 = $filterQuery1." usedbikes.State LIKE '$State' AND";
-// }
-// if($City != ""){
-//     $filterQuery2 = $filterQuery2." dealerbikes.City LIKE '$City' AND";
-//     $filterQuery1 = $filterQuery1." usedbikes.City LIKE '$City' AND";
-// }
-// if($Prize_Minimum != "" && $Prize_Maximum != ""){
-//     $filterQuery2 = $filterQuery2." dealerbikes.Prize IN (SELECT Prize from dealerbikes WHERE Prize BETWEEN $Prize_Minimum AND $Prize_Maximum)";
-//     $filterQuery1 = $filterQuery1." usedbikes.Prize IN (SELECT Prize from usedbikes WHERE Prize BETWEEN $Prize_Minimum AND $Prize_Maximum)";
-// }
-/*trim($filterQuery1);
-trim($filterQuery2);*/
-// $split = explode(" ", $filterQuery1);
-// if($split[count($split)-1] == "AND"){
-//     $filterQuery1 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filterQuery1);
-//     $filterQuery2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filterQuery2);
-// }
-//$filterQuery = $filterQuery1." UNION ".$filterQuery2;
-
-
-$_SESSION['filterQuery2'] = $filterQuery2;
-
-
-    // $_SESSION['Keyword'] = $Keyword;
-    // $_SESSION['BikeCategory'] = $BikeCategory;
-    // $_SESSION['Brand'] = $Brand;
-    // $_SESSION['Model'] = $Model;
-    //  $_SESSION['State'] = $State;
-    // $_SESSION['City'] = $City;
-    // $_SESSION['Prize_Minimum'] = $Prize_Minimum;
-    // $_SESSION['Prize_Maximum'] = $Prize_Maximum;
-
-    $_SESSION['Keyword'] = $_SESSION['Keyword'];
-    $_SESSION['BikeCategory'] = $_SESSION['BikeCategory'];
-    $_SESSION['Brand'] = $_SESSION['Brand'];
-    $_SESSION['Model'] = $_SESSION['Model'];
-     $_SESSION['State'] = $_SESSION['State'];
-    $_SESSION['City'] = $_SESSION['City'];
-    $_SESSION['Prize_Minimum'] = $_SESSION['Prize_Minimum'];
-    $_SESSION['Prize_Maximum'] = $_SESSION['Prize_Maximum'];
-
-
-    // $_SESSION['Keyword'] = $_SESSION['Keyword'];
-    // $_SESSION['BikeCategory'] = $_SESSION['BikeCategory'];
-    // $_SESSION['Brand'] = $_SESSION['Brand'];
-    // $_SESSION['Model'] = $_SESSION['Model'];
-    //  $_SESSION['State'] = $_SESSION['State'];
-    // $_SESSION['City'] = $_SESSION['City'];
-    // $_SESSION['Prize_Minimum'] = $_SESSION['Prize_Minimum'];
-    // $_SESSION['Prize_Maximum'] = $_SESSION['Prize_Maximum'];
-
-    
-    // $_SESSION['Keyword'] = $Keyword;
-    // $_SESSION['BikeCategory'] = $BikeCategory;
-    // $_SESSION['Brand'] = $Brand;
-    // $_SESSION['Model'] = $Model;
-    // $_SESSION['State'] = $State;
-    // $_SESSION['City'] = $City;
-    // $_SESSION['Prize_Minimum'] = $Prize_Minimum;
-    // $_SESSION['Prize_Maximum'] = $Prize_Maximum;
-
-    //  $_SESSION['Keyword'] = $_SESSION['Keyword'];
-    // $_SESSION['BikeCategory'] = $_SESSION['BikeCategory'];
-    // $_SESSION['Brand'] = $_SESSION['Brand'];
-    // $_SESSION['Model'] = $_SESSION['Model'];
-    //  $_SESSION['State'] = $_SESSION['State'];
-    // $_SESSION['City'] = $_SESSION['City'];
-    // $_SESSION['Prize_Minimum'] = $_SESSION['Prize_Minimum'];
-    // $_SESSION['Prize_Maximum'] = $_SESSION['Prize_Maximum'];
-    
                            
 ?>
 
@@ -409,7 +243,7 @@ $_SESSION['filterQuery2'] = $filterQuery2;
                                     <a  href="bike_sale_all.php" class= "nav-link" role="tab" >All Ads 
                                     <span class="badge badge-secondary">
                                     <?php
-                                            $count=mysql_query($filterQuery2);
+                                            $count=mysql_query($Bike_sale2);
                                                 $num_rows=mysql_num_rows($count);
                                              echo $num_rows;
                                     ?>
@@ -422,8 +256,8 @@ $_SESSION['filterQuery2'] = $filterQuery2;
                                     <a  href="bike_sale_buisness.php" class= "nav-link" role="tab" >Business Ads 
                                     <span class="badge badge-secondary">
                                     <?php
-                                            $count=mysql_query($filterQuery2);
-                                                $num_rows=mysql_num_rows($count);
+                                            $count=mysql_query($Bike_sale2);
+                                                $num_rows=mysql_num_rows($Bike_sale2);
                                              echo $num_rows;
                                     ?>
                                                  
@@ -434,8 +268,8 @@ $_SESSION['filterQuery2'] = $filterQuery2;
                                  <a href="bike_sale_personal.php" class="nav-link" role="tab">Personal
                                     <span class="badge badge-secondary">
                              <?php
-                                            $count=mysql_query($filterQuery2);
-                                                $num_rows=mysql_num_rows($count);
+                                            $count=mysql_query($Bike_sale2);
+                                                $num_rows=mysql_num_rows($Bike_sale2);
                                              echo $num_rows;
                                     ?>
                                                  
@@ -532,27 +366,16 @@ $_SESSION['filterQuery2'] = $filterQuery2;
         </div>
 
 </div>
+<div>
+<div id="target-content" >loading...</div>
+</div>
 <?php
-
-include "db_connection.php";
-
-//echo "\n Filter Query $filterQuery2";
-$sql=mysql_query($filterQuery2);
-
-while($row=mysql_fetch_array($sql))
+while($row=mysql_fetch_array($rs_result))
 {
-   // $_SESSION['Keyword'] = $row['Keyword'];
-   //  $_SESSION['BikeCategory'] = $row['BikeCategory'];
-   //  $_SESSION['Brand'] = $row['Brand'];
-   //  $_SESSION['Model'] = $row['Model'];
-   //   $_SESSION['State'] = $row['State'];
-   //  $_SESSION['City'] = $row['City'];
-   //  $_SESSION['Prize_Minimum'] = $row['Prize_Minimum'];
-   //  $_SESSION['Prize_Maximum'] = $row['Prize_Maximum'];
 ?>
 
 
-<div class="item-list oldList">
+<div class="item-list oldList" id="masterdiv">
     <div class="cornerRibbons featuredAds">
         <!--<a href=""> Featured Ads</a> -->
     </div>
@@ -627,28 +450,33 @@ function myFunction() {
 </div>
 <?php } ?>
 
+
+<div class="pagination-bar text-center">
+  <nav aria-label="Page navigation " class="d-inline-b">
+  <ul class="pagination" id="pagination" >
+    <?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
+     if($i == 1):?>
+      <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_Bike_Sale_Buisness.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+      <?php else:?>
+
+       <li class="page-item" id="<?php echo $i;?>"><a href='pagination_Bike_Sale_Buisness.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+
+     <?php endif;?> 
+   <?php endfor;endif;?> 
+ </ul>
+</nav>
+</div>
+
+
+
+
                             </div>
                         </div>                        <!--/.adds-wrapper-->
 
                         <div class="tab-box save-search-bar text-center"><!-- <a href="#"> <i class=" icon-star-empty"></i>
                             Save Search </a> --></div>
                     </div>
-                    <div class="pagination-bar text-center">
-                        <nav aria-label="Page navigation " class="d-inline-b">
-                            <ul class="pagination">
-
-                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                <li class="page-item"><a class="page-link" href="#">...</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">Next</a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                    <!--/.pagination-bar -->
+                    
 
                     <div class="post-promo text-center">
                         <h2> Do you get any bike for sell ? </h2>
@@ -687,18 +515,45 @@ function myFunction() {
 
 
 <!-- Placed at the end of the document so the pages load faster -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-<script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js></script>
+<script src="dist/jquery.simplePagination.js"></script>
+
+
+<!-- Placed at the end of the document so the pages load faster -->
+
+
+<!-- <script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js></script> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 <script src="assets/js/vendors.min.js"></script>
 
-<!-- include custom script for site  -->
-<script src="assets/js/script.js"></script>
+
 
 
 
 <script src="choosen.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+$('.pagination').pagination({
+        items: <?php echo $total_records;?>,
+        itemsOnPage: <?php echo $limit;?>,
+        cssStyle: 'light-theme',
+        currentPage : 1,
+        onPageClick : function(pageNumber) {
+            jQuery('#masterdiv div').html('');
+            jQuery("#target-content").html('loading...');
+            jQuery("#target-content").load("pagination_Bike_Sale_Buisness.php?page=" + pageNumber);
+        }
+    });
+});
+</script> 
+
+
   <script type="text/javascript">
   // city
 function recp() {
@@ -715,7 +570,7 @@ function recp() {
 
 function sort_by(value){
   jQuery('.oldList div').html('');
-  $('#myStyle').load('fetch_sort_buisness.php?value=' + encodeURIComponent(value));
+  $('#myStyle').load('fetch_sort_personal.php?value=' + encodeURIComponent(value));
 }
 //category
 // function demo(category) {
@@ -727,7 +582,7 @@ $(".chosen").chosen();
 </script>
 <link rel="stylesheet" href="style.css">
 <!-- grid problem -->
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
 <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script> -->
 <!-- <script src="choosen.js"></script> -->
 

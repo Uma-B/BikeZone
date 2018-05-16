@@ -188,6 +188,29 @@ $_SESSION['filterQuery2'] = $filterQuery2;
     $_SESSION['Prize_Minimum'] = $_SESSION['Prize_Minimum'];
     $_SESSION['Prize_Maximum'] = $_SESSION['Prize_Maximum'];
 
+
+
+$limit = 10; 
+$sql = $filterQuery2; 
+/*For No Of Rows Selected*/
+$result=mysql_query($sql);
+$rowcount = mysql_num_rows($result);
+/*----------------------*/
+$rs_result = mysql_query($sql);  
+$row = mysql_fetch_row($rs_result);  
+$total_records = $rowcount;
+$total_pages = ceil($total_records / $limit);
+
+ 
+if (isset($_GET["page"])) {
+ $page  = $_GET["page"]; 
+} else { 
+  $page=1; 
+}  
+
+$start_from = ($page-1) * $limit;    
+$sql =  $filterQuery2 . " LIMIT $start_from, $limit";  
+$rs_result = mysql_query ($sql);                            
 ?>
 
 <!DOCTYPE html>
@@ -521,18 +544,18 @@ $_SESSION['filterQuery2'] = $filterQuery2;
         </div>
 
 </div>
+<div>
+<div id="target-content" >loading...</div>
+</div>
+</div>
 <?php
-
-include "db_connection.php";
-//echo "\n Filter Query $filterQuery2";
-$sql=mysql_query($filterQuery2);
-while($row=mysql_fetch_array($sql))
+while($row=mysql_fetch_array($rs_result))
 {
    
 ?>
 
 
-<div class="item-list oldList">
+<div class="item-list oldList" id="masterdiv">
     <div class="cornerRibbons featuredAds">
         <!--<a href=""> Featured Ads</a> -->
     </div>
@@ -596,7 +619,6 @@ function myFunction() {
         <?php
         }
         ?>
-         
         </div>
     <!--/.add-desc-box-->
 </div>
@@ -607,6 +629,22 @@ function myFunction() {
 </div>
 <?php } ?>
 
+<div class="pagination-bar text-center">
+  <nav aria-label="Page navigation " class="d-inline-b">
+  <ul class="pagination" id="pagination" >
+    <?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
+     if($i == 1):?>
+      <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_BusnessAds.php.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+      <?php else:?>
+
+       <li class="page-item" id="<?php echo $i;?>"><a href='pagination_BusnessAds.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+
+     <?php endif;?> 
+   <?php endfor;endif;?> 
+ </ul>
+</nav>
+</div>
+
                             </div>
                         </div>
                         <!--/.adds-wrapper-->
@@ -614,21 +652,7 @@ function myFunction() {
                         <div class="tab-box save-search-bar text-center"><!-- <a href="#"> <i class=" icon-star-empty"></i>
                             Save Search  </a>--></div>
                     </div>
-                    <div class="pagination-bar text-center">
-                        <nav aria-label="Page navigation " class="d-inline-b">
-                            <ul class="pagination">
-
-                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                <li class="page-item"><a class="page-link" href="#">...</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">Next</a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
+        
                     <!--/.pagination-bar -->
 
                     <div class="post-promo text-center">
@@ -649,11 +673,7 @@ function myFunction() {
         }
         ?>
                   </div>
-                    <!--/.post-promo-->
-
                 </div>
-                <!--/.page-content-->
-
             </div>
         </div>
     </div>
@@ -661,10 +681,6 @@ function myFunction() {
 <?php
 include 'footer.php';
 ?>
-<!-- /.wrapper -->
-
-<!-- Modal Change City -->
-
 <div class="modal fade modalHasList" id="selectRegion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
 </div>
@@ -675,26 +691,42 @@ include 'footer.php';
      aria-hidden="true">
     
 </div>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-<!-- /.modal -->
-
-<!-- Le javascript
-================================================== -->
-
-<!-- Placed at the end of the document so the pages load faster -->
-
-<script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-<script src="assets/bootstrap/js/bootstrap.min.js"></script>
-<script src="assets/js/vendors.min.js"></script>
-
-<!-- include custom script for site  -->
-<script src="assets/js/script.js"></script>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-
-<!-- dropdown -->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+<script src="dist/jquery.simplePagination.js"></script>
 <script src="choosen.js"></script>
+
+
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+$('.pagination').pagination({
+        items: <?php echo $total_records;?>,
+        itemsOnPage: <?php echo $limit;?>,
+        cssStyle: 'light-theme',
+        currentPage : 1,
+        onPageClick : function(pageNumber) {
+            jQuery('#masterdiv div').html('');
+            jQuery("#target-content").html('loading...');
+            jQuery("#target-content").load("pagination_BusnessAds.php?page=" + pageNumber);
+        }
+    });
+});
+</script> 
+
+
+
+
+
+
+
+
+
   <script type="text/javascript">
   // city
 function recp() {
@@ -720,7 +752,7 @@ function sort_by(value){
 $(".chosen").chosen();
 </script>
 <link rel="stylesheet" href="style.css">
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script> -->
 <script src="choosen.js"></script>
 </body>
 

@@ -3,176 +3,30 @@ session_start();
 include "db_connection.php";
 
 GLOBAL $filterQuery1;
-if(isset($_SESSION['BikeCategory'])) {
+if(isset($_SESSION['filterQuery1'])) {
+$filterQuery1 = $_SESSION['filterQuery1'];
+}
+$limit = 10; 
+$sql = $filterQuery1; 
+/*For No Of Rows Selected*/
+$result=mysql_query($sql);
+$rowcount = mysql_num_rows($result);
+/*----------------------*/
+$rs_result = mysql_query($sql);  
+$row = mysql_fetch_row($rs_result);  
+$total_records = $rowcount;
+$total_pages = ceil($total_records / $limit);
 
-        $Keyword=$_SESSION['Keyword'];
-        $BikeCategory=$_SESSION['BikeCategory'];
-        $Brand=$_SESSION['Brand'];
-        $Model=$_SESSION['Model'];
-        $Prize_Minimum=$_SESSION['Prize_Minimum'];
-        $Prize_Maximum=$_SESSION['Prize_Maximum'];
-        $State=$_SESSION['State'];
-        $City=$_SESSION['City'];
-       }
+ 
+if (isset($_GET["page"])) {
+ $page  = $_GET["page"]; 
+} else { 
+  $page=1; 
+}  
 
-        // $Keyword=$_SESSION['Keyword'];
-        // $BikeCategory=$_SESSION['BikeCategory'];
-        // $Brand=$_SESSION['Brand'];
-        // $Model=$_SESSION['Model'];
-        // $Prize_Minimum=$_SESSION['Prize_Minimum'];
-        // $Prize_Maximum=$_SESSION['Prize_Maximum'];
-        // $State=$_SESSION['State'];
-        // $City=$_SESSION['City'];
-
-$filterQuery1 = "select
-  usedbikes.UsedBikeId as UsedBikeId,
-  usedbikes.BikeCategory as BikeCategory,
-  usedbikes.UsedBikeImage1 as UsedBikeImage1,
-  usedbikes.Brand as Brand,
-  usedbikes.Model as Model,
-  usedbikes.KilometreDriven as KilometreDriven,
-  usedbikes.Location as Location,
-  usedbikes.UserId as UserId,
-  usedbikes.UserName as UserName,
-  usedbikes.ContactNumber as ContactNumber,
-  usedbikes.Prize as Prize
-from
-  usedbikes
-where
-";
-
-// $filterQuery2 = "select
-//   dealerbikes.DealerBikeId as UsedBikeId,
-//   dealerbikes.BikeCategory as BikeCategory,
-//   dealerbikes.DealerBikeImage1 as BikeImage1,
-//   dealerbikes.Brand as Brand,
-//   dealerbikes.Model as Model,
-//   dealerbikes.KilometreDriven as KilometreDriven,
-//   dealerbikes.Location as Location,
-//   dealerbikes.DealerId as UserId,
-//   dealerbikes.UserName as UserName,
-//   dealerbikes.ContactNumber as ContactNumber,
-//   dealerbikes.Prize as Prize
-// from
-//   dealerbikes
-// where
-// ";
-
-if($Keyword != null){
-    $filterQuery1 = "select
-  usedbikes.UsedBikeId as UsedBikeId,
-  usedbikes.BikeCategory as BikeCategory,
-  usedbikes.UsedBikeImage1 as UsedBikeImage1,
-  usedbikes.Brand as Brand,
-  usedbikes.Model as Model,
-  usedbikes.KilometreDriven as KilometreDriven,
-  usedbikes.Location as Location,
-  usedbikes.UserId as UserId,
-  usedbikes.UserName as UserName,
-  usedbikes.ContactNumber as ContactNumber,
-  usedbikes.Prize as Prize
-from
-  usedbikes
-where
-  usedbikes.BikeCategory LIKE '$Keyword'
-  OR usedbikes.Brand LIKE '$Keyword'
-  OR usedbikes.Model LIKE '$Keyword'
-  OR usedbikes.State LIKE '$Keyword'
-  OR usedbikes.City LIKE '$Keyword'
-";
-
-
-}else{
-
-
-if($BikeCategory != ""){
-    // $filterQuery2 = $filterQuery2." dealerbikes.BikeCategory LIKE '$BikeCategory' AND";
-    $filterQuery1 = $filterQuery1." usedbikes.BikeCategory LIKE '$BikeCategory' AND";
-}
-if($Brand != ""){
-     // $filterQuery2 = $filterQuery2." dealerbikes.Brand LIKE '$Brand' AND";
-    $filterQuery1 = $filterQuery1." usedbikes.Brand LIKE '$Brand' AND";
-}
-if($Model != ""){
-    // $filterQuery2 = $filterQuery2." dealerbikes.Model LIKE '$Model' AND";
-    $filterQuery1 = $filterQuery1." usedbikes.Model LIKE '$Model' AND";
-}
-// if($KilometreDriven != ""){
-//     $filterQuery2 = $filterQuery2." dealerbikes.KilometreDriven LIKE '$KilometreDriven' AND";
-//     $filterQuery1 = $filterQuery1." usedbikes.KilometreDriven LIKE '$KilometreDriven' AND";
-// }
-if($State != ""){
-    // $filterQuery2 = $filterQuery2." dealerbikes.State LIKE '$State' AND";
-    $filterQuery1 = $filterQuery1." usedbikes.State LIKE '$State' AND";
-}
-if($City != ""){
-    // $filterQuery2 = $filterQuery2." dealerbikes.City LIKE '$City' AND";
-    $filterQuery1 = $filterQuery1." usedbikes.City LIKE '$City' AND";
-}
-if($KilometreDriven != ""){
-    // $filterQuery2 = $filterQuery2." dealerbikes.KilometreDriven LIKE '$KilometreDriven' AND";
-    $filterQuery1 = $filterQuery1." usedbikes.KilometreDriven LIKE '$KilometreDriven' AND";
-}
-if($Transmission != ""){
-    // $filterQuery2 = $filterQuery2." dealerbikes.Transmission LIKE '$Transmission' AND";
-    $filterQuery1 = $filterQuery1." usedbikes.Transmission LIKE '$Transmission' AND";
-}
-if($FuelType != ""){
-    // $filterQuery2 = $filterQuery2." dealerbikes.FuelType LIKE '$FuelType' AND";
-    $filterQuery1 = $filterQuery1." usedbikes.FuelType LIKE '$FuelType' AND";
-}
-
-if($Stroke != ""){
-    // $filterQuery2 = $filterQuery2." dealerbikes.Stroke LIKE '$Stroke' AND";
-    $filterQuery1 = $filterQuery1." usedbikes.Stroke LIKE '$Stroke' AND";
-}
-if($EngineSize != ""){
-    // $filterQuery2 = $filterQuery2." dealerbikes.EngineSize LIKE '$EngineSize' AND";
-    $filterQuery1 = $filterQuery1." usedbikes.EngineSize LIKE '$EngineSize' AND";
-}
-if($Location != ""){
-    // $filterQuery2 = $filterQuery2." dealerbikes.Location LIKE '$Location' AND";
-    $filterQuery1 = $filterQuery1." usedbikes.Location LIKE '$Location' AND";
-}
-if($PostalCode != ""){
-    // $filterQuery2 = $filterQuery2." dealerbikes.PostalCode LIKE '$PostalCode' AND";
-    $filterQuery1 = $filterQuery1." usedbikes.PostalCode LIKE '$PostalCode' AND";
-}
-if($Prize_Minimum != "" && $Prize_Maximum != ""){
-    // $filterQuery2 = $filterQuery2." dealerbikes.Prize IN (SELECT Prize from dealerbikes WHERE Prize BETWEEN $Prize_Minimum AND $Prize_Maximum)";
-    $filterQuery1 = $filterQuery1." usedbikes.Prize IN (SELECT Prize from usedbikes WHERE Prize BETWEEN $Prize_Minimum AND $Prize_Maximum)";
-}
-/*trim($filterQuery1);
-trim($filterQuery2);*/
-$split = explode(" ", $filterQuery1);
-if($split[count($split)-1] == "AND"){
-    $filterQuery1 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filterQuery1);
-    // $filterQuery2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filterQuery2);
-}
-}
-// $filterQuery = $filterQuery1." UNION ".$filterQuery2;
-$_SESSION['filterQuery1'] = $filterQuery1;
-
-        $_SESSION['Keyword'] = $Keyword;
-    $_SESSION['BikeCategory'] = $BikeCategory;
-    $_SESSION['Brand'] = $Brand;
-    $_SESSION['Model'] = $Model;
-     $_SESSION['State'] = $State;
-    $_SESSION['City'] = $City;
-    $_SESSION['Prize_Minimum'] = $Prize_Minimum;
-    $_SESSION['Prize_Maximum'] = $Prize_Maximum;
-
-    $_SESSION['Keyword'] = $_SESSION['Keyword'];
-    $_SESSION['BikeCategory'] = $_SESSION['BikeCategory'];
-    $_SESSION['Brand'] = $_SESSION['Brand'];
-    $_SESSION['Model'] = $_SESSION['Model'];
-     $_SESSION['State'] = $_SESSION['State'];
-    $_SESSION['City'] = $_SESSION['City'];
-    $_SESSION['Prize_Minimum'] = $_SESSION['Prize_Minimum'];
-    $_SESSION['Prize_Maximum'] = $_SESSION['Prize_Maximum'];
-
-    
-
+$start_from = ($page-1) * $limit;    
+$sql =  $filterQuery1 . " LIMIT $start_from, $limit";  
+$rs_result = mysql_query ($sql);                            
                             
 ?>
 <!DOCTYPE html>
@@ -496,19 +350,18 @@ $_SESSION['filterQuery1'] = $filterQuery1;
         </div>
 
 </div>
+<div>
+<div id="target-content" >loading...</div>
+</div>
+</div>
 <?php
-
-include "db_connection.php";
-
-//echo "\n Filter Query $filterQuery1";
-$sql=mysql_query($filterQuery1);
-while($row=mysql_fetch_array($sql))
+while($row=mysql_fetch_array($rs_result))
 {
    
 ?>
 
 
-<div class="item-list oldList">
+<div class="item-list oldList" id="masterdiv">
     <div class="cornerRibbons featuredAds">
         <!--<a href=""> Featured Ads</a> -->
     </div>
@@ -583,6 +436,24 @@ function myFunction() {
 </div>
 <?php } ?>
 
+
+
+
+<div class="pagination-bar text-center">
+  <nav aria-label="Page navigation " class="d-inline-b">
+  <ul class="pagination" id="pagination" >
+    <?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
+     if($i == 1):?>
+      <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_personalAds.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+      <?php else:?>
+
+       <li class="page-item" id="<?php echo $i;?>"><a href='pagination_personalAds.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+
+     <?php endif;?> 
+   <?php endfor;endif;?> 
+ </ul>
+</nav>
+</div>
                             </div>
                         </div>
                         <!--/.adds-wrapper-->
@@ -590,21 +461,7 @@ function myFunction() {
                         <div class="tab-box save-search-bar text-center"><!-- <a href="#"> <i class=" icon-star-empty"></i>
                             Save Search </a> --></div>
                     </div>
-                    <div class="pagination-bar text-center">
-                        <nav aria-label="Page navigation " class="d-inline-b">
-                            <ul class="pagination">
-
-                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                <li class="page-item"><a class="page-link" href="#">...</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">Next</a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
+                    
                     <!--/.pagination-bar -->
 
                     <div class="post-promo text-center">
@@ -639,173 +496,57 @@ include 'footer.php';
 ?>
     <!-- /.footer -->
 
-<!-- /.wrapper -->
 
-<!-- Modal Change City -->
-
-<div class="modal fade modalHasList" id="selectRegion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="exampleModalLabel"><i class=" icon-map"></i> Select your region </h4>
-
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
-                        class="sr-only">Close</span></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sm-12">
-
-                        <p>Popular cities in <strong>New York</strong>
-                        </p>
-
-                        <div style="clear:both"></div>
-                        <div class="col-sm-6 no-padding">
-                            <select class="form-control selecter  " id="region-state" name="region-state">
-                                <option value="">All States/Provinces</option>
-                                <option value="Alabama">Alabama</option>
-                                <option value="Alaska">Alaska</option>
-                                <option value="Arizona">Arizona</option>
-                                <option value="Arkansas">Arkansas</option>
-                                <option value="California">California</option>
-                                <option value="Colorado">Colorado</option>
-                                <option value="Connecticut">Connecticut</option>
-                                <option value="Delaware">Delaware</option>
-                                <option value="District of Columbia">District of Columbia</option>
-                                <option value="Florida">Florida</option>
-                                <option value="Georgia">Georgia</option>
-                                <option value="Hawaii">Hawaii</option>
-                                <option value="Idaho">Idaho</option>
-                                <option value="Illinois">Illinois</option>
-                                <option value="Indiana">Indiana</option>
-                                <option value="Iowa">Iowa</option>
-                                <option value="Kansas">Kansas</option>
-                                <option value="Kentucky">Kentucky</option>
-                                <option value="Louisiana">Louisiana</option>
-                                <option value="Maine">Maine</option>
-                                <option value="Maryland">Maryland</option>
-                                <option value="Massachusetts">Massachusetts</option>
-                                <option value="Michigan">Michigan</option>
-                                <option value="Minnesota">Minnesota</option>
-                                <option value="Mississippi">Mississippi</option>
-                                <option value="Missouri">Missouri</option>
-                                <option value="Montana">Montana</option>
-                                <option value="Nebraska">Nebraska</option>
-                                <option value="Nevada">Nevada</option>
-                                <option value="New Hampshire">New Hampshire</option>
-                                <option value="New Jersey">New Jersey</option>
-                                <option value="New Mexico">New Mexico</option>
-                                <option selected value="New York">New York</option>
-                                <option value="North Carolina">North Carolina</option>
-                                <option value="North Dakota">North Dakota</option>
-                                <option value="Ohio">Ohio</option>
-                                <option value="Oklahoma">Oklahoma</option>
-                                <option value="Oregon">Oregon</option>
-                                <option value="Pennsylvania">Pennsylvania</option>
-                                <option value="Rhode Island">Rhode Island</option>
-                                <option value="South Carolina">South Carolina</option>
-                                <option value="South Dakota">South Dakota</option>
-                                <option value="Tennessee">Tennessee</option>
-                                <option value="Texas">Texas</option>
-                                <option value="Utah">Utah</option>
-                                <option value="Vermont">Vermont</option>
-                                <option value="Virgin Islands">Virgin Islands</option>
-                                <option value="Virginia">Virginia</option>
-                                <option value="Washington">Washington</option>
-                                <option value="West Virginia">West Virginia</option>
-                                <option value="Wisconsin">Wisconsin</option>
-                                <option value="Wyoming">Wyoming</option>
-                            </select>
-                        </div>
-                        <div style="clear:both"></div>
-
-                        <hr class="hr-thin">
-                    </div>
-                    <div class="col-md-4">
-                        <ul class="list-link list-unstyled">
-                            <li><a href="#" title="">All Cities</a></li>
-                            <li><a href="#" title="Albany">Albany</a></li>
-                            <li><a href="#" title="Altamont">Altamont</a></li>
-                            <li><a href="#" title="Amagansett">Amagansett</a></li>
-                            <li><a href="#" title="Amawalk">Amawalk</a></li>
-                            <li><a href="#" title="Bellport">Bellport</a></li>
-                            <li><a href="#" title="Centereach">Centereach</a></li>
-                            <li><a href="#" title="Chappaqua">Chappaqua</a></li>
-                            <li><a href="#" title="East Elmhurst">East Elmhurst</a></li>
-                            <li><a href="#" title="East Greenbush">East Greenbush</a></li>
-                            <li><a href="#" title="East Meadow">East Meadow</a></li>
-
-                        </ul>
-                    </div>
-                    <div class="col-md-4">
-                        <ul class="list-link list-unstyled">
-                            <li><a href="#" title="Elmont">Elmont</a></li>
-                            <li><a href="#" title="Elmsford">Elmsford</a></li>
-                            <li><a href="#" title="Farmingville">Farmingville</a></li>
-                            <li><a href="#" title="Floral Park">Floral Park</a></li>
-                            <li><a href="#" title="Flushing">Flushing</a></li>
-                            <li><a href="#" title="Fonda">Fonda</a></li>
-                            <li><a href="#" title="Freeport">Freeport</a></li>
-                            <li><a href="#" title="Fresh Meadows">Fresh Meadows</a></li>
-                            <li><a href="#" title="Fultonville">Fultonville</a></li>
-                            <li><a href="#" title="Gansevoort">Gansevoort</a></li>
-                            <li><a href="#" title="Garden City">Garden City</a></li>
-
-
-                        </ul>
-                    </div>
-                    <div class="col-md-4">
-                        <ul class="list-link list-unstyled">
-                            <li><a href="#" title="Oceanside">Oceanside</a></li>
-                            <li><a href="#" title="Orangeburg">Orangeburg</a></li>
-                            <li><a href="#" title="Orient">Orient</a></li>
-                            <li><a href="#" title="Ozone Park">Ozone Park</a></li>
-                            <li><a href="#" title="Palatine Bridge">Palatine Bridge</a></li>
-                            <li><a href="#" title="Patterson">Patterson</a></li>
-                            <li><a href="#" title="Pearl River">Pearl River</a></li>
-                            <li><a href="#" title="Peekskill">Peekskill</a></li>
-                            <li><a href="#" title="Pelham">Pelham</a></li>
-                            <li><a href="#" title="Penn Yan">Penn Yan</a></li>
-                            <li><a href="#" title="Peru">Peru</a></li>
-
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Change City -->
-
-<div class="modal fade modalHasList" id="select-country" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    
-    </div>
-</div>
-
-<!-- /.modal -->
 
 <!-- Le javascript
 ================================================== -->
 
 <!-- Placed at the end of the document so the pages load faster -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
+<script src="dist/jquery.simplePagination.js"></script>
+
+
+
+
+<!-- 
 <script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-<script src="assets/js/vendors.min.js"></script>
+<script src="assets/js/vendors.min.js"></script> -->
 
 <!-- include custom script for site  -->
-<script src="assets/js/script.js"></script>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<!-- <script src="assets/js/script.js"></script> -->
+<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
 
 <!-- dropdown -->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script> -->
 <script src="choosen.js"></script>
-  <script type="text/javascript">
-  // city
+
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+$('.pagination').pagination({
+        items: <?php echo $total_records;?>,
+        itemsOnPage: <?php echo $limit;?>,
+        cssStyle: 'light-theme',
+        currentPage : 1,
+        onPageClick : function(pageNumber) {
+            jQuery('#masterdiv div').html('');
+            jQuery("#target-content").html('loading...');
+            jQuery("#target-content").load("pagination_personalAds.php?page=" + pageNumber);
+        }
+    });
+});
+</script> 
+
+
+<script>
 function recp() {
 
     var category = document.getElementById('category').value;
@@ -831,7 +572,6 @@ function sort_by(value){
 $(".chosen").chosen();
 </script>
 <link rel="stylesheet" href="style.css">
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
 <script src="choosen.js"></script>
 </body>
 
