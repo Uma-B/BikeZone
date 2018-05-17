@@ -121,8 +121,8 @@
                                     </div>
                                     <!--/.add-desc-box-->
                                     <div class="col-md-3 text-right  price-box">
-                                       <a class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>View Profile</span>
-                                       </a> <a class="btn btn-default  btn-sm make-favorite"> <i class="fa fa-heart"></i> <span>Block</span> </a>
+                                      <!--  <a class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>View Profile</span>
+                                       </a> <a class="btn btn-default  btn-sm make-favorite"> <i class="fa fa-heart"></i> <span>Block</span> </a> -->
                                     </div>
                                     <!--/.add-desc-box-->
                                  </div>
@@ -144,8 +144,8 @@
                                     </div>
                                     <!--/.add-desc-box-->
                                     <div class="col-md-3 text-right  price-box">
-                                       <a class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>View Profile</span>
-                                       </a> <a class="btn btn-default  btn-sm make-favorite"> <i class="fa fa-heart"></i> <span>Block</span> </a>
+                                       <!-- <a class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>View Profile</span>
+                                       </a> <a class="btn btn-default  btn-sm make-favorite"> <i class="fa fa-heart"></i> <span>Block</span> </a> -->
                                     </div>
                                  </div>
                               </div>

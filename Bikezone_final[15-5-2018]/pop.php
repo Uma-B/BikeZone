@@ -166,35 +166,6 @@ $_SESSION['filterQuery'] = $filterQuery;
     $_SESSION['Prize_Minimum'] = $_SESSION['Prize_Minimum'];
     $_SESSION['Prize_Maximum'] = $_SESSION['Prize_Maximum'];
 
-
-    // $_SESSION['Keyword'] = $_SESSION['Keyword'];
-    // $_SESSION['BikeCategory'] = $_SESSION['BikeCategory'];
-    // $_SESSION['Brand'] = $_SESSION['Brand'];
-    // $_SESSION['Model'] = $_SESSION['Model'];
-    //  $_SESSION['State'] = $_SESSION['State'];
-    // $_SESSION['City'] = $_SESSION['City'];
-    // $_SESSION['Prize_Minimum'] = $_SESSION['Prize_Minimum'];
-    // $_SESSION['Prize_Maximum'] = $_SESSION['Prize_Maximum'];
-
-    
-    // $_SESSION['Keyword'] = $Keyword;
-    // $_SESSION['BikeCategory'] = $BikeCategory;
-    // $_SESSION['Brand'] = $Brand;
-    // $_SESSION['Model'] = $Model;
-    // $_SESSION['State'] = $State;
-    // $_SESSION['City'] = $City;
-    // $_SESSION['Prize_Minimum'] = $Prize_Minimum;
-    // $_SESSION['Prize_Maximum'] = $Prize_Maximum;
-
-    //  $_SESSION['Keyword'] = $_SESSION['Keyword'];
-    // $_SESSION['BikeCategory'] = $_SESSION['BikeCategory'];
-    // $_SESSION['Brand'] = $_SESSION['Brand'];
-    // $_SESSION['Model'] = $_SESSION['Model'];
-    //  $_SESSION['State'] = $_SESSION['State'];
-    // $_SESSION['City'] = $_SESSION['City'];
-    // $_SESSION['Prize_Minimum'] = $_SESSION['Prize_Minimum'];
-    // $_SESSION['Prize_Maximum'] = $_SESSION['Prize_Maximum'];
-    
                            
 ?>
 

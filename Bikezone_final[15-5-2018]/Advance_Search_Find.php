@@ -247,16 +247,6 @@ $start_from = ($page-1) * $limit;
 $sql =  $filterQuery . " LIMIT $start_from, $limit";  
 $rs_result = mysql_query ($sql);                            
 ?>
-
-
-
-
-
-
-
-
-?>
-
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
@@ -303,10 +293,6 @@ $rs_result = mysql_query ($sql);
 
 </head>
 <body>
-
-<div id="wrapper">
-
-        
 <?php
   include "header.php";
 ?>
@@ -592,7 +578,7 @@ $rs_result = mysql_query ($sql);
 
 </div>
 <div>
-<div id="target-content" >loading...</div>
+<div id="target-content" ></div>
 </div>
 <?php 
 while($row=mysql_fetch_array($rs_result))
@@ -607,7 +593,7 @@ while($row=mysql_fetch_array($rs_result))
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
-         <a href="used_bikes_view.php?usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
+         <a href="used_bikes_view.php?filename=Advance_Search_Find&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
 
 <?php     
 
@@ -623,7 +609,7 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
 
     <div class="col-sm-7 add-desc-box">
         <div class="ads-details">
-            <h5 class="add-title"><a href="ads-details.html">
+            <h5 class="add-title"><a href="used_bikes_view.php?filename=Advance_Search_Find&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
                 <?php echo $row['Brand'].'-'.$row['Model'] ;  ?></a></h5>
             <span class="info-row"> 
                 <span class="add-type business-ads tooltipHere" data-toggle="tooltip" data-placement="right" title="" data-original-title="Business Ads">B </span> 

@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 if(isset($_POST['get_option']))
 {
  include "db_connection.php";
@@ -72,8 +72,8 @@ $City = html_entity_decode($_GET['city'],null,'UTF-8');
 $priceMin = $_GET['minPrice'];
 $priceMax = $_GET['maxPrice'];
 
-echo $Category;
-echo $City;
+//echo $Category;
+//echo $City;
 
 $filter1 = "select usedbikes.UsedBikeId as UsedBikeId, usedbikes.BikeCategory as BikeCategory, usedbikes.UsedBikeImage1 as UsedBikeImage1, usedbikes.Brand as Brand, usedbikes.Model as Model, usedbikes.KilometreDriven as KilometreDriven, usedbikes.Location as Location, usedbikes.UserId as UserId, usedbikes.UserName as UserName, usedbikes.ContactNumber as ContactNumber, usedbikes.Prize as Prize from usedbikes where";
 $filter2 = "select dealerbikes.DealerBikeId as DealerBikeId, dealerbikes.BikeCategory as BikeCategory, dealerbikes.DealerBikeImage1 as BikeImage1, dealerbikes.Brand as Brand, dealerbikes.Model as Model, dealerbikes.KilometreDriven as KilometreDriven, dealerbikes.Location as Location, dealerbikes.DealerId as UserId, dealerbikes.UserName as UserName, dealerbikes.ContactNumber as ContactNumber, dealerbikes.Prize as Prize from dealerbikes where";
@@ -99,7 +99,7 @@ if($split[count($split)-1] == "AND"){
     $filter2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter2);
 }
 
-echo $filterQuery = $filter1." UNION ".$filter2;
+$filterQuery = $filter1." UNION ".$filter2;
   
   $_SESSION['filterQuery']=$filterQuery;
 
@@ -124,7 +124,7 @@ echo $filterQuery = $filter1." UNION ".$filter2;
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
-         <a href="used_bikes_view.php?usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
+         <a href="used_bikes_view.php?filename=Advance_Search_Find&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
 
 <?php     
 
@@ -137,7 +137,7 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
     <!--/.photobox-->
     <div class="col-sm-7 add-desc-box">
         <div class="ads-details">
-            <h5 class="add-title"><a href="ads-details.html">
+            <h5 class="add-title"><a href="used_bikes_view.php?filename=Advance_Search_Find&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
                 <?php echo $row['Brand'].'-'.$row['Model'] ;  ?></a></h5>
             <span class="info-row"> 
                 <span class="add-type business-ads tooltipHere" data-toggle="tooltip" data-placement="right" title="" data-original-title="Business Ads">B </span> 
@@ -153,8 +153,30 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
     <!--/.add-desc-box-->
     <div class="col-md-3 text-right  price-box">
         <h2 class="item-price">RS:-<?php echo $row['Prize']  ?></h2>
-        <a class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
-        </a> <a class="btn btn-default  btn-sm make-favorite"> <i class="fa fa-heart"></i> <span>Save</span> </a></div>
+        <?php
+        if (isset($_SESSION['usr_id'])) {
+          echo $id=$_SESSION['usr_id'];
+          ?>
+          <a href="favourite.php?filename=Advance_Search_Find&UserId=<?php echo $row['UserId']; ?> &UsedBikeId=<?php echo $row['UsedBikeId']; ?> &Brand=<?php echo $row['Brand'];?> &Category=<?php echo $row['BikeCategory'];?> &Price=<?php echo $row['Prize'];?> &ContactNumber=<?php echo $row['ContactNumber'];?> &Fav_Userid=<?php echo $id;?>" class="btn btn-danger btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
+        </a>
+        <?php
+        }
+        else{
+          ?>
+          kjl<a href onclick="myFunction()" class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
+        </a>
+       <!--  <button onclick="myFunction()">Try it</button> -->
+
+<script>
+function myFunction() {
+    alert("Please login before adding favourites");
+}
+</script>
+        <?php
+        }
+        ?>
+         
+        </div>
     <!--/.add-desc-box-->
 </div>
 </div>

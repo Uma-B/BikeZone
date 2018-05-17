@@ -1,15 +1,12 @@
-
-
 <?php
 session_start();
 include_once 'db_connection.php';
 ?>
 
 <?php
-
 include('db_connection.php'); 
 $limit = 10; 
-$sql = "SELECT COUNT(DealerBikeId) FROM dealerbikes";  
+$sql = "SELECT COUNT(DealerBikeId) FROM dealerbikes WHERE BikeCategory = 'New bikes' ";  
 $rs_result = mysql_query($sql);  
 $row = mysql_fetch_row($rs_result);  
 $total_records = $row[0];  
@@ -22,7 +19,7 @@ $start_from = ($page-1) * $limit;
   
 $sql = "SELECT * FROM dealerbikes WHERE BikeCategory = 'New bikes' ORDER BY DealerBikeId ASC LIMIT $start_from, $limit";  
 
-$rs_result = mysql_query ($sql);  
+$rs_result = mysql_query ($sql);
 
 
 ?>
@@ -35,6 +32,7 @@ $rs_result = mysql_query ($sql);
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
 <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.js"></script>
+<script type="text/javascript" charset="utf8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 <script src="dist/jquery.simplePagination.js"></script>
@@ -57,22 +55,13 @@ $rs_result = mysql_query ($sql);
 
 
     <link href="assets/css/style.css" rel="stylesheet">
-
-    <!-- styles needed for carousel slider -->
     <link href="assets/plugins/owl-carousel/owl.carousel.css" rel="stylesheet">
     <link href="assets/plugins/owl-carousel/owl.theme.css" rel="stylesheet">
 
     <!-- bxSlider CSS file -->
     <link href="assets/plugins/bxslider/jquery.bxslider.css" rel="stylesheet"/>
 
-    <!-- Just for debugging purposes. -->
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- include pace script for automatic web page progress bar  -->
+  
     <script>
         paceOptions = {
             elements: true
@@ -83,20 +72,17 @@ $rs_result = mysql_query ($sql);
 
 </head>
 <body>
-
+<?php
+           include "header.php";
+         ?>
+ 
 <div id="wrapper">
-
-        <?php
-          include "header.php";
-         ?>    <!-- /.header -->
-
         <div class="search-row-wrapper">
             <div class="container ">
               
             </div>
         </div>
 
-    <!-- /.search-row -->
     <div class="main-container">
         <div class="container">
             <div class="row">
@@ -162,7 +148,7 @@ $rs_result = mysql_query ($sql);
                             </div>
                             <!--/.locations-list-->
 
-                            <div class="locations-list  list-filter" class="form-inline ">
+                           <div class="locations-list  list-filter" class="form-inline ">
                                 <h5 class="list-title"><strong><a href="#">Price range</a></strong></h5>
 
                                 <!-- <form role="form" class="form-inline "> -->
@@ -241,13 +227,13 @@ $rs_result = mysql_query ($sql);
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
                                 <li class="active nav-item">
                                     <a  class="nav-link" href="ajax/ee.html" data-url="ajax/33.html" role="tab"
-                                                      data-toggle="tab">New Bikes <span class="badge badge-secondary">
+                                                      data-toggle="tab">Scooter Ads <span class="badge badge-secondary">
                                                           
                                                           <?php
 
                                             $count=mysql_query("SELECT DealerBikeId FROM dealerbikes");
                                                 $num_rows=mysql_num_rows($count);
-                                             echo $num_rows; ?>
+                                             echo $num_rows+1; ?>
                                                       </span></a>
                                 </li>
                                <!--  <li class="nav-item"><a class="nav-link"  href="ajax/33.html" data-url="ajax/33.html" role="tab" data-toggle="tab">Business
@@ -312,21 +298,11 @@ $rs_result = mysql_query ($sql);
 
                         <div class="adds-wrapper">
                             <div class="tab-content">
-                                <div class="tab-pane active" id="allAds"><div class="row">
-
-
-
-    
-    <div class="col-sm-7 add-desc-box">
-    </div>
-        </div>
-
-</div>
-
+                               
 
 
 <div>
-<!-- <div id="target-content" >loading...</div> -->
+<div id="target-content" >loading...</div>
 </div>
 
 
@@ -339,7 +315,7 @@ while ($row = mysql_fetch_assoc($rs_result)) {
       
 
 
-<div class="item-list">
+<div class="item-list" id="masterdiv">
     <div class="cornerRibbons featuredAds">
         <!--<a href=""> Featured Ads</a> -->
     </div>
@@ -380,7 +356,7 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
         if (isset($_SESSION['usr_id'])) {
           $id=$_SESSION['usr_id'];
           ?>
-          <a href="favourite.php?filename=new_bikes&UserId=<?php echo $row['UserId']; ?> &UsedBikeId=<?php echo $row['UsedBikeId']; ?> &Brand=<?php echo $row['Brand'];?> &Category=<?php echo $row['BikeCategory'];?> &Price=<?php echo $row['Prize'];?> &ContactNumber=<?php echo $row['ContactNumber'];?> &Fav_Userid=<?php echo $id;?>" class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
+          <a href="favourite.php?filename=scooter&UserId=<?php echo $row['UserId']; ?> &UsedBikeId=<?php echo $row['UsedBikeId']; ?> &Brand=<?php echo $row['Brand'];?> &Category=<?php echo $row['BikeCategory'];?> &Price=<?php echo $row['Prize'];?> &ContactNumber=<?php echo $row['ContactNumber'];?> &Fav_Userid=<?php echo $id;?>" class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
         </a>
         <?php
         }
@@ -409,11 +385,6 @@ function myFunction() {
 </div>
 <?php } ?>
 
-<!-- <div class="pagination"></div>
- -->
-
-
-
 
 <div class="pagination-bar text-center">
      <nav aria-label="Page navigation " class="d-inline-b">
@@ -422,10 +393,10 @@ function myFunction() {
 
 <?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
  if($i == 1):?>
-            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_newbikes.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
  <?php else:?>
 
- <li class="page-item" id="<?php echo $i;?>"><a href='pagination.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+ <li class="page-item" id="<?php echo $i;?>"><a href='pagination_newbikes.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
 
  <?php endif;?> 
 <?php endfor;endif;?> 
@@ -448,14 +419,10 @@ function myFunction() {
                         </div>
                         <!--/.adds-wrapper-->
 
-                        <div class="tab-box  save-search-bar text-center"><a href="#"> <!-- <i class=" icon-star-empty"></i>
-                            Save Search --> </a></div>
-                    </div>
-
-                    <div class="post-promo text-center">
+                       <div class="post-promo text-center">
                         <h2> Do you get any bike for sell ? </h2>
                         <h5>Sell your bikes online FOR FREE. It's easier than you think !</h5>
-                        <?php
+                       <?php
         if (isset($_SESSION['usr_id'])) {
           $id=$_SESSION['usr_id'];
           ?>
@@ -470,16 +437,19 @@ function myFunction() {
         }
         ?>
                   </div>
-                    <!--/.post-promo-->
+                    </div>
+
+                   
+
 
                 </div>
-                <!--/.page-content-->
 
             </div>
         </div>
-        <?php
-        include "footer.php";
-        ?>
+
+         <?php
+            include "footer.php";
+         ?>
     </div>
   
 
@@ -489,7 +459,7 @@ function myFunction() {
 <script src="assets/js/vendors.min.js"></script>
 
 <!-- include custom script for site  -->
-<script src="assets/js/script.js"></script>
+<!-- <script src="assets/js/script.js"></script> -->
 
 <script src="choosen.js"></script>
 
@@ -533,6 +503,7 @@ $('.pagination').pagination({
         cssStyle: 'light-theme',
         currentPage : 1,
         onPageClick : function(pageNumber) {
+            jQuery('#masterdiv div').hide();
             jQuery("#target-content").html('loading...');
             jQuery("#target-content").load("pagination_newbikes.php?page=" + pageNumber);
         }
@@ -542,4 +513,3 @@ $('.pagination').pagination({
 
 
 </html>
-    

@@ -42,15 +42,15 @@ $_SESSION['Bike_sale1'] = $filterQuery1;
 $_SESSION['Bike_sale2'] = $filterQuery2;
 
 
-$filterQuery = $filterQuery1." UNION ".$filterQuery2;
+echo $filter = $filterQuery1." UNION ".$filterQuery2;
 
-$_SESSION['bike_sale_all'] = $filterQuery;
+$_SESSION['bike_sale_all'] = $filter;
 
 $limit = 10; 
-$sql = $filterQuery; 
+$sql = $filter; 
 /*For No Of Rows Selected*/
 $result=mysql_query($sql);
-$rowcount = mysql_num_rows($result);
+echo $rowcount = mysql_num_rows($result);
 /*----------------------*/
 $rs_result = mysql_query($sql);  
 $row = mysql_fetch_row($rs_result);  
@@ -65,7 +65,7 @@ if (isset($_GET["page"])) {
 }  
 
 $start_from = ($page-1) * $limit;    
-$sql =  $filterQuery . " LIMIT $start_from, $limit";  
+$sql =  $filter . " LIMIT $start_from, $limit";  
 $rs_result = mysql_query ($sql);                            
 ?>
 <!DOCTYPE html>
@@ -92,15 +92,6 @@ $rs_result = mysql_query ($sql);
 
     <!-- bxSlider CSS file -->
     <link href="assets/plugins/bxslider/jquery.bxslider.css" rel="stylesheet"/>
-
-    <!-- Just for debugging purposes. -->
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- include pace script for automatic web page progress bar  -->
     <script>
         paceOptions = {
             elements: true
@@ -115,13 +106,12 @@ $rs_result = mysql_query ($sql);
 </head>
 <body>
 
-<div id="wrapper">
+
 
          <?php
             include "header.php";
          ?>
-    <!-- /.header -->
-
+<div id="wrapper">
         <div class="search-row-wrapper">
             <div class="container ">
                 <form action="#" method="GET">
@@ -280,7 +270,7 @@ $rs_result = mysql_query ($sql);
                                     <a  class="nav-link" href="bike_sale_all.php" data-url="ajax/33.html" role="tab" data-toggle="tab">All Ads 
                                     <span class="badge badge-secondary">
                                     <?php
-                                            $count=mysql_query($filterQuery);
+                                            $count=mysql_query($filter);
                                                 $num_rows=mysql_num_rows($count);
                                              echo $num_rows;
                                     ?>
@@ -390,7 +380,6 @@ $rs_result = mysql_query ($sql);
     <!--/.add-desc-box-->
 
         </div>
-
 </div>
 <div>
 <div id="target-content" >loading...</div>

@@ -332,8 +332,8 @@ $(document).ready(function(){
                                         <div class="container">
                                         <div class="row"> 
                                            <div class="col-sm-6">
-                                             <select id="autocomplete-ajax" class="form-control " name="Stroke">                            
-                                              <option value="">Select Stroke</option>
+                                             <select id="autocomplete-ajax" class="form-control " name="Location">                            
+                                              <option value="">Select Location</option>
                                                   <?php
                                                  
                                                   $select=mysql_query("SELECT Location FROM usedbikes UNION SELECT Location FROM dealerbikes Group By Location");

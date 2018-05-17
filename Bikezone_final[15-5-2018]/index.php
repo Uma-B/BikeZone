@@ -76,6 +76,33 @@ else{
 </head>
 
 <body>
+  <div id="wrapper">
+   <div class="themeControll ">
+
+     <h3 style=" color:#fff; font-size: 10px; line-height: 12px;" class="uppercase color-white text-center">
+       <a target="_blank" href="index.php">  All
+       Pages</a> </h3>
+
+     <div class="linkinner linkScroll scrollbar" style="height: 265px">
+       <!-- <a target="_blank" href="blogs.html"> Blog</a>
+       <a target="_blank" href="blog-details.html"> Blog Details</a>
+        --><a target="_blank" href=""> about us</a>
+       <a target="_blank" href=""> account my ads</a>
+       <a target="_blank" href="ads-details.html"> ads details</a>
+
+       </a>
+       <!-- <a target="_blank" href=""> Contact</a>
+        --><a target="_blank" href=""> Faq</a>
+       <a target="_blank" href=""> Sign Up</a>
+       <a target="_blank" href="statements.html"> Sign In<span class="label label-success " style="font-size: 10px"></span></a>
+     <!--  <a target="_blank" href="seller-profile.html"> Seller profile
+         <span class="label label-success " style="font-size: 10px"><em>NEW</em></span></a> -->
+
+       
+     </div>
+     <p class="tbtn"><i class="fa fa-angle-double-left"></i></p>
+   </div>
+   <!--themeControll-->
 <?php include "header.php"; ?>
 
     <div class="intro" style="background-image: url(images/bg3.jpg);">

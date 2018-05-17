@@ -6,7 +6,7 @@ include_once 'db_connection.php';
 <?php
 include('db_connection.php'); 
 $limit = 10; 
-$sql = "SELECT COUNT(DealerBikeId) FROM dealerbikes";  
+$sql = "SELECT COUNT(DealerBikeId) FROM dealerbikes WHERE BikeCategory = 'Scooter' ";  
 $rs_result = mysql_query($sql);  
 $row = mysql_fetch_row($rs_result);  
 $total_records = $row[0];  
@@ -55,22 +55,13 @@ $rs_result = mysql_query ($sql);
 
 
     <link href="assets/css/style.css" rel="stylesheet">
-
-    <!-- styles needed for carousel slider -->
     <link href="assets/plugins/owl-carousel/owl.carousel.css" rel="stylesheet">
     <link href="assets/plugins/owl-carousel/owl.theme.css" rel="stylesheet">
 
     <!-- bxSlider CSS file -->
     <link href="assets/plugins/bxslider/jquery.bxslider.css" rel="stylesheet"/>
 
-    <!-- Just for debugging purposes. -->
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- include pace script for automatic web page progress bar  -->
+  
     <script>
         paceOptions = {
             elements: true
@@ -81,21 +72,17 @@ $rs_result = mysql_query ($sql);
 
 </head>
 <body>
-
-<div id="wrapper">
-
-         <?php
-            include "header.php";
+<?php
+           include "header.php";
          ?>
-    <!-- /.header -->
-
+ 
+<div id="wrapper">
         <div class="search-row-wrapper">
             <div class="container ">
               
             </div>
         </div>
 
-    <!-- /.search-row -->
     <div class="main-container">
         <div class="container">
             <div class="row">
@@ -328,7 +315,7 @@ while ($row = mysql_fetch_assoc($rs_result)) {
       
 
 
-<div class="item-list">
+<div class="item-list" id="masterdiv">
     <div class="cornerRibbons featuredAds">
         <!--<a href=""> Featured Ads</a> -->
     </div>
@@ -397,10 +384,6 @@ function myFunction() {
 
 </div>
 <?php } ?>
-<!-- <div class="pagination"></div>
- -->
-
-
 
 
 <div class="pagination-bar text-center">
@@ -410,10 +393,10 @@ function myFunction() {
 
 <?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
  if($i == 1):?>
-            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_scooter.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
  <?php else:?>
 
- <li class="page-item" id="<?php echo $i;?>"><a href='pagination.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+ <li class="page-item" id="<?php echo $i;?>"><a href='pagination_scooter.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
 
  <?php endif;?> 
 <?php endfor;endif;?> 
@@ -436,11 +419,7 @@ function myFunction() {
                         </div>
                         <!--/.adds-wrapper-->
 
-                        <div class="tab-box  save-search-bar text-center"><!-- <a href="#"> <i class=" icon-star-empty"></i>
-                            Save Search </a> --></div>
-                    </div>
-
-                    <div class="post-promo text-center">
+                       <div class="post-promo text-center">
                         <h2> Do you get any bike for sell ? </h2>
                         <h5>Sell your bikes online FOR FREE. It's easier than you think !</h5>
                        <?php
@@ -458,10 +437,12 @@ function myFunction() {
         }
         ?>
                   </div>
-                    <!--/.post-promo-->
+                    </div>
+
+                   
+
 
                 </div>
-                <!--/.page-content-->
 
             </div>
         </div>
@@ -478,7 +459,7 @@ function myFunction() {
 <script src="assets/js/vendors.min.js"></script>
 
 <!-- include custom script for site  -->
-<script src="assets/js/script.js"></script>
+<!-- <script src="assets/js/script.js"></script> -->
 
 <script src="choosen.js"></script>
 
@@ -522,6 +503,7 @@ $('.pagination').pagination({
         cssStyle: 'light-theme',
         currentPage : 1,
         onPageClick : function(pageNumber) {
+            jQuery('#masterdiv div').hide();
             jQuery("#target-content").html('loading...');
             jQuery("#target-content").load("pagination_scooter.php?page=" + pageNumber);
         }

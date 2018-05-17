@@ -35,12 +35,7 @@ $rs_result = mysql_query ($sql);
 <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.js"></script>
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-<script src="dist/jquery.simplePagination.js"></script>
-
-
-
-
-    
+<script src="dist/jquery.simplePagination.js"></script>    
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Fav and touch icons -->
@@ -74,7 +69,6 @@ $rs_result = mysql_query ($sql);
          <?php
             include "header.php";
          ?>
-    <!-- /.header -->
 
         <div class="search-row-wrapper">
             <div class="container ">
@@ -302,21 +296,17 @@ $rs_result = mysql_query ($sql);
 <div id="target-content" >loading...</div>
 </div>
 
-
-
-
-
 <?php  
 while ($row = mysql_fetch_assoc($rs_result)) {  
 ?>  
-      
+ 
+<div id="masterdiv">
 
 
-<div class="item-list oldList">
-    <div class="cornerRibbons featuredAds">
-        <!--<a href=""> Featured Ads</a> -->
-    </div>
-    <div class="row">
+<div class="item-list oldList" id="masterdiv">
+    <!-- <div class="cornerRibbons featuredAds" id="masterdiv">
+    </div> -->
+    <div class="row" id="masterdiv">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
          <a href="used_bikes_view.php?id=<?php echo $row['UsedBikeId']; ?>" role="button">
@@ -376,16 +366,13 @@ function myFunction() {
     <!--/.add-desc-box-->
 </div>
 
-<div id='myStyle'>
+<div id='myStyle' id="masterdiv">
 </div>
 
 </div>
+</div>
+
 <?php } ?>
-<!-- <div class="pagination"></div>
- -->
-
-
-
 
 <div class="pagination-bar text-center">
      <nav aria-label="Page navigation " class="d-inline-b">
@@ -410,18 +397,16 @@ function myFunction() {
 
 </div>
 </div>
-          </div>
-                  </div>
+         
+
+                            </div>
+                        </div>
                         <!--/.adds-wrapper-->
 
-                        <div class="tab-box  save-search-bar text-center"><!-- <a href="#"> <i class=" icon-star-empty"></i>
-                            Save Search </a> --></div>
-                    </div>
-
-                    <div class="post-promo text-center">
+                       <div class="post-promo text-center">
                         <h2> Do you get any bike for sell ? </h2>
                         <h5>Sell your bikes online FOR FREE. It's easier than you think !</h5>
-                        <?php
+                       <?php
         if (isset($_SESSION['usr_id'])) {
           $id=$_SESSION['usr_id'];
           ?>
@@ -436,10 +421,12 @@ function myFunction() {
         }
         ?>
                   </div>
-                    <!--/.post-promo-->
+                    </div>
+
+                   
+
 
                 </div>
-                <!--/.page-content-->
 
             </div>
         </div>
@@ -454,8 +441,6 @@ function myFunction() {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 <script src="assets/js/vendors.min.js"></script>
-
-<!-- include custom script for site  -->
 <script src="assets/js/script.js"></script>
 <script src="choosen.js"></script>
 
@@ -480,10 +465,6 @@ function sort_by(value){
   jQuery('.oldList div').html('');
   $('#myStyle').load('fetch_data_sort.php?value=' + encodeURIComponent(value));
 }
-//category
-// function demo(category) {
-//   $('#myStyle2').load('fetch_data.php?category=' + category);
-// }
 </script>
 <link rel="stylesheet" href="style.css">
 
@@ -498,6 +479,7 @@ $('.pagination').pagination({
         cssStyle: 'light-theme',
         currentPage : 1,
         onPageClick : function(pageNumber) {
+            jQuery('#masterdiv div').hide();
             jQuery("#target-content").html('loading...');
             jQuery("#target-content").load("pagination.php?page=" + pageNumber);
         }

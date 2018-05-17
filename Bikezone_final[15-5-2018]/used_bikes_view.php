@@ -4,10 +4,12 @@
     session_start();
     include "db_connection.php";
     if(isset($_GET['userid']) & !empty($_GET['userid'])){
+        $fileName=$_GET['filename'];
         $usedbikeid = $_GET['usedbikeid'];
             $userid = $_GET['userid'];           
             $brand = $_GET['brand'];
             $BikeCategory = $_GET['category'];
+             $fileName=$fileName . ".php";
             
              $show=mysql_query("SELECT UsedBikeId, UserId, BikeCategory,Brand, Model, Year, KilometreDriven, Transmission, FuelType, Stroke, EngineSize, Description, Details, Prize, UsedBikeImage1, UsedBikeImage2, UsedBikeImage3, UsedBikeImage4, UserName, ContactNumber, State, City, Location, PostalCode, Status, Date FROM usedbikes  WHERE UsedBikeId='$usedbikeid' AND UserId='$userid' AND Brand = '$brand' AND BikeCategory='$BikeCategory' 
                 UNION 
@@ -80,14 +82,14 @@
 
                     <nav aria-label="breadcrumb" role="navigation" class="pull-left">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="#"><i class="icon-home fa"></i></a></li>
-                            <li class="breadcrumb-item"><a href="index.php">All Ads</a></li>
+                            <li class="breadcrumb-item"><a href="<?php echo $fileName; ?>"><i class="icon-home fa"></i></a></li>
+                            <li class="breadcrumb-item"><a href="<?php echo $fileName; ?>">All Ads</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Category name</li>
                         </ol>
                     </nav>
 
-
-                    <div class="pull-right backtolist"><a href="index.php"> <i
+                   
+                    <div class="pull-right backtolist"><a href="<?php echo $fileName; ?>"> <i
                             class="fa fa-angle-double-left"></i> Back to Results</a></div>
 
                 </div>

@@ -101,7 +101,7 @@ session_start();
             <div class="navbar-identity">
 
 
-                <a href="index.php" class="navbar-brand logo logo-title">
+                <a href="Admin_home.php" class="navbar-brand logo logo-title">
                 <span class="logo-icon"><!-- <i class="icon icon-search-1 ln-shadow-logo "></i> -->
                 </span>BIKE<span>ZONE </span> </a>
 
