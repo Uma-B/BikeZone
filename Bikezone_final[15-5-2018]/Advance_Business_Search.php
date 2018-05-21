@@ -114,7 +114,7 @@ $rs_result = mysql_query ($sql);
                                         ?>
                                         <li>                                        
                                         <div margin:0px auto; margin-top:30px;" >
-                                                <select id="category" class="chosen form-control" style="width:80%;" onchange="recp()">
+                                                <select id="category" class="chosen form-control" style="width:80%;" onchange="category(this.value)">
                                             <option value=""> Select Category </option>
                                             <option value="Used Bikes"> Used Bikes</option>
                               <option value="New Bikes"> New Bikes</option>
@@ -253,8 +253,8 @@ $rs_result = mysql_query ($sql);
                                     <a  href="Advance_Business_Search.php" class= "nav-link" role="tab" >Business Ads 
                                     <span class="badge badge-secondary">
                                     <?php
-                                            $count=mysql_query("SELECT DealerId FROM dealerbikes");
-                                                $num_rows=mysql_num_rows($count);
+                                            // $count=mysql_query("SELECT DealerId FROM dealerbikes");
+                                                $num_rows=mysql_num_rows($rs_result);
                                              echo $num_rows;
                                     ?>
                                                  
@@ -359,15 +359,13 @@ $rs_result = mysql_query ($sql);
 
 </div>
 <div>
-<div id="target-content" >loading...</div>
+<div id="target-content" ></div>
 </div>
 <?php
 while($row=mysql_fetch_array($rs_result))
 {
    
 ?>
-
-
 <div class="item-list oldList" id="masterdiv">
     <div class="cornerRibbons featuredAds" >
         <!--<a href=""> Featured Ads</a> -->
@@ -409,7 +407,8 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
     </div>
     <!--/.add-desc-box-->
     <div class="col-md-3 text-right  price-box">
-       <?php
+      <h2 class="item-price">RS:-<?php echo $row['Prize']  ?></h2>
+        <?php
         if (isset($_SESSION['usr_id'])) {
           $id=$_SESSION['usr_id'];
           ?>
@@ -564,19 +563,38 @@ $('.pagination').pagination({
 });
 </script> 
 
-<script>
+<script type="text/javascript">
+  // city
+  function category(category){
+
+    if (category=="Used Bikes") {
+       // document.write(category);
+         window.location.replace('used_bikes.php');
+    }
+    else if(category=="New Bikes"){
+        //document.write(category);
+        window.location.replace('new_bikes.php');
+  }
+  else {
+    //document.write(category);
+    window.location.replace('scooter.php');
+  }
+}
+
 function recp() {
     var category = document.getElementById('category').value;
         var city = document.getElementById('city').value;
         var min = document.getElementById('minPrice').value;
         var max = document.getElementById('maxPrice').value;
         jQuery('.oldList div').html('');
+        jQuery('#pagination').hide();
   $('#myStyle').load('fetch_data.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
 }
 
 function sort_by(value){
   jQuery('.oldList div').html('');
-  $('#myStyle').load('fetch_sort_buisness.php?value=' + encodeURIComponent(value));
+  jQuery('#pagination').hide();
+  $('#myStyle').load('fetch_sort_advance_buisness.php?value=' + encodeURIComponent(value));
 }
 
 //category

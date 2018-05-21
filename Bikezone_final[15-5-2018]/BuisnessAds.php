@@ -256,8 +256,6 @@ $rs_result = mysql_query ($sql);
 </head>
 <body>
 
-<div id="wrapper">
-
          <?php
             include "header.php";
          ?>
@@ -298,7 +296,7 @@ $rs_result = mysql_query ($sql);
                                         ?>
                                         <li>                                        
                                         <div margin:0px auto; margin-top:30px;" >
-                                                <select id="category" class="chosen form-control" style="width:80%;" onchange="recp()">
+                                                <select id="category" class="chosen form-control" style="width:80%;" onchange="category(this.value)">
                                             <option value=""> Select Category </option>
                                             <option value="Used Bikes"> Used Bikes</option>
                               <option value="New Bikes"> New Bikes</option>
@@ -437,8 +435,8 @@ $rs_result = mysql_query ($sql);
                                     <a  href="BuisnessAds.php" class= "nav-link" role="tab" >Business Ads 
                                     <span class="badge badge-secondary">
                                     <?php
-                                            $count=mysql_query("SELECT DealerId FROM dealerbikes");
-                                                $num_rows=mysql_num_rows($count);
+                                            // $count=mysql_query("SELECT DealerId FROM dealerbikes");
+                                                $num_rows=mysql_num_rows($rs_result);
                                              echo $num_rows;
                                     ?>
                                                  
@@ -545,7 +543,7 @@ $rs_result = mysql_query ($sql);
 
 </div>
 <div>
-<div id="target-content" >loading...</div>
+<div id="target-content" ></div>
 </div>
 </div>
 <?php
@@ -562,7 +560,7 @@ while($row=mysql_fetch_array($rs_result))
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
-         <a href="used_bikes_view.php?usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
+         <a href="used_bikes_view.php?filename=BuisnessAds&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
 
 <?php     
 
@@ -578,7 +576,7 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
 
     <div class="col-sm-7 add-desc-box">
         <div class="ads-details">
-            <h5 class="add-title"><a href="ads-details.html">
+            <h5 class="add-title"> <a href="used_bikes_view.php?filename=BuisnessAds&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
                 <?php echo $row['Brand'].'-'.$row['Model'] ;  ?></a></h5>
             <span class="info-row"> 
                 <span class="add-type business-ads tooltipHere" data-toggle="tooltip" data-placement="right" title="" data-original-title="Business Ads">B </span> 
@@ -719,15 +717,24 @@ $('.pagination').pagination({
 });
 </script> 
 
+<script type="text/javascript">
+  // city
+  function category(category){
 
+    if (category=="Used Bikes") {
+       // document.write(category);
+         window.location.replace('used_bikes.php');
+    }
+    else if(category=="New Bikes"){
+        //document.write(category);
+        window.location.replace('new_bikes.php');
+  }
+  else {
+    //document.write(category);
+    window.location.replace('scooter.php');
+  }
+}
 
-
-
-
-
-
-
-  <script type="text/javascript">
   // city
 function recp() {
     var category = document.getElementById('category').value;
@@ -735,12 +742,14 @@ function recp() {
         var min = document.getElementById('minPrice').value;
         var max = document.getElementById('maxPrice').value;
         jQuery('.oldList div').html('');
-  $('#myStyle').load('fetch_data.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
+         jQuery('#pagination').hide();
+  $('#myStyle').load('fetch_data_business.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
 }
 
 function sort_by(value){
   jQuery('.oldList div').html('');
-  $('#myStyle').load('fetch_sort_buisness.php?value=' + encodeURIComponent(value));
+   jQuery('#pagination').hide();
+  $('#myStyle').load('fetch_sort_business.php?value=' + encodeURIComponent(value));
 }
 
 //category

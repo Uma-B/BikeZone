@@ -226,7 +226,9 @@ $rs_result = mysql_query ($sql);
 </head>
 <body>
 
-
+<?php
+  include "header.php";
+?>
 
         <div class="search-row-wrapper">
             <div class="container ">
@@ -263,7 +265,7 @@ $rs_result = mysql_query ($sql);
                                         ?>
                                         <li>                                        
                                         <div margin:0px auto; margin-top:30px;" >
-                                                <select id="category"  style="width:80%;" onchange="recp()" class="chosen form-control ">
+                                                <select id="category"  style="width:80%;" onchange="category(this.value)" class="chosen form-control ">
                                             <option value=""> Select Category </option>
                                             <option value="Used Bikes"> Used Bikes</option>
                               <option value="New Bikes"> New Bikes</option>
@@ -386,8 +388,8 @@ $rs_result = mysql_query ($sql);
                                     <a  class="nav-link" href="ajax/ee.html" data-url="ajax/33.html" role="tab" data-toggle="tab">All Ads 
                                     <span class="badge badge-secondary">
                                     <?php
-                                            $count=mysql_query($filterQuery);
-                                                $num_rows=mysql_num_rows($count);
+                                           // $count=mysql_query($filterQuery);
+                                                $num_rows=mysql_num_rows($rs_result);
                                              echo $num_rows;
                                     ?>
                                                  
@@ -494,8 +496,8 @@ $rs_result = mysql_query ($sql);
 
 
     <div class="col-md-2 no-padding photobox">
-        <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span> <a href="ads-details.html"><img class="thumbnail no-margin" src="images/category/sample_bike.jpg" alt="img"></a>
-        </div>
+        <!-- <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span> <a href="ads-details.html"><img class="thumbnail no-margin" src="images/category/sample_bike.jpg" alt="img"></a>
+        </div> -->
     </div>
     <!--/.photobox-->
     <div class="col-sm-7 add-desc-box">
@@ -511,7 +513,7 @@ $rs_result = mysql_query ($sql);
 
 </div>
 <div>
-<div id="target-content" >loading...</div>
+<div id="target-content" ></div>
 </div>
 <?php
 
@@ -528,7 +530,7 @@ while($row = mysql_fetch_assoc($rs_result))
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
-         <a href="used_bikes_view.php?usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
+         <a href="used_bikes_view.php?filename=index_find&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
 
 <?php     
 
@@ -544,7 +546,7 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
 
     <div class="col-sm-7 add-desc-box">
         <div class="ads-details">
-            <h5 class="add-title"><a href="ads-details.html">
+            <h5 class="add-title"><a href="used_bikes_view.php?filename=index_find&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
                 <?php echo $row['Brand'].'-'.$row['Model'] ;  ?></a></h5>
             <span class="info-row"> 
                 <span class="add-type business-ads tooltipHere" data-toggle="tooltip" data-placement="right" title="" data-original-title="Business Ads">B </span> 
@@ -561,9 +563,30 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
     <!--/.add-desc-box-->
     <div class="col-md-3 text-right  price-box">
         <h2 class="item-price">RS:-<?php echo $row['Prize']  ?></h2>
-         <a href="favourite.php?UserId=<?php echo $row['UserId']; ?> &UsedBikeId=<?php echo $row['UsedBikeId']; ?> &Brand=<?php echo $row['Brand'];?> &Category=<?php echo $row['BikeCategory'];?>" class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
-        </a> 
-         <a class="btn btn-default  btn-sm make-favorite"> <i class="fa fa-heart"></i> <span>Save</span> </a></div>
+         <?php
+        if (isset($_SESSION['usr_id'])) {
+          $id=$_SESSION['usr_id'];
+          ?>
+          <a href="favourite.php?filename=index_find&UserId=<?php echo $row['UserId']; ?> &UsedBikeId=<?php echo $row['UsedBikeId']; ?> &Brand=<?php echo $row['Brand'];?> &Category=<?php echo $row['BikeCategory'];?> &Price=<?php echo $row['Prize'];?> &ContactNumber=<?php echo $row['ContactNumber'];?> &Fav_Userid=<?php echo $id;?>" class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
+        </a>
+        <?php
+        }
+        else{
+          ?>
+          <a href onclick="myFunction()" class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
+        </a>
+       <!--  <button onclick="myFunction()">Try it</button> -->
+
+<script>
+function myFunction() {
+    alert("Please login before adding favourites");
+}
+</script>
+        <?php
+        }
+        ?>
+         
+        </div>
     <!--/.add-desc-box-->
 </div>
 
@@ -598,11 +621,24 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
                     <div class="post-promo text-center">
                         <h2> Do you get any bike for sell ? </h2>
                         <h5>Sell your bikes online FOR FREE. It's easier than you think !</h5>
-                        <a href="pop.php " class="btn btn-lg btn-border btn-post btn-danger">Sell my bike free</a>
-                    </div>
+                        <?php
+        if (isset($_SESSION['usr_id'])) {
+          $id=$_SESSION['usr_id'];
+          ?>
+          <a href="popup.php " class="btn btn-lg btn-border btn-post btn-danger">Sell my bike free</a>
+          
+        <?php
+        }
+        else{
+          ?>
+         <a href="pop.php " class="btn btn-lg btn-border btn-post btn-danger">Sell my bike free</a>
+        <?php
+        }
+        ?>
                     <!--/.post-promo-->
 
                 </div>
+              </div>
                 <!--/.page-content-->
 
             </div>
@@ -651,6 +687,23 @@ $('.pagination').pagination({
 <script src="choosen.js"></script>
   <script type="text/javascript">
   // city
+  function category(category){
+
+    if (category=="Used Bikes") {
+       // document.write(category);
+         window.location.replace('used_bikes.php');
+    }
+    else if(category=="New Bikes"){
+        //document.write(category);
+        window.location.replace('new_bikes.php');
+  }
+  else {
+    //document.write(category);
+    window.location.replace('scooter.php');
+  }
+}
+
+  // city
 function recp() {
 
         var category = document.getElementById('category').value;
@@ -658,13 +711,15 @@ function recp() {
         var min = document.getElementById('minPrice').value;
         var max = document.getElementById('maxPrice').value;
         jQuery('.oldList div').html('');
+         jQuery('#pagination').hide();
   $('#myStyle').load('fetch_data.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
 
 }
 
 function sort_by(value){
   jQuery('.oldList div').html('');
-  $('#myStyle').load('fetch_data_sort.php?value=' + encodeURIComponent(value));
+   jQuery('#pagination').hide();
+  $('#myStyle').load('fetch_sort_index.php?value=' + encodeURIComponent(value));
 }
 //category
 // function demo(category) {

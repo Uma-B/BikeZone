@@ -27,7 +27,7 @@ if (isset($_GET["page"])) {
 }  
 
 $start_from = ($page-1) * $limit;    
-$sql =  $filterQuery1 . " LIMIT $start_from, $limit";  
+echo $sql =  $filterQuery1 . " LIMIT $start_from, $limit";  
 $rs_result = mysql_query ($sql);   
 
 
@@ -272,7 +272,7 @@ $rs_result = mysql_query ($sql);
                                         ?>
                                         <li>                                        
                                         <div margin:0px auto; margin-top:30px;" >
-                                                <select id="category"  style="width:80%;" onchange="recp()" class="chosen form-control ">
+                                                <select id="category"  style="width:80%;" onchange="category()" class="chosen form-control ">
                                             <option value=""> Select Category </option>
                                             <option value="Used Bikes"> Used Bikes</option>
                               <option value="New Bikes"> New Bikes</option>
@@ -408,8 +408,8 @@ $rs_result = mysql_query ($sql);
                                     <a  href="bike_sale_buisness.php" class= "nav-link" role="tab" >Business Ads 
                                     <span class="badge badge-secondary">
                                     <?php
-                                            $count=mysql_query($filterQuery1);
-                                                $num_rows=mysql_num_rows($count);
+                                            //$count=mysql_query($filterQuery1);
+                                                $num_rows=mysql_num_rows($rs_result);
                                              echo $num_rows;
                                     ?>
                                                  
@@ -420,8 +420,8 @@ $rs_result = mysql_query ($sql);
                                  <a href="bike_sale_personal.php" class="nav-link" role="tab">Personal
                                     <span class="badge badge-secondary">
                              <?php
-                                            $count=mysql_query($filterQuery1);
-                                                $num_rows=mysql_num_rows($count);
+                                            //$count=mysql_query($filterQuery1);
+                                                $num_rows=mysql_num_rows($rs_result);
                                              echo $num_rows;
                                     ?>                                                
                                     </span>
@@ -449,13 +449,7 @@ $rs_result = mysql_query ($sql);
 
                         <div class="listing-filter">
                             <div class="pull-left col-xs-6">
-                               <!--  <div class="breadcrumb-list"><a href="#" class="current"> <span>All ads</span></a>
-                                    in
-
-                                    cityName will replace with selected location/area from location modal 
-                                    <span class="cityName"> New York </span> <a href="#selectRegion" id="dropdownMenu1"
-                                                                                data-toggle="modal"> <span
-                                            class="caret"></span> </a></div> -->
+                     
                             </div>
                             <div class="pull-right col-xs-6 text-right listing-view-action"><span
                                     class="list-view active"><!-- <i class="  icon-th"></i> --></span> <span
@@ -518,13 +512,18 @@ $rs_result = mysql_query ($sql);
 
 </div>
 <div>
-<div id="target-content" >loading...</div>
+<div id="target-content" ></div>
 </div>
+<div>
+<div id='myStyle'></div>
+</div>
+
 <?php
 while($row=mysql_fetch_array($rs_result))
 {
 ?>
 
+<div id="masterdiv">
 
 <div class="item-list oldList" id="masterdiv">
     <div class="cornerRibbons featuredAds">
@@ -596,9 +595,8 @@ function myFunction() {
     <!--/.add-desc-box-->
 </div>
 
-<div id='myStyle'>
-</div>
 
+</div>
 </div>
 <?php } ?>
 
@@ -696,7 +694,7 @@ $('.pagination').pagination({
         cssStyle: 'light-theme',
         currentPage : 1,
         onPageClick : function(pageNumber) {
-            jQuery('#masterdiv div').html('');
+            jQuery('#masterdiv div').hide();
             jQuery("#target-content").html('loading...');
             jQuery("#target-content").load("pagination_Bike_Sale_Personal.php?page=" + pageNumber);
         }
@@ -705,7 +703,24 @@ $('.pagination').pagination({
 </script> 
 
 
-  <script type="text/javascript">
+    <script type="text/javascript">
+  // city
+  function category(category){
+
+    if (category=="Used Bikes") {
+       // document.write(category);
+         window.location.replace('used_bikes.php');
+    }
+    else if(category=="New Bikes"){
+        //document.write(category);
+        window.location.replace('new_bikes.php');
+  }
+  else {
+    //document.write(category);
+    window.location.replace('scooter.php');
+  }
+}
+
   // city
 function recp() {
 
@@ -715,13 +730,18 @@ function recp() {
         var max = document.getElementById('maxPrice').value;
         //alert( min + max);
         jQuery('.oldList div').html('');
-  $('#myStyle').load('fetch_data.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
+          jQuery('#masterdiv div').hide();
+          jQuery('#pagination').hide();
+  $('#myStyle').load('fetch_data_personal.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
 
 }
 
 function sort_by(value){
   jQuery('.oldList div').html('');
-  $('#myStyle').load('fetch_sort_personal.php?value=' + encodeURIComponent(value));
+          jQuery('.oldList div').html('');
+          jQuery('#masterdiv div').hide();
+          jQuery('#pagination').hide();
+  $('#myStyle').load('fetch_sort_bike_sale_all_personal.php?value=' + encodeURIComponent(value));
 }
 //category
 // function demo(category) {

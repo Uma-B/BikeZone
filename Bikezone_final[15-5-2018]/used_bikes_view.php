@@ -14,7 +14,7 @@
              $show=mysql_query("SELECT UsedBikeId, UserId, BikeCategory,Brand, Model, Year, KilometreDriven, Transmission, FuelType, Stroke, EngineSize, Description, Details, Prize, UsedBikeImage1, UsedBikeImage2, UsedBikeImage3, UsedBikeImage4, UserName, ContactNumber, State, City, Location, PostalCode, Status, Date FROM usedbikes  WHERE UsedBikeId='$usedbikeid' AND UserId='$userid' AND Brand = '$brand' AND BikeCategory='$BikeCategory' 
                 UNION 
                 SELECT DealerBikeId, DealerId, BikeCategory,Brand, Model, Year, Transmission, FuelType, Stroke, EngineSize, Description, Details, Prize, KilometreDriven, DealerBikeImage1, DealerBikeImage2, DealerBikeImage3, DealerBikeImage4, Username, ContactNumber, State, City, Location, PostalCode, Status, Date FROM dealerbikes  WHERE DealerBikeId='$usedbikeid' AND DealerId='$userid' AND Brand = '$brand' AND BikeCategory='$BikeCategory' ");
-                $res=mysql_fetch_array($show);
+                echo $res=mysql_fetch_array($show);
 
             //$_SESSION['cart'] = $items;
             //header('location: index.php?status=success');

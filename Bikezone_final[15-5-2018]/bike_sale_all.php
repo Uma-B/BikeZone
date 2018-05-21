@@ -5,7 +5,6 @@ include "db_connection.php";
  
 GLOBAL $bike_sale_all,$Bike_sale1,$Bike_sale2;
 
-
 $filterQuery1 = "select
   usedbikes.UsedBikeId as UsedBikeId,
   usedbikes.BikeCategory as BikeCategory,
@@ -19,7 +18,7 @@ $filterQuery1 = "select
   usedbikes.ContactNumber as ContactNumber,
   usedbikes.Prize as Prize
 from
-  usedbikes
+  usedbikes Where Status='UnBlock'
 ";
 
 $filterQuery2 = "select
@@ -35,22 +34,20 @@ $filterQuery2 = "select
   dealerbikes.ContactNumber as ContactNumber,
   dealerbikes.Prize as Prize
 from
-  dealerbikes
-";
+  dealerbikes Where Status='UnBlock'";
 
 $_SESSION['Bike_sale1'] = $filterQuery1;
 $_SESSION['Bike_sale2'] = $filterQuery2;
 
 
-echo $filter = $filterQuery1." UNION ".$filterQuery2;
+$filter = $filterQuery1." UNION ".$filterQuery2;
 
-$_SESSION['bike_sale_all'] = $filter;
 
 $limit = 10; 
 $sql = $filter; 
 /*For No Of Rows Selected*/
 $result=mysql_query($sql);
-echo $rowcount = mysql_num_rows($result);
+$rowcount = mysql_num_rows($result);
 /*----------------------*/
 $rs_result = mysql_query($sql);  
 $row = mysql_fetch_row($rs_result);  
@@ -105,13 +102,9 @@ $rs_result = mysql_query ($sql);
 
 </head>
 <body>
-
-
-
          <?php
             include "header.php";
          ?>
-<div id="wrapper">
         <div class="search-row-wrapper">
             <div class="container ">
                 <form action="#" method="GET">
@@ -147,7 +140,7 @@ $rs_result = mysql_query ($sql);
                                         ?>
                                         <li>                                        
                                         <div margin:0px auto; margin-top:30px;" >
-                                                <select id="category"  style="width:80%;" onchange="recp()" class="chosen form-control ">
+                                                <select id="category"  style="width:80%;" onchange="category(this.value)" class="chosen form-control ">
                                             <option value=""> Select Category </option>
                                             <option value="Used Bikes"> Used Bikes</option>
                               <option value="New Bikes"> New Bikes</option>
@@ -270,8 +263,8 @@ $rs_result = mysql_query ($sql);
                                     <a  class="nav-link" href="bike_sale_all.php" data-url="ajax/33.html" role="tab" data-toggle="tab">All Ads 
                                     <span class="badge badge-secondary">
                                     <?php
-                                            $count=mysql_query($filter);
-                                                $num_rows=mysql_num_rows($count);
+                                            //$count=mysql_query($filter);
+                                                $num_rows=mysql_num_rows($rs_result);
                                              echo $num_rows;
                                     ?>
                                                  
@@ -382,13 +375,17 @@ $rs_result = mysql_query ($sql);
         </div>
 </div>
 <div>
-<div id="target-content" >loading...</div>
+<div id="target-content" ></div>
 </div>
+<div id='myStyle'>
+</div>
+
 <?php
 while($row=mysql_fetch_array($rs_result))
 {
 ?>
 
+<div id="masterdiv">
 
 <div class="item-list oldList" id="masterdiv">
     <div class="cornerRibbons featuredAds">
@@ -397,7 +394,7 @@ while($row=mysql_fetch_array($rs_result))
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
-         <a href="used_bikes_view.php?usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
+         <a href="used_bikes_view.php?filename=bike_sale_all&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
 
 <?php     
 
@@ -413,7 +410,7 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
 
     <div class="col-sm-7 add-desc-box">
         <div class="ads-details">
-            <h5 class="add-title"><a href="ads-details.html">
+            <h5 class="add-title"><a href="used_bikes_view.php?filename=bike_sale_all&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
                 <?php echo $row['Brand'].'-'.$row['Model'] ;  ?></a></h5>
             <span class="info-row"> 
                 <span class="add-type business-ads tooltipHere" data-toggle="tooltip" data-placement="right" title="" data-original-title="Business Ads">B </span> 
@@ -459,9 +456,9 @@ function myFunction() {
     <!--/.add-desc-box-->
 </div>
 
-<div id='myStyle'>
-</div>
 
+
+</div>
 </div>
 <?php } ?>
 
@@ -569,7 +566,24 @@ $('.pagination').pagination({
 </script> 
 
 
-  <script type="text/javascript">
+    <script type="text/javascript">
+  // city
+  function category(category){
+
+    if (category=="Used Bikes") {
+       // document.write(category);
+         window.location.replace('used_bikes.php');
+    }
+    else if(category=="New Bikes"){
+        //document.write(category);
+        window.location.replace('new_bikes.php');
+  }
+  else {
+    //document.write(category);
+    window.location.replace('scooter.php');
+  }
+}
+
   // city
 function recp() {
 
@@ -579,13 +593,17 @@ function recp() {
         var max = document.getElementById('maxPrice').value;
         //alert( min + max);
         jQuery('.oldList div').html('');
+          jQuery('#masterdiv div').hide();
+           jQuery('#pagination').hide();
   $('#myStyle').load('fetch_data.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
 
 }
 
 function sort_by(value){
   jQuery('.oldList div').html('');
-  $('#myStyle').load('fetch_sort_personal.php?value=' + encodeURIComponent(value));
+          jQuery('#masterdiv div').hide();
+           jQuery('#pagination').hide();
+  $('#myStyle').load('fetch_sort_bike_sale_all.php?value=' + encodeURIComponent(value));
 }
 //category
 // function demo(category) {
@@ -596,10 +614,6 @@ function sort_by(value){
 $(".chosen").chosen();
 </script>
 <link rel="stylesheet" href="style.css">
-<!-- grid problem -->
-<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
-<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script> -->
-<!-- <script src="choosen.js"></script> -->
 
 </body>
 

@@ -1,29 +1,67 @@
 <?php
 session_start();
-include_once 'db_connection.php';
-?>
+include "db_connection.php";
+GLOBAL $bike_sale_all,$Bike_sale1,$Bike_sale2,$sql;
 
-<?php
 
-include('db_connection.php'); 
+$filterQuery1 = "select
+  usedbikes.UsedBikeId as UsedBikeId,
+  usedbikes.BikeCategory as BikeCategory,
+  usedbikes.UsedBikeImage1 as UsedBikeImage1,
+  usedbikes.Brand as Brand,
+  usedbikes.Model as Model,
+  usedbikes.KilometreDriven as KilometreDriven,
+  usedbikes.Location as Location,
+  usedbikes.UserId as UserId,
+  usedbikes.UserName as UserName,
+  usedbikes.ContactNumber as ContactNumber,
+  usedbikes.Prize as Prize
+from
+  usedbikes Where BikeCategory = 'Used Bikes'  and Status='UnBlock'
+";
+
+$filterQuery2 = "select
+  dealerbikes.DealerBikeId as UsedBikeId,
+  dealerbikes.BikeCategory as BikeCategory,
+  dealerbikes.DealerBikeImage1 as UsedBikeImage1,
+  dealerbikes.Brand as Brand,
+  dealerbikes.Model as Model,
+  dealerbikes.KilometreDriven as KilometreDriven,
+  dealerbikes.Location as Location,
+  dealerbikes.DealerId as UserId,
+  dealerbikes.UserName as UserName,
+  dealerbikes.ContactNumber as ContactNumber,
+  dealerbikes.Prize as Prize
+from
+  dealerbikes Where BikeCategory = 'Used Bikes'  and Status='UnBlock'";
+
+$filterQuery = $filterQuery1." UNION ".$filterQuery2;
+
+
+
 $limit = 10; 
-$sql = "SELECT COUNT(UsedBikeId) FROM usedbikes";  
+$sql = $filterQuery; 
+/*For No Of Rows Selected*/
+$result=mysql_query($sql);
+$rowcount = mysql_num_rows($result);
+/*----------------------*/
 $rs_result = mysql_query($sql);  
 $row = mysql_fetch_row($rs_result);  
-$total_records = $row[0];  
+$total_records = $rowcount;
 $total_pages = ceil($total_records / $limit);
 
+ 
+if (isset($_GET["page"])) {
+ $page  = $_GET["page"]; 
+} else { 
+  $page=1; 
+}  
 
-$limit = 10;  
-if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };  
-$start_from = ($page-1) * $limit;  
-  
-$sql = "SELECT * FROM usedbikes ORDER BY UsedBikeId ASC LIMIT $start_from, $limit";  
-
-$rs_result = mysql_query ($sql);  
-
-
+$start_from = ($page-1) * $limit;    
+$sql =  $filterQuery . "LIMIT $start_from, $limit";  
+$rs_result = mysql_query ($sql);                            
 ?>
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
@@ -67,7 +105,7 @@ $rs_result = mysql_query ($sql);
 
          
          <?php
-            include "header.php";
+           include "header.php";
          ?>
 
         <div class="search-row-wrapper">
@@ -99,7 +137,7 @@ $rs_result = mysql_query ($sql);
                                         ?>
                                         <li>                                        
                                         <div margin:0px auto; margin-top:30px;" >
-                                                <select id="category"  style="width:80%;" onchange="recp()" class="chosen form-control ">
+                                                <select id="category"  style="width:80%;" onchange="category(this.value)" class="chosen form-control">
                                             <option value=""> Select Category </option>
                                             <option value="Used Bikes"> Used Bikes</option>
                               <option value="New Bikes"> New Bikes</option>
@@ -123,7 +161,7 @@ $rs_result = mysql_query ($sql);
                                                 <select id="city" class="chosen form-control" style="width:80%;" onchange="recp()">
                                                 <option value=""> Select City </option>
                                                 <?php
-                                        $query ="SELECT City FROM usedbikes UNION SELECT City FROM dealerbikes Group by City  ";
+                                        $query ="SELECT City FROM usedbikes WHERE BikeCategory LIKE 'Used Bikes' UNION SELECT City FROM dealerbikes WHERE BikeCategory LIKE 'Used Bikes' Group by City  ";
                                         $result= mysql_query($query);
 
                                         while($row=mysql_fetch_array($result))
@@ -195,7 +233,7 @@ $rs_result = mysql_query ($sql);
 
                                             $count=mysql_query("SELECT UserId FROM usedbikes");
                                                 $num_rows=mysql_num_rows($count);
-                                             echo $num_rows+1;
+                                             echo $num_rows;
                                              ?></span></a>
                                     </li>
                                     <li><a href="">Used <span class="count">28,705</span></a>
@@ -225,9 +263,9 @@ $rs_result = mysql_query ($sql);
                                                           
                                                           <?php
 
-                                            $count=mysql_query("SELECT UserId FROM usedbikes");
-                                                $num_rows=mysql_num_rows($count);
-                                             echo $num_rows+1; ?>
+                                           
+                                                $num_rows=mysql_num_rows($rs_result);
+                                             echo $num_rows; ?>
                                                       </span></a>
                                 </li>
                                
@@ -235,10 +273,10 @@ $rs_result = mysql_query ($sql);
 
 
                             <div class="tab-filter">
-                                <select class="selectpicker select-sort-by" data-style="btn-select" data-width="auto">
-                                    <option>Sort by </option>
-                                    <option>Price: Low to High</option>
-                                    <option>Price: High to Low</option>
+                                <select class="selectpicker select-sort-by" data-style="btn-select" data-width="auto" onchange="sort_by(this.value)">
+                                    <option value="-1">Sort by </option>
+                                    <option value="ASC">Price: Low to High</option>
+                                    <option value="DESC">Price: High to Low</option>
                                 </select>
                             </div>
                         </div>
@@ -293,7 +331,9 @@ $rs_result = mysql_query ($sql);
 
 
 <div>
-<div id="target-content" >loading...</div>
+<div id="target-content" ></div>
+</div>
+<div id='myStyle'>
 </div>
 
 <?php  
@@ -309,7 +349,7 @@ while ($row = mysql_fetch_assoc($rs_result)) {
     <div class="row" id="masterdiv">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
-         <a href="used_bikes_view.php?id=<?php echo $row['UsedBikeId']; ?>" role="button">
+         <a href="used_bikes_view.php?filename=used_bikes&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
 
 <?php     
 
@@ -322,7 +362,7 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
     
     <div class="col-sm-7 add-desc-box">
         <div class="ads-details">
-            <h5 class="add-title"><a href="ads-details.html">
+            <h5 class="add-title"><a href="used_bikes_view.php?filename=used_bikes&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
                 <?php echo $row['Brand'].'-'.$row['Model'] ;  ?></a></h5>
             <span class="info-row"> 
                 <span class="add-type business-ads tooltipHere" data-toggle="tooltip" data-placement="right" title="" data-original-title="Business Ads">B </span> 
@@ -365,10 +405,6 @@ function myFunction() {
         </div>
     <!--/.add-desc-box-->
 </div>
-
-<div id='myStyle' id="masterdiv">
-</div>
-
 </div>
 </div>
 
@@ -397,8 +433,6 @@ function myFunction() {
 
 </div>
 </div>
-         
-
                             </div>
                         </div>
                         <!--/.adds-wrapper-->
@@ -449,21 +483,39 @@ $(".chosen").chosen();
 </script>
  <script type="text/javascript">
   // city
+  function category(category){
+
+    if (category=="Used Bikes") {
+        window.location.replace('used_bikes.php');
+    }
+    else if(category=="New Bikes"){
+        window.location.replace('new_bikes.php');
+  }
+  else if (category=="Scooter"){
+    window.location.replace('scooter.php');
+  }
+}
+
+
+
 function recp() {
 
-        var category = document.getElementById('category').value;
+        var category = 'Used Bikes';
         var city = document.getElementById('city').value;
         var min = document.getElementById('minPrice').value;
         var max = document.getElementById('maxPrice').value;
         //alert( min + max);
         jQuery('.oldList div').html('');
+          jQuery('#masterdiv div').hide();
+            jQuery('#pagination').hide();
   $('#myStyle').load('fetch_data.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
-
 }
 
 function sort_by(value){
   jQuery('.oldList div').html('');
-  $('#myStyle').load('fetch_data_sort.php?value=' + encodeURIComponent(value));
+          jQuery('#masterdiv div').hide();
+            jQuery('#pagination').hide();
+  $('#myStyle').load('fetch_sort_used_bikes.php?value=' + encodeURIComponent(value));
 }
 </script>
 <link rel="stylesheet" href="style.css">

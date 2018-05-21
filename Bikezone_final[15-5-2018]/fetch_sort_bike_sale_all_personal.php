@@ -1,10 +1,19 @@
 <?php
 
 session_start();
-if (isset($_SESSION['filterQuery'])) {
-  # code...
-  $filterQuery=$_SESSION['filterQuery'];
+
+$limit = 10;  
+if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };  
+$start_from = ($page-1) * $limit;  
+
+
+GLOBAL $Bike_sale1;
+if(isset($_SESSION['Bike_sale1'])) {
+$filter = $_SESSION['Bike_sale1'];
 }
+
+ 
+
 
 $servername = "localhost";
       $username = "root";
@@ -16,34 +25,29 @@ $servername = "localhost";
       if ($conn->connect_error) {
           die("Connection failed: " . $conn->connect_error);
       } 
-//city
+
 $value= $_GET['value'];
-//$filterQuery = $_GET['query'];
-//$filterQuery= $_GET['filterQuery'];
+
 
 if($value != null){
   
-$filterQuery =  $filterQuery . " ORDER BY Prize $value";
-$filterQuery;
+$filterQuery =  $filter . " ORDER BY Prize $value LIMIT $start_from, $limit";
 }
 $result = $conn->query($filterQuery);
-      /*echo $split[count($split)-1];*/
-//echo "\n Filter Query $filterQuery";
+      
 
       if ($result->num_rows > 0) {
-    // output data of each row
     while($row = $result->fetch_assoc()) {
  ?>
 
 
 <div class="item-list">
     <div class="cornerRibbons featuredAds">
-        <!--<a href=""> Featured Ads</a> -->
     </div>
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
-         <a href="used_bikes_view.php?filename=Advance_Search_Find&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
+         <a href="used_bikes_view.php?filename=scooter&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
 
 <?php     
 
@@ -56,7 +60,7 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
     <!--/.photobox-->
     <div class="col-sm-7 add-desc-box">
         <div class="ads-details">
-            <h5 class="add-title"><a href="used_bikes_view.php?filename=Advance_Search_Find&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
+            <h5 class="add-title"><a href="used_bikes_view.php?filename=scooter&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
                 <?php echo $row['Brand'].'-'.$row['Model'] ;  ?></a></h5>
             <span class="info-row"> 
                 <span class="add-type business-ads tooltipHere" data-toggle="tooltip" data-placement="right" title="" data-original-title="Business Ads">B </span> 
@@ -77,7 +81,7 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
         if (isset($_SESSION['usr_id'])) {
           $id=$_SESSION['usr_id'];
           ?>
-          <a href="favourite.php?filename=Advance_Search_Find&UserId=<?php echo $row['UserId']; ?> &UsedBikeId=<?php echo $row['UsedBikeId']; ?> &Brand=<?php echo $row['Brand'];?> &Category=<?php echo $row['BikeCategory'];?> &Price=<?php echo $row['Prize'];?> &ContactNumber=<?php echo $row['ContactNumber'];?> &Fav_Userid=<?php echo $id;?>" class="btn btn-danger btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
+          <a href="favourite.php?filename=scooter&UserId=<?php echo $row['UserId']; ?> &UsedBikeId=<?php echo $row['UsedBikeId']; ?> &Brand=<?php echo $row['Brand'];?> &Category=<?php echo $row['BikeCategory'];?> &Price=<?php echo $row['Prize'];?> &ContactNumber=<?php echo $row['ContactNumber'];?> &Fav_Userid=<?php echo $id;?>" class="btn btn-danger btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
         </a>
         <?php
         }

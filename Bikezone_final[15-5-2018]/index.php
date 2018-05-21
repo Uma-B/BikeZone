@@ -83,25 +83,57 @@ else{
        <a target="_blank" href="index.php">  All
        Pages</a> </h3>
 
-     <div class="linkinner linkScroll scrollbar" style="height: 265px">
+     <div class="linkinner linkScroll scrollbar" style="height: 220px">
        <!-- <a target="_blank" href="blogs.html"> Blog</a>
        <a target="_blank" href="blog-details.html"> Blog Details</a>
         --><a target="_blank" href=""> about us</a>
        <a target="_blank" href=""> account my ads</a>
-       <a target="_blank" href="ads-details.html"> ads details</a>
+       <a target="_blank" href="Index.php"> ads details</a>
 
        </a>
        <!-- <a target="_blank" href=""> Contact</a>
         --><a target="_blank" href=""> Faq</a>
-       <a target="_blank" href=""> Sign Up</a>
-       <a target="_blank" href="statements.html"> Sign In<span class="label label-success " style="font-size: 10px"></span></a>
-     <!--  <a target="_blank" href="seller-profile.html"> Seller profile
-         <span class="label label-success " style="font-size: 10px"><em>NEW</em></span></a> -->
+       <div class="dropdown">
+      <span> <a target="_blank" href=""> Sign Up</a></span>
+       <div class="dropdown-content">
+    <p style="position:right"><a href="CompanyLogin.php">Dealer Sign Up </a> 
+         <a href="UserLogin.php">User &nbsp; Sign Up</a></p>
 
-       
+  </div>
+</div> 
+<div class="dropdown">
+       <a target="_blank" href="statements.html">Sign In<span class="label label-success " style="font-size: 10px"></span></a>
+         <div class="dropdown-content">
+    <p style="position:left"><a href="UserRegistration.php"> User &nbsp;&nbsp;Sign In</a></p>
+        <a href="delear.php">Dealer Sign In</a></p>
+
+  </div></div>  
      </div>
      <p class="tbtn"><i class="fa fa-angle-double-left"></i></p>
    </div>
+
+    <style>
+     .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color:   #CCFF0000;
+    min-width: 105px;
+    box-shadow:white;
+  position: right;
+    z-index: 1;
+}
+
+
+.dropdown:hover .dropdown-content {
+    display: block;
+    text-align:right;
+}
+</style>
    <!--themeControll-->
 <?php include "header.php"; ?>
 
@@ -330,7 +362,7 @@ else{
                                         {                                         
                                         ?>
                                         <li>
-                                          <a href="category.html"><?php echo $row['Model']?></a>
+                                          <a href="used_bikes.php"><?php echo $row['Model']?></a>
                                         </li>
                                       <?php 
                                          }
@@ -364,7 +396,7 @@ else{
                                         {                                         
                                         ?>
                                         <li>
-                                          <a href="category.html"><?php echo $row['Model']?></a>
+                                          <a href="new_bikes.php"><?php echo $row['Model']?></a>
                                         </li>
                                       <?php 
                                          }
@@ -396,7 +428,7 @@ else{
                                         {                                         
                                         ?>
                                         <li>
-                                          <a href="category.html"><?php echo $row['Model']?></a>
+                                          <a href="scooter.php"><?php echo $row['Model']?></a>
                                         </li>
                                       <?php 
                                          }
@@ -521,11 +553,7 @@ else{
                         <!--/.iconbox-wrap-->
                     </div>
 
-                </div>
-
-            </div>
-        </div>
-    </div>
+             
     <!-- /.page-info -->
 
     <div class="page-bottom-info">
@@ -533,13 +561,12 @@ else{
 
 
         </div>
-    </div>
+    </div></div></div></div>
 
    <?php
 include 'footer.php';
    ?>
-
-</div>
+</body>
 <!-- /.wrapper -->
 
 
@@ -554,12 +581,7 @@ include 'footer.php';
 
 				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
 						class="sr-only">Close</span></button>
-			</div>
-		
-			</div>
-		</div>
-	</div>
-</div>
+			
 
 <!-- /.modal -->
 

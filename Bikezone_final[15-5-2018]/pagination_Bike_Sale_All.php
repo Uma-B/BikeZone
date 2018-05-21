@@ -8,8 +8,46 @@ include_once 'db_connection.php';
 
 <body>
 <?php
+
+ 
+ $filterQuery1 = "select
+  usedbikes.UsedBikeId as UsedBikeId,
+  usedbikes.BikeCategory as BikeCategory,
+  usedbikes.UsedBikeImage1 as UsedBikeImage1,
+  usedbikes.Brand as Brand,
+  usedbikes.Model as Model,
+  usedbikes.KilometreDriven as KilometreDriven,
+  usedbikes.Location as Location,
+  usedbikes.UserId as UserId,
+  usedbikes.UserName as UserName,
+  usedbikes.ContactNumber as ContactNumber,
+  usedbikes.Prize as Prize
+from
+  usedbikes WHERE Status='UnBlock'
+";
+
+$filterQuery2 = "select
+  dealerbikes.DealerBikeId as UsedBikeId,
+  dealerbikes.BikeCategory as BikeCategory,
+  dealerbikes.DealerBikeImage1 as UsedBikeImage1,
+  dealerbikes.Brand as Brand,
+  dealerbikes.Model as Model,
+  dealerbikes.KilometreDriven as KilometreDriven,
+  dealerbikes.Location as Location,
+  dealerbikes.DealerId as UserId,
+  dealerbikes.UserName as UserName,
+  dealerbikes.ContactNumber as ContactNumber,
+  dealerbikes.Prize as Prize
+from
+  dealerbikes WHERE Status='UnBlock'
+";
+/*
+$_SESSION['Bike_sale1'] = $filterQuery1;
+$_SESSION['Bike_sale2'] = $filterQuery2;*/
+
+
+ $filterQuery = $filterQuery1." UNION ".$filterQuery2;
 $limit = 10; 
-$filterQuery = $_SESSION['bike_sale_all'];
 
 if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };  
 $start_from = ($page-1) * $limit;

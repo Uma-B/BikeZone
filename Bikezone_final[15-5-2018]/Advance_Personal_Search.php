@@ -29,10 +29,6 @@ $sql =  $filterQuery1 . " LIMIT $start_from, $limit";
 $rs_result = mysql_query ($sql);                            
                             
 ?>
-    
-
-                            
-?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
@@ -76,8 +72,6 @@ $rs_result = mysql_query ($sql);
 </head>
 <body>
 
-<div id="wrapper">
-
          <?php
             include "header.php";
          ?>
@@ -118,7 +112,7 @@ $rs_result = mysql_query ($sql);
                                         ?>
                                         <li>                                        
                                         <div margin:0px auto; margin-top:30px;" >
-                                                <select id="category" class="chosen form-control" style="width:80%;" onchange="recp()">
+                                                <select id="category" class="chosen form-control" style="width:80%;" onchange="category(this.value)">
                                             <option value=""> Select Category </option>
                                             <option value="Used Bikes"> Used Bikes</option>
                               <option value="New Bikes"> New Bikes</option>
@@ -281,9 +275,9 @@ $rs_result = mysql_query ($sql);
                                  <a href="Advance_Personal_Search.php" class="nav-link" role="tab">Personal
                                     <span class="badge badge-secondary">
                              <?php
-                                            $count=mysql_query("SELECT UserId FROM usedbikes");
-                                                $num_rows=mysql_num_rows($count);
-                                             echo $num_rows+1;
+                                            // $count=mysql_query("SELECT UserId FROM usedbikes");
+                                                $num_rows=mysql_num_rows($rs_result);
+                                             echo $num_rows;
                                     ?>
                                                  
                                     </span>
@@ -369,7 +363,7 @@ $rs_result = mysql_query ($sql);
 
 </div>
 <div>
-<div id="target-content" >loading...</div>
+<div id="target-content" ></div>
 </div>
 <?php
 while($row=mysql_fetch_array($rs_result))
@@ -573,6 +567,22 @@ $('.pagination').pagination({
 
   <script type="text/javascript">
   // city
+  function category(category){
+
+    if (category=="Used Bikes") {
+       // document.write(category);
+         window.location.replace('used_bikes.php');
+    }
+    else if(category=="New Bikes"){
+        //document.write(category);
+        window.location.replace('new_bikes.php');
+  }
+  else {
+    //document.write(category);
+    window.location.replace('scooter.php');
+  }
+}
+
 function recp() {
 
     var category = document.getElementById('category').value;
@@ -581,13 +591,15 @@ function recp() {
         var max = document.getElementById('maxPrice').value;
         //alert( min + max);
         jQuery('.oldList div').html('');
+        jQuery('#pagination').hide();
   $('#myStyle').load('fetch_data.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
 
 }
 
 function sort_by(value){
   jQuery('.oldList div').html('');
-  $('#myStyle').load('fetch_sort_personal.php?value=' + encodeURIComponent(value));
+  jQuery('#pagination').hide();
+  $('#myStyle').load('fetch_sort_advance_personal.php?value=' + encodeURIComponent(value));
 }
 //category
 // function demo(category) {

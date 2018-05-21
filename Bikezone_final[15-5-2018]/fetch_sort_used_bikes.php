@@ -1,19 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-
-<body>
-
 <?php
+
 session_start();
-
-
-
-include "db_connection.php";
  
-GLOBAL $bike_sale_all,$Bike_sale1,$Bike_sale2,$sql;
-
-
 $filterQuery1 = "select
   usedbikes.UsedBikeId as UsedBikeId,
   usedbikes.BikeCategory as BikeCategory,
@@ -45,26 +33,35 @@ $filterQuery2 = "select
 from
   dealerbikes Where BikeCategory = 'Used Bikes'  and Status='UnBlock'";
 
-$filterQuery = $filterQuery1." UNION ".$filterQuery2;
+$filter = $filterQuery1." UNION ".$filterQuery2;
 
-$limit = 10; 
-if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };  
-$start_from = ($page-1) * $limit;
+ 
+
+
+$servername = "localhost";
+      $username = "root";
+      $password = "";
+      $dbname = "bikezone";
+      $conn = new mysqli($servername, $username, $password, $dbname);
+      // Check connection
+
+      if ($conn->connect_error) {
+          die("Connection failed: " . $conn->connect_error);
+      } 
+
+$value= $_GET['value'];
+
+
+if($value != null){
   
-$sql =  $filterQuery . " LIMIT $start_from, $limit";  
-  
-
-$rs_result = mysql_query ($sql);    
-?>
-
-
-
-
-
-<?php  
-while ($row = mysql_fetch_assoc($rs_result)) {  
-?>  
+$filterQuery =  $filter . " ORDER BY Prize $value";
+}
+$result = $conn->query($filterQuery);
       
+
+      if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+ ?>
 
 
 <div class="item-list" id="masterdiv">
@@ -135,8 +132,8 @@ function myFunction() {
 </div>
 
 
-<?php  
-};  
-?>  
-</body>
-</html>
+<?php
+}
+}
+
+?>

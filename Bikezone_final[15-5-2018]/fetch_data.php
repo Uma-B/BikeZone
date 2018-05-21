@@ -63,10 +63,7 @@ $servername = "localhost";
       if ($conn->connect_error) {
           die("Connection failed: " . $conn->connect_error);
       } 
-//city
-      //$smth = preg_replace("/%u([0-9a-f]{3,4})/i","&#x\\1;",urldecode($smth)); 
-      //$smth = html_entity_decode($smth,null,'UTF-8');
-
+/*forAllCatagory*/
 $Category =html_entity_decode($_GET['category'],null,'UTF-8');
 $City = html_entity_decode($_GET['city'],null,'UTF-8');
 $priceMin = $_GET['minPrice'];
@@ -99,17 +96,18 @@ if($split[count($split)-1] == "AND"){
     $filter2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter2);
 }
 
-$filterQuery = $filter1." UNION ".$filter2;
+// $limit = 10;  
+// if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };  
+// $start_from = ($page-1) * $limit;  
+
+
+
+echo $filterQuery = $filter1." UNION ".$filter2;
   
-  $_SESSION['filterQuery']=$filterQuery;
+/*  $filterQuery= $sub." LIMIT $start_from, $limit ";*/
 
 
-      // $sql = "select usedbikes.UsedBikeId as UsedBikeId, usedbikes.BikeCategory as BikeCategory, usedbikes.UsedBikeImage1 as UsedBikeImage1, usedbikes.Brand as Brand, usedbikes.Model as Model, usedbikes.KilometreDriven as KilometreDriven, usedbikes.Location as Location, usedbikes.UserId as UserId, usedbikes.UserName as UserName, usedbikes.ContactNumber as ContactNumber, usedbikes.Prize as Prize from usedbikes where usedbikes.City LIKE '$City'
-      //  UNION 
-      //  select dealerbikes.DealerBikeId as DealerBikeId, dealerbikes.BikeCategory as BikeCategory, dealerbikes.DealerBikeImage1 as BikeImage1, dealerbikes.Brand as Brand, dealerbikes.Model as Model, dealerbikes.KilometreDriven as KilometreDriven, dealerbikes.Location as Location, dealerbikes.DealerId as UserId, dealerbikes.UserName as UserName, dealerbikes.ContactNumber as ContactNumber, dealerbikes.Prize as Prize from dealerbikes where dealerbikes.City LIKE '$City'";
       $result = $conn->query($filterQuery);
-      /*echo $split[count($split)-1];*/
-//echo "\n Filter Query $filterQuery";
 
       if ($result->num_rows > 0) {
     // output data of each row
@@ -155,15 +153,15 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
         <h2 class="item-price">RS:-<?php echo $row['Prize']  ?></h2>
         <?php
         if (isset($_SESSION['usr_id'])) {
-          echo $id=$_SESSION['usr_id'];
+          $id=$_SESSION['usr_id'];
           ?>
-          <a href="favourite.php?filename=Advance_Search_Find&UserId=<?php echo $row['UserId']; ?> &UsedBikeId=<?php echo $row['UsedBikeId']; ?> &Brand=<?php echo $row['Brand'];?> &Category=<?php echo $row['BikeCategory'];?> &Price=<?php echo $row['Prize'];?> &ContactNumber=<?php echo $row['ContactNumber'];?> &Fav_Userid=<?php echo $id;?>" class="btn btn-danger btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
+          <a href="favourite.php?filename=favourite_view&UserId=<?php echo $row['UserId']; ?> &UsedBikeId=<?php echo $row['UsedBikeId']; ?> &Brand=<?php echo $row['Brand'];?> &Category=<?php echo $row['BikeCategory'];?> &Price=<?php echo $row['Prize'];?> &ContactNumber=<?php echo $row['ContactNumber'];?> &Fav_Userid=<?php echo $id;?>" class="btn btn-danger btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
         </a>
         <?php
         }
         else{
           ?>
-          kjl<a href onclick="myFunction()" class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
+          <a href onclick="myFunction()" class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
         </a>
        <!--  <button onclick="myFunction()">Try it</button> -->
 
