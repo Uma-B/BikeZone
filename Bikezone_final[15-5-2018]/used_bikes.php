@@ -35,7 +35,7 @@ $filterQuery2 = "select
 from
   dealerbikes Where BikeCategory = 'Used Bikes'  and Status='UnBlock'";
 
-$filterQuery = $filterQuery1." UNION ".$filterQuery2;
+echo $filterQuery = $filterQuery1." UNION ".$filterQuery2;
 
 
 
@@ -43,7 +43,7 @@ $limit = 10;
 $sql = $filterQuery; 
 /*For No Of Rows Selected*/
 $result=mysql_query($sql);
-$rowcount = mysql_num_rows($result);
+echo $rowcount = mysql_num_rows($result);
 /*----------------------*/
 $rs_result = mysql_query($sql);  
 $row = mysql_fetch_row($rs_result);  
@@ -105,7 +105,7 @@ $rs_result = mysql_query ($sql);
 
          
          <?php
-           include "header.php";
+           //include "header.php";
          ?>
 
         <div class="search-row-wrapper">

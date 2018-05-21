@@ -3,16 +3,13 @@
 session_start();
 if (isset($_SESSION['bike_sale_all'])) {
   # code...
-  echo $filterQuery=$_SESSION['bike_sale_all'];
-}else{
-//if (isset($_SESSION['fetch_data'])) {
-echo $filterQuery=$_SESSION['fetch_data'];
+  $filterQuery=$_SESSION['bike_sale_all'];
 }
 
 
-$limit = 10;  
-if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };  
-$start_from = ($page-1) * $limit;  
+// $limit = 10;  
+// if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };  
+// $start_from = ($page-1) * $limit;  
 
 
 $servername = "localhost";
@@ -35,8 +32,8 @@ $value= $_GET['value'];
 
 if($value != null){
   
-$filterQuery =  $filterQuery . " ORDER BY Prize $value LIMIT $start_from, $limit";
-echo $filterQuery;
+$filterQuery =  $filterQuery . " ORDER BY Prize $value";
+//echo $filterQuery;
 }
 $result = $conn->query($filterQuery);
     

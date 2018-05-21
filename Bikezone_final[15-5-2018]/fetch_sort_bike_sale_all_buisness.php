@@ -31,7 +31,7 @@ $value= $_GET['value'];
 
 if($value != null){
   
-echo $filterQuery =  $filter . " ORDER BY Prize $value LIMIT $start_from, $limit";
+$filterQuery =  $filter . " ORDER BY Prize $value LIMIT $start_from, $limit";
 }
 $result = $conn->query($filterQuery);
       

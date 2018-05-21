@@ -123,7 +123,7 @@ $rs_result = mysql_query ($sql);
                                         ?>
                                         <li>                                        
                                         <div margin:0px auto; margin-top:30px;" >
-                                                <select id="category"  style="width:80%;" onchange="category()" class="chosen form-control ">
+                                                <select id="category"  style="width:80%;" onchange="category(this.value)" class="chosen form-control ">
                                             <option value=""> Select Category </option>
                                             <option value="Used Bikes"> Used Bikes</option>
                               <option value="New Bikes"> New Bikes</option>

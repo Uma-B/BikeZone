@@ -41,7 +41,7 @@ $_SESSION['Bike_sale2'] = $filterQuery2;
 
 
 $filter = $filterQuery1." UNION ".$filterQuery2;
-
+$_SESSION['bike_sale_all']=$filter;
 
 $limit = 10; 
 $sql = $filter; 

@@ -88,7 +88,7 @@ else{
        <a target="_blank" href="blog-details.html"> Blog Details</a>
         --><a target="_blank" href=""> about us</a>
        <a target="_blank" href=""> account my ads</a>
-       <a target="_blank" href="Index.php"> ads details</a>
+       <a target="_blank" href=""> ads details</a>
 
        </a>
        <!-- <a target="_blank" href=""> Contact</a>
@@ -96,13 +96,13 @@ else{
        <div class="dropdown">
       <span> <a target="_blank" href=""> Sign Up</a></span>
        <div class="dropdown-content">
-    <p style="position:right"><a href="CompanyLogin.php">Dealer Sign Up </a> 
-         <a href="UserLogin.php">User &nbsp; Sign Up</a></p>
+    <p style="position:right"><a href="UserLogin.php">User Sign Up </a> 
+         <a href="CompanyLogin.php">Dealer Sign Up</a></p>
 
   </div>
 </div> 
 <div class="dropdown">
-       <a target="_blank" href="statements.html">Sign In<span class="label label-success " style="font-size: 10px"></span></a>
+       <a target="_blank" href="">Sign In<span class="label label-success " style="font-size: 10px"></span></a>
          <div class="dropdown-content">
     <p style="position:left"><a href="UserRegistration.php"> User &nbsp;&nbsp;Sign In</a></p>
         <a href="delear.php">Dealer Sign In</a></p>
@@ -144,7 +144,7 @@ else{
                     <h1 class="intro-title"> Find your next bike </h1>
 
                   
-                    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" name="form">
+                    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" name="form" onSubmit="return validateForm();">
                     <div class="row">
                         <div class="col-xl-3 col-sm-3 search-col relative locationicon">
                             <!-- <i class="icon-location-2 icon-append"></i> -->
@@ -302,13 +302,26 @@ else{
 
                         <div class="no-margin featured-list-slider ">
                         <?php
-                            $sql=mysql_query("SELECT * FROM dealerbikes ORDER BY Date DESC LIMIT 8;");
+                            $sql=mysql_query("select
+                                    dealerbikes.DealerBikeId as UsedBikeId,
+                                    dealerbikes.BikeCategory as BikeCategory,
+                                    dealerbikes.DealerBikeImage1 as UsedBikeImage1,
+                                    dealerbikes.Brand as Brand,
+                                    dealerbikes.Model as Model,
+                                    dealerbikes.KilometreDriven as KilometreDriven,
+                                    dealerbikes.Location as Location,
+                                    dealerbikes.DealerId as UserId,
+                                    dealerbikes.UserName as UserName,
+                                    dealerbikes.ContactNumber as ContactNumber,
+                                    dealerbikes.Prize as Prize
+                                  from
+                                    dealerbikes ORDER BY Date DESC LIMIT 8;");
                             while ($res=mysql_fetch_array($sql)) {
                               ?>
-                              <div class="item"><a href="used_bikes_view.php">
+                              <div class="item"><a href="used_bikes_view.php?filename=index&usedbikeid=<?php echo $res['UsedBikeId']; ?> &userid=<?php echo $res['UserId']; ?> &brand=<?php echo $res['Brand']; ?> &category=<?php echo $res['BikeCategory']; ?>" role="button">
                      <span class="item-carousel-thumb">
                       <?php 
-                                echo '<img alt="no img is found" src="data:image/jpeg;base64,'.base64_encode($res['DealerBikeImage1']).'"/>'
+                                echo '<img alt="no img is found" src="data:image/jpeg;base64,'.base64_encode($res['UsedBikeImage1']).'"/>'
                                 ?>
                      </span>
                                 <span class="item-name"> <?php echo $res['Brand'];?>  </span>
@@ -446,7 +459,7 @@ else{
                               ?>
 
                     <div class="inner-box has-aff relative">
-                        <a class="dummy-aff-img" href="category.html">
+                        <a class="dummy-aff-img" href="">
                           <?php 
                                 echo '<img class="img-responsive"  alt="no img is found" src="data:image/jpeg;base64,'.base64_encode($res['image1']).'"/>'
                                 ?> </a>
@@ -608,6 +621,23 @@ include 'footer.php';
 
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
 <!-- <script type="text/javascript" src="jquery-1.9.1.min.js"></script> -->
+<script type="text/javascript">
+  function validateForm(){
+    var x=document.forms.['form']['Keyword'].value;
+    var x=document.forms.['form']['BikeCategory'].value;
+    var x=document.forms.['form']['Brand'].value;
+    var x=document.forms.['form']['Model'].value;
+    var x=document.forms.['form']['Prize_Minimum'].value;
+    var x=document.forms.['form']['Prize_Maximum'].value;
+    var x=document.forms.['form']['State'].value;
+    var x=document.forms.['form']['City'].value;
+
+    switch(x){
+      default:
+      alert("please select any field");
+    }
+  }
+</script>
   <script type="text/javascript">
     function fetch_select(val)
     {

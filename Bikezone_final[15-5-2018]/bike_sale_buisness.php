@@ -144,7 +144,7 @@ $rs_result = mysql_query ($sql);
                                                 <select id="city" class="chosen form-control" style="width:80%;" onchange="recp()">
                                                 <option value=""> Select City </option>
                                                 <?php
-                                        $query ="SELECT City FROM usedbikes UNION SELECT City FROM dealerbikes Group by City  ";
+                                        $query ="SELECT City FROM dealerbikes Group by City  ";
                                         $result= mysql_query($query);
 
                                         while($row=mysql_fetch_array($result))

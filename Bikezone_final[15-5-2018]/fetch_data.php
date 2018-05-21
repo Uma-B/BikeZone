@@ -63,6 +63,9 @@ $servername = "localhost";
       if ($conn->connect_error) {
           die("Connection failed: " . $conn->connect_error);
       } 
+
+      $uri = $_SERVER['REQUEST_URI'];
+
 /*forAllCatagory*/
 $Category =html_entity_decode($_GET['category'],null,'UTF-8');
 $City = html_entity_decode($_GET['city'],null,'UTF-8');
@@ -102,7 +105,7 @@ if($split[count($split)-1] == "AND"){
 
 
 
-echo $filterQuery = $filter1." UNION ".$filter2;
+$filterQuery = $filter1." UNION ".$filter2;
   
 /*  $filterQuery= $sub." LIMIT $start_from, $limit ";*/
 
@@ -122,7 +125,7 @@ echo $filterQuery = $filter1." UNION ".$filter2;
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
-         <a href="used_bikes_view.php?filename=Advance_Search_Find&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
+         <a href="used_bikes_view.php?filename=$uri&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
 
 <?php     
 
@@ -135,7 +138,7 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
     <!--/.photobox-->
     <div class="col-sm-7 add-desc-box">
         <div class="ads-details">
-            <h5 class="add-title"><a href="used_bikes_view.php?filename=Advance_Search_Find&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
+            <h5 class="add-title"><a href="used_bikes_view.php?filename=$uri&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
                 <?php echo $row['Brand'].'-'.$row['Model'] ;  ?></a></h5>
             <span class="info-row"> 
                 <span class="add-type business-ads tooltipHere" data-toggle="tooltip" data-placement="right" title="" data-original-title="Business Ads">B </span> 
