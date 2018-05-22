@@ -209,7 +209,7 @@ if (isset($_GET["page"])) {
 }  
 
 $start_from = ($page-1) * $limit;    
-$sql =  $filterQuery2 . " LIMIT $start_from, $limit";  
+$sql =  $filterQuery2 . " AND Status = 'UnBlock' LIMIT $start_from, $limit";  
 $rs_result = mysql_query ($sql);                            
 ?>
 
@@ -494,7 +494,7 @@ $rs_result = mysql_query ($sql);
 
 
                         <!-- Mobile Filter bar-->
-                        <div class="mobile-filter-bar col-xl-12  ">
+                      <!--  edited filter uma and nidhi <div class="mobile-filter-bar col-xl-12  ">
                             <ul class="list-unstyled list-inline no-margin no-padding">
                                 <li class="filter-toggle">
                                     <a class="">
@@ -518,7 +518,7 @@ $rs_result = mysql_query ($sql);
 
                                 </li>
                             </ul>
-                        </div>
+                        </div> -->
                         <div class="menu-overly-mask"></div>
                         <!-- Mobile Filter bar End-->
 
@@ -624,7 +624,6 @@ function myFunction() {
 <div id='myStyle'>
 </div>
 
-</div>
 <?php } ?>
 
 <div class="pagination-bar text-center">
@@ -650,7 +649,7 @@ function myFunction() {
                         <div class="tab-box save-search-bar text-center"><!-- <a href="#"> <i class=" icon-star-empty"></i>
                             Save Search  </a>--></div>
                     </div>
-        
+        </div></div>
                     <!--/.pagination-bar -->
 
                     <div class="post-promo text-center">

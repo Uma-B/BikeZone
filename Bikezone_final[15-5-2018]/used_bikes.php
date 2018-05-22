@@ -295,7 +295,7 @@ $rs_result = mysql_query ($sql);
 
 
                         <!-- Mobile Filter bar-->
-                        <div class="mobile-filter-bar col-xl-12  ">
+                        <!-- <div class="mobile-filter-bar col-xl-12  ">
                             <ul class="list-unstyled list-inline no-margin no-padding">
                                 <li class="filter-toggle">
                                     <a class="">
@@ -321,7 +321,7 @@ $rs_result = mysql_query ($sql);
 
                                 </li>
                             </ul>
-                        </div>
+                        </div> -->
                         <div class="menu-overly-mask"></div>
                         <!-- Mobile Filter bar End-->
 

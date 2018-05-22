@@ -11,7 +11,18 @@ $limit = 10;
 if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };  
 $start_from = ($page-1) * $limit;  
   
-$sql = "SELECT * FROM dealerbikes WHERE BikeCategory = 'New bikes' ORDER BY DealerBikeId ASC LIMIT $start_from, $limit";
+$sql = "select
+       dealerbikes.DealerBikeId as UsedBikeId,
+        dealerbikes.BikeCategory as BikeCategory,
+        dealerbikes.DealerBikeImage1 as UsedBikeImage1,
+        dealerbikes.Brand as Brand,
+        dealerbikes.Model as Model,
+        dealerbikes.KilometreDriven as KilometreDriven,
+        dealerbikes.Location as Location,
+        dealerbikes.DealerId as UserId,
+        dealerbikes.UserName as UserName,
+        dealerbikes.ContactNumber as ContactNumber,
+        dealerbikes.Prize as Prize FROM dealerbikes WHERE BikeCategory = 'New bikes' ORDER BY DealerBikeId ASC LIMIT $start_from, $limit";
 
 $rs_result = mysql_query ($sql);  
 ?>

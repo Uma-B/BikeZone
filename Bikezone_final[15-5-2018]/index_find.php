@@ -129,7 +129,7 @@ if($split[count($split)-1] == "AND"){
     $filterQuery2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filterQuery2);
 }  
 
-$filterQuery = $filterQuery1." UNION ".$filterQuery2;
+$filterQuery = $filterQuery1." AND Status = 'UnBlock' UNION ".$filterQuery2. " AND Status = 'UnBlock'";
 
 }
     
@@ -226,9 +226,10 @@ $rs_result = mysql_query ($sql);
 </head>
 <body>
 
-<?php
-  include "header.php";
-?>
+         <?php
+            include "header.php";
+         ?>
+    <!-- /.header -->
 
         <div class="search-row-wrapper">
             <div class="container ">
@@ -460,8 +461,8 @@ $rs_result = mysql_query ($sql);
                         <!--/.listing-filter-->
 
 
-                        <!-- Mobile Filter bar-->
-                        <div class="mobile-filter-bar col-xl-12  ">
+                        <!-- Mobile Filter bar by nidhi and uma-->
+                        <!-- <div class="mobile-filter-bar col-xl-12  ">
                             <ul class="list-unstyled list-inline no-margin no-padding">
                                 <li class="filter-toggle">
                                     <a class="">
@@ -485,7 +486,7 @@ $rs_result = mysql_query ($sql);
 
                                 </li>
                             </ul>
-                        </div>
+                        </div> -->
                         <div class="menu-overly-mask"></div>
                         <!-- Mobile Filter bar End-->
 

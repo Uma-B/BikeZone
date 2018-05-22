@@ -284,7 +284,7 @@ $rs_result = mysql_query ($sql);
 
 
                         <!-- Mobile Filter bar-- remove tag below nidhii>
-                       <!--  <div class="mobile-filter-bar col-xl-12  ">
+                       < <div class="mobile-filter-bar col-xl-12  ">
                             <ul class="list-unstyled list-inline no-margin no-padding">
                                 <li class="filter-toggle">
                                     <a class="">

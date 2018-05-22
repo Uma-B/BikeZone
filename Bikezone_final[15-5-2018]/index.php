@@ -81,7 +81,7 @@ else{
 
      <h3 style=" color:#fff; font-size: 10px; line-height: 12px;" class="uppercase color-white text-center">
        <a target="_blank" href="index.php">  All
-       Pages</a> </h3>
+       Pages</a></h3>
 
      <div class="linkinner linkScroll scrollbar" style="height: 220px">
        <!-- <a target="_blank" href="blogs.html"> Blog</a>
@@ -489,8 +489,8 @@ else{
         </div>
     </div>
     <?php 
-                            }
-                             ?>
+       }
+   ?>
 
     <!-- /.main-container -->
 
@@ -623,19 +623,20 @@ include 'footer.php';
 <!-- <script type="text/javascript" src="jquery-1.9.1.min.js"></script> -->
 <script type="text/javascript">
   function validateForm(){
-    var x=document.forms.['form']['Keyword'].value;
-    var x=document.forms.['form']['BikeCategory'].value;
-    var x=document.forms.['form']['Brand'].value;
-    var x=document.forms.['form']['Model'].value;
-    var x=document.forms.['form']['Prize_Minimum'].value;
-    var x=document.forms.['form']['Prize_Maximum'].value;
-    var x=document.forms.['form']['State'].value;
-    var x=document.forms.['form']['City'].value;
+    var x1=document.forms['form']['Keyword'].value;
+    var x2=document.forms['form']['BikeCategory'].value;
+    var x3=document.forms['form']['Brand'].value;
+    var x4=document.forms['form']['Model'].value;
+    var x5=document.forms['form']['Prize_Minimum'].value;
+    var x6=document.forms['form']['Prize_Maximum'].value;
+    var x7=document.forms['form']['State'].value;
+    var x8=document.forms['form']['City'].value;
 
-    switch(x){
-      default:
-      alert("please select any field");
+    if(x1=="" && x2=="" && x3=="" && x4=="" && x5=="" && x6=="" && x7=="" && x8==""){
+      alert('please select atlease one field');
+      return false;
     }
+    return true;
   }
 </script>
   <script type="text/javascript">

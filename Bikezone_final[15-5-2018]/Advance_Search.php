@@ -138,7 +138,7 @@ $(document).ready(function(){
                         <div class="row">
                             <div class="col-sm-12">
 
-                                <form name="form1" class="form-horizontal" method="post" action="" >
+                                <form name="form1" class="form-horizontal" method="post" action="" onSubmit="return validateForm();">
 
                                     <div class="content-subheading"><i class="icon-user fa"></i> <strong>Advance Search</strong></div>
 
@@ -543,7 +543,32 @@ $(document).ready(function(){
 
 <!-- include custom script for site  -->
 <script src="assets/js/script.js"></script>
+<script type="text/javascript">
+  function validateForm(){
+    var x1=document.forms['form1']['Keyword'].value;
+    var x2=document.forms['form1']['BikeCategory'].value;
+    var x3=document.forms['form1']['Brand'].value;
+    var x4=document.forms['form1']['Model'].value;
+    var x5=document.forms['form1']['Prize_Minimum'].value;
+    var x6=document.forms['form1']['Prize_Maximum'].value;
+    var x7=document.forms['form1']['State'].value;
+    var x8=document.forms['form1']['City'].value;
+    var x9=document.forms['form1']['Year'].value;
+    var x10=document.forms['form1']['KilometreDriven'].value;
+    var x11=document.forms['form1']['Transmission'].value;
+    var x12=document.forms['form1']['FuelType'].value;
+    var x13=document.forms['form1']['Stroke'].value;
+    var x14=document.forms['form1']['EngineSize'].value;
+    var x15=document.forms['form1']['Location'].value;
+    var x16=document.forms['form1']['PostalCode'].value;
 
+    if(x1=="" && x2=="" && x3=="" && x4=="" && x5=="" && x6=="" && x7=="" && x8=="" && x9=="" && x10=="" && x11=="" && x12=="" && x13=="" && x14=="" && x15=="" && x16==""){
+      alert('please select atlease one field');
+      return false;
+    }
+    return true;
+  }
+</script>
 <script type="text/javascript">
     function fetch_select(val)
     {
