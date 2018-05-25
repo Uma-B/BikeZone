@@ -34,7 +34,8 @@ $filterQuery2 = "select
   dealerbikes.Prize as Prize
 from
   dealerbikes Where BikeCategory = 'Used Bikes'  and Status='UnBlock'";
-$filterQuery = $filterQuery1." UNION ".$filterQuery2;
+
+echo $filterQuery = $filterQuery1." UNION ".$filterQuery2;
 
 
 
@@ -42,7 +43,7 @@ $limit = 10;
 $sql = $filterQuery; 
 /*For No Of Rows Selected*/
 $result=mysql_query($sql);
-$rowcount = mysql_num_rows($result);
+echo $rowcount = mysql_num_rows($result);
 /*----------------------*/
 $rs_result = mysql_query($sql);  
 $row = mysql_fetch_row($rs_result);  
@@ -58,8 +59,7 @@ if (isset($_GET["page"])) {
 
 $start_from = ($page-1) * $limit;    
 $sql =  $filterQuery . "LIMIT $start_from, $limit";  
-$rs_result = mysql_query($sql);  
-$_SESSION['queryToSort'] = $sql;                          
+$rs_result = mysql_query ($sql);                            
 ?>
 
 <!DOCTYPE html>
@@ -105,7 +105,7 @@ $_SESSION['queryToSort'] = $sql;
 
          
          <?php
-           include "header.php";
+           //include "header.php";
          ?>
 
         <div class="search-row-wrapper">
@@ -256,7 +256,7 @@ $_SESSION['queryToSort'] = $sql;
                         <div class="tab-box ">
 
                             <!-- Nav tabs -->
-                            <ul class="nav nav-tabs navbar-fixed add-tabs" id="ajaxTabs" role="tablist">
+                            <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
                                 <li class="active nav-item">
                                     <a  class="nav-link" href="ajax/ee.html" data-url="ajax/33.html" role="tab"
                                                       data-toggle="tab">Used bikes <span class="badge badge-secondary">
@@ -500,24 +500,31 @@ $(".chosen").chosen();
 
 function recp() {
 
-  var category = 'Used Bikes';
-  var city = document.getElementById('city').value;
-  var min = document.getElementById('minPrice').value;
-  var max = document.getElementById('maxPrice').value;
-  //alert( min + max);
-  jQuery('.oldList div').html('');
-  jQuery('#masterdiv div').hide();
-  jQuery('#pagination').hide();
+        var category = 'Used Bikes';
+        var city = document.getElementById('city').value;
+        var min = document.getElementById('minPrice').value;
+        var max = document.getElementById('maxPrice').value;
+        //alert( min + max);
+        jQuery('.oldList div').html('');
+          jQuery('#masterdiv div').hide();
+            jQuery('#pagination').hide();
   $('#myStyle').load('fetch_data.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
 }
 
 function sort_by(value){
   jQuery('.oldList div').html('');
-  jQuery('#target-content').html('');
-  //jQuery('#pagination').hide();
-  $('#target-content').load('fetch_sort_used_bikes.php?value=' + encodeURIComponent(value));
+          jQuery('#masterdiv div').hide();
+            jQuery('#pagination').hide();
+  $('#myStyle').load('fetch_sort_used_bikes.php?value=' + encodeURIComponent(value));
 }
- 
+</script>
+<link rel="stylesheet" href="style.css">
+
+</body>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
 $('.pagination').pagination({
         items: <?php echo $total_records;?>,
         itemsOnPage: <?php echo $limit;?>,
@@ -527,29 +534,6 @@ $('.pagination').pagination({
             jQuery('#masterdiv div').hide();
             jQuery("#target-content").html('loading...');
             jQuery("#target-content").load("pagination.php?page=" + pageNumber);
-        }
-    });
-
-</script>
-<link rel="stylesheet" href="style.css">
-
-</body>
-
-
-<script type="text/javascript">
-$(document).ready(function(){
-  <?php 
-  $value = null;
-  ?>
-$('.pagination').pagination({
-        items: <?php echo $total_records;?>,
-        itemsOnPage: <?php echo $limit;?>,
-        cssStyle: 'light-theme',
-        currentPage : 1,
-        onPageClick : function(pageNumber) {
-            jQuery('#masterdiv div').hide();
-            jQuery("#target-content").html('loading...');
-            jQuery("#target-content").load("pagination.php?page=" + pageNumber + "&value=" + value);
         }
     });
 });

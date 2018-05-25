@@ -35,10 +35,7 @@ from
 
 $filter = $filterQuery1." UNION ".$filterQuery2;
 
-/*if(isset($_SESSION['queryToSort'])){
-  $filter = $_SESSION['queryToSort'];
-}*/
-
+ 
 
 
 $servername = "localhost";
@@ -55,15 +52,16 @@ $servername = "localhost";
 $value= $_GET['value'];
 
 
-if($value != null){ 
+if($value != null){
+  
 $filterQuery =  $filter . " ORDER BY Prize $value";
 }
+$result = $conn->query($filterQuery);
+      
 
-$result = mysql_query($filterQuery);
-$num_rows = mysql_num_rows($result);
-if ($num_rows > 0) {
-  while($row=mysql_fetch_array($result)) {
-   ?>
+      if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+ ?>
 
 
 <div class="item-list" id="masterdiv">

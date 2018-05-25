@@ -48,12 +48,11 @@ from
 $filterQuery = $filterQuery1." UNION ".$filterQuery2;
 
 $limit = 10; 
-if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };
-
+if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };  
 $start_from = ($page-1) * $limit;
   
 $sql =  $filterQuery . " LIMIT $start_from, $limit";  
-$_SESSION['queryToSort'] = $sql;
+  
 
 $rs_result = mysql_query ($sql);    
 ?>
