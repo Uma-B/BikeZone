@@ -1,9 +1,9 @@
 <?php
 
 session_start();
-if (isset($_SESSION['Advance_Search'])) {
+if (isset($_SESSION['sortSearchFind'])) {
   # code...
-  $filterQuery=$_SESSION['Advance_Search'];
+  $filter=$_SESSION['sortSearchFind'];
 }
 
 $servername = "localhost";
@@ -23,8 +23,9 @@ $value= $_GET['value'];
 
 if($value != null){
   
-$filterQuery =  $filterQuery . " ORDER BY Prize $value";
-$filterQuery;
+$splitQuery = explode("LIMIT", $filter);
+$filterQuery = $splitQuery[0] . " ORDER BY Prize $value LIMIT " . $splitQuery[1];  
+echo $filterQuery;
 }
 $result = $conn->query($filterQuery);
       /*echo $split[count($split)-1];*/

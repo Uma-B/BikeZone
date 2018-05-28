@@ -106,8 +106,6 @@ if($split[count($split)-1] == "AND"){
 // if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };  
 // $start_from = ($page-1) * $limit;  
 
-
-
 $filterQuery = $filter1." AND Status = 'UnBlock' UNION ".$filter2. " AND Status = 'UnBlock'";
 
 /*  $filterQuery= $sub." LIMIT $start_from, $limit ";*/

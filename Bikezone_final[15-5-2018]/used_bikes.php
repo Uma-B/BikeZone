@@ -35,7 +35,7 @@ $filterQuery2 = "select
 from
   dealerbikes Where BikeCategory = 'Used Bikes'  and Status='UnBlock'";
 
-echo $filterQuery = $filterQuery1." UNION ".$filterQuery2;
+$filterQuery = $filterQuery1." UNION ".$filterQuery2;
 
 
 
@@ -43,7 +43,7 @@ $limit = 10;
 $sql = $filterQuery; 
 /*For No Of Rows Selected*/
 $result=mysql_query($sql);
-echo $rowcount = mysql_num_rows($result);
+$rowcount = mysql_num_rows($result);
 /*----------------------*/
 $rs_result = mysql_query($sql);  
 $row = mysql_fetch_row($rs_result);  
@@ -58,7 +58,12 @@ if (isset($_GET["page"])) {
 }  
 
 $start_from = ($page-1) * $limit;    
-$sql =  $filterQuery . "LIMIT $start_from, $limit";  
+$sql1 =  $filterQuery;
+$sql2="LIMIT $start_from, $limit";
+ $sql=$sql1." ".$sql2;
+
+$_SESSION['sortUsedBikes']=$sql;
+$_SESSION['paginationUsedBikes']=$sql1;  
 $rs_result = mysql_query ($sql);                            
 ?>
 
@@ -105,7 +110,7 @@ $rs_result = mysql_query ($sql);
 
          
          <?php
-           //include "header.php";
+           include "header.php";
          ?>
 
         <div class="search-row-wrapper">
@@ -507,15 +512,15 @@ function recp() {
         //alert( min + max);
         jQuery('.oldList div').html('');
           jQuery('#masterdiv div').hide();
-            jQuery('#pagination').hide();
+            //jQuery('#pagination').hide();
   $('#myStyle').load('fetch_data.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
 }
 
 function sort_by(value){
   jQuery('.oldList div').html('');
           jQuery('#masterdiv div').hide();
-            jQuery('#pagination').hide();
-  $('#myStyle').load('fetch_sort_used_bikes.php?value=' + encodeURIComponent(value));
+            //jQuery('#pagination').hide();
+  $('#target-content').load('fetch_sort_used_bikes.php?value=' + encodeURIComponent(value));
 }
 </script>
 <link rel="stylesheet" href="style.css">

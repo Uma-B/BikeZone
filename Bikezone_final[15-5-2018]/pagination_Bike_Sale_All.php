@@ -9,53 +9,21 @@ include_once 'db_connection.php';
 <body>
 <?php
 
- 
- $filterQuery1 = "select
-  usedbikes.UsedBikeId as UsedBikeId,
-  usedbikes.BikeCategory as BikeCategory,
-  usedbikes.UsedBikeImage1 as UsedBikeImage1,
-  usedbikes.Brand as Brand,
-  usedbikes.Model as Model,
-  usedbikes.KilometreDriven as KilometreDriven,
-  usedbikes.Location as Location,
-  usedbikes.UserId as UserId,
-  usedbikes.UserName as UserName,
-  usedbikes.ContactNumber as ContactNumber,
-  usedbikes.Prize as Prize
-from
-  usedbikes WHERE Status='UnBlock'
-";
-
-$filterQuery2 = "select
-  dealerbikes.DealerBikeId as UsedBikeId,
-  dealerbikes.BikeCategory as BikeCategory,
-  dealerbikes.DealerBikeImage1 as UsedBikeImage1,
-  dealerbikes.Brand as Brand,
-  dealerbikes.Model as Model,
-  dealerbikes.KilometreDriven as KilometreDriven,
-  dealerbikes.Location as Location,
-  dealerbikes.DealerId as UserId,
-  dealerbikes.UserName as UserName,
-  dealerbikes.ContactNumber as ContactNumber,
-  dealerbikes.Prize as Prize
-from
-  dealerbikes WHERE Status='UnBlock'
-";
-/*
-$_SESSION['Bike_sale1'] = $filterQuery1;
-$_SESSION['Bike_sale2'] = $filterQuery2;*/
-
-
- $filterQuery = $filterQuery1." UNION ".$filterQuery2;
 $limit = 10; 
 
 if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };  
 $start_from = ($page-1) * $limit;
-  
-$sql =  $filterQuery . " LIMIT $start_from, $limit";  
-  
 
-$rs_result = mysql_query ($sql);  
+if(isset($_SESSION['paginationBikeSaleAll'])){
+  $sql1=$_SESSION['paginationBikeSaleAll'];
+}
+
+ $sql2= "LIMIT $start_from, $limit";  
+  
+echo $sql=$sql1." ".$sql2;
+$rs_result = mysql_query ($sql);
+
+$_SESSION['sortBikeSaleAll']=$sql;
   
 while ($row = mysql_fetch_assoc($rs_result)) {  
 ?>  
@@ -68,7 +36,7 @@ while ($row = mysql_fetch_assoc($rs_result)) {
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
-         <a href="used_bikes_view.php?usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
+         <a href="used_bikes_view.php?filename=bike_sale_all&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
 
 <?php     
 
@@ -84,7 +52,7 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
 
     <div class="col-sm-7 add-desc-box">
         <div class="ads-details">
-            <h5 class="add-title"><a href="ads-details.html">
+            <h5 class="add-title"><a href="used_bikes_view.php?filename=bike_sale_all&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
                 <?php echo $row['Brand'].'-'.$row['Model'] ;  ?></a></h5>
             <span class="info-row"> 
                 <span class="add-type business-ads tooltipHere" data-toggle="tooltip" data-placement="right" title="" data-original-title="Business Ads">B </span> 

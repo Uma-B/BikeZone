@@ -6,7 +6,7 @@ include_once 'db_connection.php';
 <?php
 include('db_connection.php'); 
 $limit = 10; 
-$sql = "SELECT COUNT(DealerBikeId) FROM dealerbikes WHERE BikeCategory = 'New bikes' ";  
+$sql = "SELECT COUNT(DealerBikeId) FROM dealerbikes WHERE BikeCategory LIKE 'New bikes'";  
 $rs_result = mysql_query($sql);  
 $row = mysql_fetch_row($rs_result);  
 $total_records = $row[0];  
@@ -17,7 +17,7 @@ $limit = 10;
 if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };  
 $start_from = ($page-1) * $limit;  
   
-$sql = "select
+$sql1 = "select
   dealerbikes.DealerBikeId as UsedBikeId,
   dealerbikes.BikeCategory as BikeCategory,
   dealerbikes.DealerBikeImage1 as UsedBikeImage1,
@@ -37,7 +37,11 @@ dealerbikes.Prize as Prize,
   dealerbikes.PostalCode as PostalCode 
 from
   dealerbikes
-   WHERE BikeCategory = 'New bikes' and Status='UnBlock' ORDER BY DealerBikeId ASC LIMIT $start_from, $limit";  
+   WHERE BikeCategory LIKE 'New bikes' and Status ='UnBlock'";
+   $sql2="LIMIT $start_from, $limit"; 
+   $sql=$sql1." ".$sql2;
+   $_SESSION['sortNewBikes']=$sql;
+   $_SESSION['paginationNewBikes']=$sql1;
 
 $rs_result = mysql_query ($sql);
 
@@ -147,7 +151,7 @@ $rs_result = mysql_query ($sql);
                                                 <select id="city" class="chosen form-control" style="width:80%;" onchange="recp()">
                                                 <option value=""> Select City </option>
                                                 <?php
-                                        $query ="SELECT City FROM usedbikes WHERE BikeCategory Like 'New Bikes' UNION SELECT City FROM dealerbikes WHERE BikeCategory LIKE 'New Bikes' Group by City";
+                                        $query ="SELECT City FROM dealerbikes WHERE BikeCategory LIKE 'New Bikes' Group by City";
                                         $result= mysql_query($query);
 
                                         while($row=mysql_fetch_array($result))
@@ -516,8 +520,8 @@ function recp() {
 function sort_by(value){
     jQuery('.oldList div').html('');
   jQuery('#masterdiv div').hide();
-  jQuery('#pagination').hide();
-  $('#myStyle').load('fetch_sort_new_bikes.php?value=' + encodeURIComponent(value));
+  //jQuery('#pagination').hide();
+  $('#target-content').load('fetch_sort_new_bikes.php?value=' + encodeURIComponent(value));
 }
 </script>
 <link rel="stylesheet" href="style.css">

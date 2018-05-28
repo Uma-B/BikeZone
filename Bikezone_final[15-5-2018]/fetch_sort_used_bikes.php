@@ -2,41 +2,9 @@
 
 session_start();
  
-$filterQuery1 = "select
-  usedbikes.UsedBikeId as UsedBikeId,
-  usedbikes.BikeCategory as BikeCategory,
-  usedbikes.UsedBikeImage1 as UsedBikeImage1,
-  usedbikes.Brand as Brand,
-  usedbikes.Model as Model,
-  usedbikes.KilometreDriven as KilometreDriven,
-  usedbikes.Location as Location,
-  usedbikes.UserId as UserId,
-  usedbikes.UserName as UserName,
-  usedbikes.ContactNumber as ContactNumber,
-  usedbikes.Prize as Prize
-from
-  usedbikes Where BikeCategory = 'Used Bikes'  and Status='UnBlock'
-";
-
-$filterQuery2 = "select
-  dealerbikes.DealerBikeId as UsedBikeId,
-  dealerbikes.BikeCategory as BikeCategory,
-  dealerbikes.DealerBikeImage1 as UsedBikeImage1,
-  dealerbikes.Brand as Brand,
-  dealerbikes.Model as Model,
-  dealerbikes.KilometreDriven as KilometreDriven,
-  dealerbikes.Location as Location,
-  dealerbikes.DealerId as UserId,
-  dealerbikes.UserName as UserName,
-  dealerbikes.ContactNumber as ContactNumber,
-  dealerbikes.Prize as Prize
-from
-  dealerbikes Where BikeCategory = 'Used Bikes'  and Status='UnBlock'";
-
-$filter = $filterQuery1." UNION ".$filterQuery2;
-
- 
-
+if(isset($_SESSION['sortUsedBikes'])  ){
+  $filter=$_SESSION['sortUsedBikes'];
+}
 
 $servername = "localhost";
       $username = "root";
@@ -54,7 +22,9 @@ $value= $_GET['value'];
 
 if($value != null){
   
-$filterQuery =  $filter . " ORDER BY Prize $value";
+$splitQuery = explode("LIMIT", $filter);
+$filterQuery = $splitQuery[0] . " ORDER BY Prize $value LIMIT " . $splitQuery[1];  
+echo $filterQuery;
 }
 $result = $conn->query($filterQuery);
       
@@ -71,7 +41,7 @@ $result = $conn->query($filterQuery);
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
-         <a href="used_bikes_view.php?id=<?php echo $row['UsedBikeId']; ?>" role="button">
+         <a href="used_bikes_view.php?filename=used_bikes&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
 
 <?php     
 
@@ -84,7 +54,7 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
     
     <div class="col-sm-7 add-desc-box">
         <div class="ads-details">
-            <h5 class="add-title"><a href="ads-details.html">
+            <h5 class="add-title"><a href="used_bikes_view.php?filename=used_bikes&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
                 <?php echo $row['Brand'].'-'.$row['Model'] ;  ?></a></h5>
             <span class="info-row"> 
                 <span class="add-type business-ads tooltipHere" data-toggle="tooltip" data-placement="right" title="" data-original-title="Business Ads">B </span> 

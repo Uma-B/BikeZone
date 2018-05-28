@@ -11,7 +11,7 @@ if(isset($_GET['UserId'])){
 	$Price=$_GET['Price'];
 	$FavUserId=$_GET['Fav_Userid'];
 	
-	$insert=mysql_query("INSERT INTO favourite values ($FavUserId,$UserId, $UsedBikeId,'$BikeCategory','$Brand', '$ContactNumber',$Price)");
+	$insert=mysql_query("INSERT INTO favourite (Fav_UserId,UserId,UsedBikeId,BikeCategory,Brand,MobileNumber,Price,Status) values ($FavUserId,$UserId, $UsedBikeId,'$BikeCategory','$Brand', '$ContactNumber',$Price,'UnBlock')");
 	if($insert){
 		$fileName=$fileName . ".php";
 		header("Location:$fileName");

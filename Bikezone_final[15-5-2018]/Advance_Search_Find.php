@@ -236,7 +236,6 @@ $row = mysql_fetch_row($rs_result);
 $total_records = $rowcount;
 $total_pages = ceil($total_records / $limit);
 
- 
 if (isset($_GET["page"])) {
  $page  = $_GET["page"]; 
 } else { 
@@ -244,12 +243,17 @@ if (isset($_GET["page"])) {
 }  
 
 $start_from = ($page-1) * $limit;    
-$sql =  $filterQuery . " LIMIT $start_from, $limit";  
+$sql1 =  $filterQuery;
+$sql2="LIMIT $start_from, $limit";
+  echo $sql=$sql1." ".$sql2;
+
+$_SESSION['sortSearchFind']=$sql;
+$_SESSION['paginationSearchFind']=$sql1;  
 $rs_result = mysql_query ($sql);                            
 ?>
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -586,7 +590,7 @@ while($row=mysql_fetch_array($rs_result))
 {
 ?>
 
-
+<div id="masterdiv">
 <div class="item-list oldList" id="masterdiv">
     <div class="cornerRibbons featuredAds">
         <!--<a href=""> Featured Ads</a> -->
@@ -655,8 +659,6 @@ function myFunction() {
         </div>
     <!--/.add-desc-box-->
 </div>
-
-<div id='myStyle'>
 </div>
 
 </div>
@@ -770,7 +772,9 @@ function myFunction() {
     window.location.replace('scooter.php');
   }
 }
+</script>
 
+<script type="text/javascript">
 $(document).ready(function(){
 $('.pagination').pagination({
         items: <?php echo $total_records;?>,
@@ -795,15 +799,15 @@ function recp() {
         var max = document.getElementById('maxPrice').value;
         //alert( min + max);
         jQuery('.oldList div').html('');
-        jQuery('#pagination').hide();
+        //jQuery('#pagination').hide();
   $('#myStyle').load('fetch_data.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
 
 }
 
 function sort_by(value){
   jQuery('.oldList div').html('');
-  jQuery('#pagination').hide();
-  $('#myStyle').load('fetch_sort_advance_find.php?value=' + encodeURIComponent(value));
+  //jQuery('#pagination').hide();
+  $('#target-content').load('fetch_sort_advance_find.php?value=' + encodeURIComponent(value));
 }
 
 </script>

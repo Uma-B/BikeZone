@@ -5,10 +5,10 @@ include "db_connection.php";
 
 GLOBAL $Advance_Search1;
 if(isset($_SESSION['Advance_Search2'])) {
-$filterQuery1 = $_SESSION['Advance_Search2'];
+$filterQuery2 = $_SESSION['Advance_Search2'];
 }
 $limit = 10; 
-$sql = $filterQuery1; 
+$sql = $filterQuery2; 
 /*For No Of Rows Selected*/
 $result=mysql_query($sql);
 $rowcount = mysql_num_rows($result);
@@ -26,7 +26,12 @@ if (isset($_GET["page"])) {
 }  
 
 $start_from = ($page-1) * $limit;    
-$sql =  $filterQuery1 . " LIMIT $start_from, $limit";  
+$sql1 =  $filterQuery2;
+$sql2="LIMIT $start_from, $limit";
+ $sql=$sql1." ".$sql2;
+
+$_SESSION['sortSearchBusiness']=$sql;
+$_SESSION['paginationSearchBusiness']=$sql1;  
 $rs_result = mysql_query ($sql);                            
                             
 
@@ -587,14 +592,14 @@ function recp() {
         var min = document.getElementById('minPrice').value;
         var max = document.getElementById('maxPrice').value;
         jQuery('.oldList div').html('');
-        jQuery('#pagination').hide();
+       // jQuery('#pagination').hide();
   $('#myStyle').load('fetch_data.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
 }
 
 function sort_by(value){
   jQuery('.oldList div').html('');
-  jQuery('#pagination').hide();
-  $('#myStyle').load('fetch_sort_advance_buisness.php?value=' + encodeURIComponent(value));
+  //jQuery('#pagination').hide();
+  $('#target-content').load('fetch_sort_advance_buisness.php?value=' + encodeURIComponent(value));
 }
 
 //category

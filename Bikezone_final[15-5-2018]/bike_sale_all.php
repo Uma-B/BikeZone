@@ -41,7 +41,7 @@ $_SESSION['Bike_sale2'] = $filterQuery2." and Status='UnBlock'";
 
 
 $filter = $filterQuery1." UNION ".$filterQuery2;
-$_SESSION['bike_sale_all']=$filter;
+//$_SESSION['bike_sale_all']=$filter;
 
 $limit = 10; 
 $sql = $filter; 
@@ -62,8 +62,13 @@ if (isset($_GET["page"])) {
 }  
 
 $start_from = ($page-1) * $limit;    
-$sql =  $filter . " LIMIT $start_from, $limit";  
-$rs_result = mysql_query ($sql);                            
+$sql1 =  $filter;
+$sql2="LIMIT $start_from, $limit";
+  echo $sql=$sql1." ".$sql2;
+
+$_SESSION['sortBikeSaleAll']=$sql;
+$_SESSION['paginationBikeSaleAll']=$sql1;  
+$rs_result = mysql_query ($sql);                             
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -299,7 +304,7 @@ $rs_result = mysql_query ($sql);
 
                             <div class="tab-filter">
                                 <select class="selectpicker select-sort-by" data-style="btn-select" data-width="auto" onchange="sort_by(this.value)">
-                                    <option value="-1">Sort by </option>
+                                    <option value="">Sort by </option>
                                     <option value="ASC">Price: Low to High</option>
                                     <option value="DESC">Price: High to Low</option>
                                 </select>
@@ -376,8 +381,6 @@ $rs_result = mysql_query ($sql);
 </div>
 <div>
 <div id="target-content" ></div>
-</div>
-<div id='myStyle'>
 </div>
 
 <?php
@@ -480,8 +483,7 @@ function myFunction() {
 </nav>
 </div>
 
-
-                            </div>
+                    </div>
                         </div>
                         <!--/.adds-wrapper-->
 
@@ -559,7 +561,7 @@ $('.pagination').pagination({
         onPageClick : function(pageNumber) {
             jQuery('#masterdiv div').html('');
             jQuery("#target-content").html('loading...');
-            jQuery("#target-content").load("pagination_Bike_Sale_Personal.php?page=" + pageNumber);
+            jQuery("#target-content").load("pagination_Bike_Sale_All.php?page=" + pageNumber);
         }
     });
 });
@@ -594,7 +596,7 @@ function recp() {
         //alert( min + max);
         jQuery('.oldList div').html('');
           jQuery('#masterdiv div').hide();
-           jQuery('#pagination').hide();
+           //jQuery('#pagination').hide();
   $('#myStyle').load('fetch_data.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
 
 }
@@ -602,8 +604,8 @@ function recp() {
 function sort_by(value){
   jQuery('.oldList div').html('');
           jQuery('#masterdiv div').hide();
-           jQuery('#pagination').hide();
-  $('#myStyle').load('fetch_sort_bike_sale_all.php?value=' + encodeURIComponent(value));
+           //jQuery('#pagination').hide();
+  $('#target-content').load('fetch_sort_bike_sale_all.php?value=' + encodeURIComponent(value));
 }
 //category
 // function demo(category) {

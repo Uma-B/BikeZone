@@ -6,7 +6,7 @@ include_once 'db_connection.php';
 <?php
 include('db_connection.php'); 
 $limit = 10; 
-$sql = "SELECT COUNT(DealerBikeId) FROM dealerbikes WHERE BikeCategory = 'Scooter' and Status='UnBlock' ";  
+$sql = "SELECT COUNT(DealerBikeId) FROM dealerbikes WHERE BikeCategory = 'Scooters' and Status='UnBlock' ";  
 $rs_result = mysql_query($sql);  
 $row = mysql_fetch_row($rs_result);  
 $total_records = $row[0];  
@@ -17,7 +17,7 @@ $limit = 10;
 if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };  
 $start_from = ($page-1) * $limit;  
   
-$sql = "select
+$sql1 = "select
   dealerbikes.DealerBikeId as UsedBikeId,
   dealerbikes.BikeCategory as BikeCategory,
   dealerbikes.DealerBikeImage1 as UsedBikeImage1,
@@ -36,11 +36,12 @@ dealerbikes.Prize as Prize,
   dealerbikes.Location as Location,
   dealerbikes.PostalCode as PostalCode 
 from
-  dealerbikes WHERE BikeCategory = 'Scooter' and Status='UnBlock'  ORDER BY DealerBikeId ASC LIMIT $start_from, $limit";  
-
+  dealerbikes WHERE BikeCategory = 'Scooters' and Status='UnBlock'";
+  $sql2="LIMIT $start_from, $limit";
+ $sql=$sql1." ".$sql2;
 $rs_result = mysql_query ($sql);
-
-
+$_SESSION['fetchToSort']=$sql;
+$_SESSION['fetchToPagination']=$sql1;
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -148,7 +149,7 @@ $rs_result = mysql_query ($sql);
                                                 <select id="city" class="chosen form-control" style="width:80%;" onchange="recp()">
                                                 <option value=""> Select City </option>
                                                 <?php
-                                        $query ="SELECT City FROM usedbikes WHERE BikeCategory LIKE 'scooter' UNION SELECT City FROM dealerbikes WHERE BikeCategory LIKE 'scooter' Group by City";
+                                        $query ="SELECT City FROM dealerbikes WHERE BikeCategory LIKE 'Scooters' Group by City";
                                         $result= mysql_query($query);
 
                                         while($row=mysql_fetch_array($result))
@@ -264,7 +265,7 @@ $rs_result = mysql_query ($sql);
 
                             <div class="tab-filter">
                                 <select class="selectpicker select-sort-by" data-style="btn-select" data-width="auto" onchange="sort_by(this.value)">
-                                    <option value="-1">Sort by </option>
+                                    <option value="">Sort by </option>
                                     <option value="ASC">Price: Low to High</option>
                                     <option value="DESC">Price: High to Low</option>
                                 </select>
@@ -514,7 +515,7 @@ function recp() {
         //alert( min + max);
           jQuery('.oldList div').html('');
           jQuery('#masterdiv div').hide();
-          jQuery('#pagination').hide();
+          //jQuery('#pagination').hide();
   $('#myStyle').load('fetch_data.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
 
 }
@@ -522,8 +523,8 @@ function recp() {
 function sort_by(value){
   jQuery('.oldList div').html('');
   jQuery('#masterdiv div').hide();
-  jQuery('#pagination').hide();
-  $('#myStyle').load('fetch_sort_scooter.php?value=' + encodeURIComponent(value));
+  //jQuery('#pagination').hide();
+  $('#target-content').load('fetch_sort_scooter.php?value=' + encodeURIComponent(value));
 }
 //category
 // function demo(category) {

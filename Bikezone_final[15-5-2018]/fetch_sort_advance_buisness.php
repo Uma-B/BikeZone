@@ -1,9 +1,9 @@
 <?php
 
 session_start();
-if (isset($_SESSION['Advance_Search2'])) {
+if (isset($_SESSION['sortSearchBusiness'])) {
   # code...
-  $filterQuery2=$_SESSION['Advance_Search2'];
+  $filter=$_SESSION['sortSearchBusiness'];
 }
 
 $servername = "localhost";
@@ -25,8 +25,9 @@ $value= $_GET['value'];
 
 if($value != null){
   
-$filterQuery2 =  $filterQuery2 . " ORDER BY dealerbikes.Prize $value";
- $filterQuery2;
+$splitQuery = explode("LIMIT", $filter);
+$filterQuery2 = $splitQuery[0] . " ORDER BY Prize $value LIMIT " . $splitQuery[1];  
+echo $filterQuery;
 }
 $result = $conn->query($filterQuery2);
       /*echo $split[count($split)-1];*/
@@ -45,7 +46,7 @@ $result = $conn->query($filterQuery2);
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
-         <a href="used_bikes_view.php?filename=Advance_Personal_Search&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
+         <a href="used_bikes_view.php?filename=Advance_Business_Search&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
 
 <?php     
 
@@ -58,7 +59,7 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
     <!--/.photobox-->
     <div class="col-sm-7 add-desc-box">
         <div class="ads-details">
-            <h5 class="add-title"><a href="used_bikes_view.php?filename=Advance_Personal_Search&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
+            <h5 class="add-title"><a href="used_bikes_view.php?filename=Advance_Business_Search&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
                 <?php echo $row['Brand'].'-'.$row['Model'] ;  ?></a></h5>
             <span class="info-row"> 
                 <span class="add-type business-ads tooltipHere" data-toggle="tooltip" data-placement="right" title="" data-original-title="Business Ads">B </span> 

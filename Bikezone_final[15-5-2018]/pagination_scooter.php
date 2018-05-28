@@ -10,33 +10,19 @@ include('db_connection.php');
 
 $limit = 10;  
 if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };  
-$start_from = ($page-1) * $limit;  
+$start_from = ($page-1) * $limit;
 
 
+if(isset($_SESSION['fetchToPagination'])){
+  $sql1=$_SESSION['fetchToPagination'];
+}
 
-  
-$sql = "select
-  dealerbikes.DealerBikeId as UsedBikeId,
-  dealerbikes.BikeCategory as BikeCategory,
-  dealerbikes.DealerBikeImage1 as UsedBikeImage1,
-  dealerbikes.Brand as Brand,
-  dealerbikes.Model as Model,
-dealerbikes.DealerId as UserId,
-  dealerbikes.Username as UserName,
-dealerbikes.ContactNumber as ContactNumber,
-dealerbikes.Prize as Prize,
-  dealerbikes.Year as Year,
-  dealerbikes.Transmission as Transmission,
-  dealerbikes.FuelType as FuelType,
-  dealerbikes.EngineSize as EngineSize,
-  dealerbikes.KilometreDriven as KilometreDriven,
-  dealerbikes.Stroke as Stroke,
-  dealerbikes.Location as Location,
-  dealerbikes.PostalCode as PostalCode 
-from
-  dealerbikes WHERE BikeCategory = 'Scooter' and Status='UnBlock'  ORDER BY DealerBikeId ASC LIMIT $start_from, $limit";
+$sql2="LIMIT $start_from, $limit";
+echo $sql=$sql1." ".$sql2;
+$rs_result = mysql_query ($sql);
 
-$rs_result = mysql_query ($sql);    
+$_SESSION['fetchToSort']=$sql;
+
 ?>
 
 
@@ -56,7 +42,7 @@ while ($row = mysql_fetch_assoc($rs_result)) {
     </div>
     <div class="row">
     <div class="col-md-2 no-padding photobox">
-        <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
+        <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>1
          <a href="used_bikes_view.php?filename=scooter&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
 
 <?php     

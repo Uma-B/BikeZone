@@ -4,38 +4,30 @@
 
 <body>
 
-	<?php
+	 <?php
+    session_start();
 include('db_connection.php');
 
 $limit = 10;  
 if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };  
-$start_from = ($page-1) * $limit;  
-  
-$sql = "select
-       dealerbikes.DealerBikeId as UsedBikeId,
-        dealerbikes.BikeCategory as BikeCategory,
-        dealerbikes.DealerBikeImage1 as UsedBikeImage1,
-        dealerbikes.Brand as Brand,
-        dealerbikes.Model as Model,
-        dealerbikes.KilometreDriven as KilometreDriven,
-        dealerbikes.Location as Location,
-        dealerbikes.DealerId as UserId,
-        dealerbikes.UserName as UserName,
-        dealerbikes.ContactNumber as ContactNumber,
-        dealerbikes.Prize as Prize FROM dealerbikes WHERE BikeCategory = 'New bikes' ORDER BY DealerBikeId ASC LIMIT $start_from, $limit";
+$start_from = ($page-1) * $limit;
 
-$rs_result = mysql_query ($sql);  
+
+if(isset($_SESSION['paginationNewBikes'])){
+  $sql1=$_SESSION['paginationNewBikes'];
+}
+
+$sql2="LIMIT $start_from, $limit";
+echo $sql=$sql1." ".$sql2;
+$rs_result = mysql_query ($sql);
+
+$_SESSION['sortNewBikes']=$sql;
+
 ?>
-
-
-
-
-
+      
 <?php  
 while ($row = mysql_fetch_assoc($rs_result)) {  
-?>  
-      
-
+?> 
 
 
 <div class="item-list">
@@ -45,11 +37,11 @@ while ($row = mysql_fetch_assoc($rs_result)) {
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
-         <a href="new_bikes_view.php?id=<?php echo $row['DealerBikeId']; ?>" role="button">
+         <a href="used_bikes_view.php?filename=new_bikes&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
 
 <?php     
 
-echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpeg;base64,'.base64_encode($row['DealerBikeImage1']).'"/>'
+echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpeg;base64,'.base64_encode($row['UsedBikeImage1']).'"/>'
 
 ?>
         </a>
@@ -58,14 +50,14 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
     
     <div class="col-sm-7 add-desc-box">
         <div class="ads-details">
-            <h5 class="add-title"><a href="ads-details.html">
+            <h5 class="add-title"> <a href="used_bikes_view.php?filename=new_bikes&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
                 <?php echo $row['Brand'].'-'.$row['Model'] ;  ?></a></h5>
             <span class="info-row"> 
                 <span class="add-type business-ads tooltipHere" data-toggle="tooltip" data-placement="right" title="" data-original-title="Business Ads">B </span> 
 
                 <span class="date"><i> </i>KM's Driven (<?php echo $row['KilometreDriven']. ') - <i class="fa fa-map-marker"></i>'.$row['Location']  ?></span> 
               <br><br> 
-              <span class="category">Seller Name : <?php echo $row['Username']  ?></span>
+              <span class="category">Seller Name : <?php echo $row['UserName']  ?></span>
 
               - <span class="item-location"><i class="">
                 Contact No : 
@@ -106,7 +98,7 @@ function myFunction() {
 
 
 <?php  
-};  
+} 
 ?>  
 </body>
 </html>

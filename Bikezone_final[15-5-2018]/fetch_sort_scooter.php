@@ -3,28 +3,10 @@
 session_start();
 
 
-$filter="select
-  dealerbikes.DealerBikeId as UsedBikeId,
-  dealerbikes.BikeCategory as BikeCategory,
-  dealerbikes.DealerBikeImage1 as UsedBikeImage1,
-  dealerbikes.Brand as Brand,
-  dealerbikes.Model as Model,
-dealerbikes.DealerId as UserId,
-  dealerbikes.Username as UserName,
-dealerbikes.ContactNumber as ContactNumber,
-dealerbikes.Prize as Prize,
-  dealerbikes.Year as Year,
-  dealerbikes.Transmission as Transmission,
-  dealerbikes.FuelType as FuelType,
-  dealerbikes.EngineSize as EngineSize,
-  dealerbikes.KilometreDriven as KilometreDriven,
-  dealerbikes.Stroke as Stroke,
-  dealerbikes.Location as Location,
-  dealerbikes.PostalCode as PostalCode 
-from
-  dealerbikes WHERE BikeCategory = 'Scooter' and Status='UnBlock'";
 
- 
+if(isset($_SESSION['fetchToSort'])  ){
+  $filter=$_SESSION['fetchToSort'];
+}
 
 
 $servername = "localhost";
@@ -42,8 +24,10 @@ $value= $_GET['value'];
 
 
 if($value != null){
-  
-$filterQuery =  $filter . " ORDER BY Prize $value ";
+
+$splitQuery = explode("LIMIT", $filter);
+$filterQuery = $splitQuery[0] . " ORDER BY Prize $value LIMIT " . $splitQuery[1];  
+echo $filterQuery;
 }
 $result = $conn->query($filterQuery);
       

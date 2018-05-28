@@ -25,7 +25,12 @@ if (isset($_GET["page"])) {
 }  
 
 $start_from = ($page-1) * $limit;    
-$sql =  $filterQuery1 . " LIMIT $start_from, $limit";  
+$sql1 =  $filterQuery1;
+$sql2="LIMIT $start_from, $limit";
+ $sql=$sql1." ".$sql2;
+
+$_SESSION['sortSearchPersonal']=$sql;
+$_SESSION['paginationSearchPersonal']=$sql1;  
 $rs_result = mysql_query ($sql);                            
                             
 ?>
@@ -379,7 +384,7 @@ while($row=mysql_fetch_array($rs_result))
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
-         <a href="used_bikes_view.php?usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
+         <a href="used_bikes_view.php?filename=Advance_Personal_Search&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
 
 <?php     
 
@@ -395,7 +400,7 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
 
     <div class="col-sm-7 add-desc-box">
         <div class="ads-details">
-            <h5 class="add-title"><a href="ads-details.html">
+            <h5 class="add-title"><a href="used_bikes_view.php?filename=Advance_Personal_Search&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
                 <?php echo $row['Brand'].'-'.$row['Model'] ;  ?></a></h5>
             <span class="info-row"> 
                 <span class="add-type business-ads tooltipHere" data-toggle="tooltip" data-placement="right" title="" data-original-title="Business Ads">B </span> 
@@ -591,15 +596,15 @@ function recp() {
         var max = document.getElementById('maxPrice').value;
         //alert( min + max);
         jQuery('.oldList div').html('');
-        jQuery('#pagination').hide();
+        //jQuery('#pagination').hide();
   $('#myStyle').load('fetch_data.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
 
 }
 
 function sort_by(value){
   jQuery('.oldList div').html('');
-  jQuery('#pagination').hide();
-  $('#myStyle').load('fetch_sort_advance_personal.php?value=' + encodeURIComponent(value));
+  //jQuery('#pagination').hide();
+  $('#target-content').load('fetch_sort_advance_personal.php?value=' + encodeURIComponent(value));
 }
 //category
 // function demo(category) {

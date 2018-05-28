@@ -30,9 +30,8 @@ session_start();
        $Location=$_POST['Location'];
        $PostalCode=$_POST['PostalCode'];
        $Date=$_POST['Date'];
-   
 
-       $insert=mysqli_query($link, "INSERT INTO dealerbikes(DealerId,BikeCategory,Brand, Model, Year, Transmission, FuelType, Stroke, EngineSize, Description, Details,Price,WebSiteLink,KilometreDriven,DealerBikeImage1,DealerBikeImage2,DealerBikeImage3,DealerBikeImage4,Prize, UserName, ContactNumber, State, City, Location, PostalCode, Status, Date ) values ($DealerId,'$BikeCategory','$Brand','$Model','$Year',$KilometreDriven,'$FuelType','$Stroke','$EngineSize','$Description','$Details','$Prize','$WebSiteLink','KilometreDriven','{$DealerBikeImage1}','{$DealerBikeImage2}','{$DealerBikeImage3}','{$DealerBikeImage4}',$Amount ,'$UserName','$ContactNumber','$State','$City','$Location','$PostalCode','UnBlock','$Date')");
+       $insert=mysqli_query($link, "INSERT INTO dealerbikes(DealerId,BikeCategory,Brand, Model, Year, Transmission, FuelType, Stroke, EngineSize, Description, Details,Amount,WebSiteLink,KilometreDriven,DealerBikeImage1,DealerBikeImage2,DealerBikeImage3,DealerBikeImage4,Prize, UserName, ContactNumber, State, City, Location, PostalCode, Status, Date ) values ($DealerId,'$BikeCategory','$Brand','$Model','$Year',$Transmission,'$FuelType','$Stroke','$EngineSize','$Description','$Details','$Prize','$WebSiteLink',$KilometreDriven,'{$DealerBikeImage1}','{$DealerBikeImage2}','{$DealerBikeImage3}','{$DealerBikeImage4}',$Amount ,'$UserName','$ContactNumber','$State','$City','$Location','$PostalCode','UnBlock','$Date')");
    
        if($insert){
            ?>
@@ -44,8 +43,8 @@ session_start();
    {
     echo mysqli_error();
    }
-   }
    
+   }
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -107,7 +106,7 @@ session_start();
  <div id="wrapper">
 
          <?php
-          include "header.php";
+          //include "header.php";
          ?>
     <!-- /.header -->
     <body>
@@ -704,143 +703,143 @@ include 'footer.php';
         document.form1.BikeCategory.focus();
         return false;
     } 
-    var x = document.forms["form1"]["Brand"].value;
-    if (x == "1") {
-        alert("Brand must be select out");
-        document.form1.Brand.focus();
-        return false;
-    } 
-    var x = document.forms["form1"]["Model"].value;
-    if (x == "1") {
-        alert("Model must be select out");
-        document.form1.Model.focus();
-        return false;
-    } 
-    var x = document.forms["form1"]["Year"].value;
-    if (x == "") {
-        alert("Year must be filled out");
-        document.form1.Year.focus();
-        return false;
-    } 
-    var x = document.forms["form1"]["KilometreDriven"].value;
-    if (x == "") {
-        alert("Kilometre driven must be filled out");
-        document.form1.KilometreDriven.focus();
-        return false;
-    }
-    var c = document.forms["form1"]["Transmission"].value;
-    if (c == "1") {
-        alert("Transmission must be select out");
-        document.form1.Transmission.focus();
-        return false;
-    }   
-    var b = document.forms["form1"]["FuelType"].value;
-    if (b == "1") {
-        alert("Fuel type must be select out");
-        document.form1.FuelType.focus();
-        return false;
-    } 
-    var x = document.forms["form1"]["Stroke"].value;
-    if (x == "1") {
-        alert("Stroke must be select out");
-        document.form1.Stroke.focus();
-        return false;
-    }  
-    var x = document.forms["form1"]["EngineSize"].value;
-    if (x == "") {
-        alert("Engine size must be filled out");
-        document.form1.EngineSize.focus();
-        return false;
-    } 
-    var c = document.forms["form1"]["Description"].value;
-    if (c == "") {
-        alert("Description must be filled out");
-        document.form1.Description.focus();
-        return false;
-    } 
-    var c = document.forms["form1"]["ContactNumber"].value;
-    if (c == "") {
-        alert("Contact number must be filled out");
-        document.form1.ContactNumber.focus();
-        return false;
-    } 
-    if (c.length<10) {
-        alert("Contact number number is invalid");
-        document.form1.ContactNumber.focus();
-        return false;
-    } 
-    var x = document.forms["form1"]["UserName"].value;
-    if (x == "") {
-        alert("UserName must be filled out");
-        document.form1.UserName.focus();
-        return false;
-    }  
+    // var x = document.forms["form1"]["Brand"].value;
+    // if (x == "1") {
+    //     alert("Brand must be select out");
+    //     document.form1.Brand.focus();
+    //     return false;
+    // } 
+    // var x = document.forms["form1"]["Model"].value;
+    // if (x == "1") {
+    //     alert("Model must be select out");
+    //     document.form1.Model.focus();
+    //     return false;
+    // } 
+    // var x = document.forms["form1"]["Year"].value;
+    // if (x == "") {
+    //     alert("Year must be filled out");
+    //     document.form1.Year.focus();
+    //     return false;
+    // } 
+    // var x = document.forms["form1"]["KilometreDriven"].value;
+    // if (x == "") {
+    //     alert("Kilometre driven must be filled out");
+    //     document.form1.KilometreDriven.focus();
+    //     return false;
+    // }
+    // var c = document.forms["form1"]["Transmission"].value;
+    // if (c == "1") {
+    //     alert("Transmission must be select out");
+    //     document.form1.Transmission.focus();
+    //     return false;
+    // }   
+    // var b = document.forms["form1"]["FuelType"].value;
+    // if (b == "1") {
+    //     alert("Fuel type must be select out");
+    //     document.form1.FuelType.focus();
+    //     return false;
+    // } 
+    // var x = document.forms["form1"]["Stroke"].value;
+    // if (x == "1") {
+    //     alert("Stroke must be select out");
+    //     document.form1.Stroke.focus();
+    //     return false;
+    // }  
+    // var x = document.forms["form1"]["EngineSize"].value;
+    // if (x == "") {
+    //     alert("Engine size must be filled out");
+    //     document.form1.EngineSize.focus();
+    //     return false;
+    // } 
+    // var c = document.forms["form1"]["Description"].value;
+    // if (c == "") {
+    //     alert("Description must be filled out");
+    //     document.form1.Description.focus();
+    //     return false;
+    // } 
+    // var c = document.forms["form1"]["ContactNumber"].value;
+    // if (c == "") {
+    //     alert("Contact number must be filled out");
+    //     document.form1.ContactNumber.focus();
+    //     return false;
+    // } 
+    // if (c.length<10) {
+    //     alert("Contact number number is invalid");
+    //     document.form1.ContactNumber.focus();
+    //     return false;
+    // } 
+    // var x = document.forms["form1"]["UserName"].value;
+    // if (x == "") {
+    //     alert("UserName must be filled out");
+    //     document.form1.UserName.focus();
+    //     return false;
+    // }  
     
-    var x = document.forms["form1"]["State"].value;
-    if (x == "") {
-        alert("State must be filled out");
-        document.form1.State.focus();
-        return false;
-    } 
-    var x = document.forms["form1"]["City"].value;
-    if (x == "1") {
-        alert("City must be filled out");
-        document.form1.City.focus();
-        return false;
-    } 
-    var x = document.forms["form1"]["Location"].value;
-    if (x == "") {
-        alert("Location must be filled out");
-        document.form1.Location.focus();
-        return false;
-    }  
-    var x = document.forms["form1"]["PostalCode"].value;
-    if (x == "") {
-        alert("Postal Code must be filled out");
-        document.form1.PostalCode.focus();
-        return false;
-    }
-    var x = document.forms["form1"]["Details"].value;
-    if (x == "") {
-        alert("Details must be filled out");
-        document.form1.Details.focus();
-        return false;
-    } 
-    var x = document.forms["form1"]["Prize"].value;
-    if (x == "") {
-        alert("Price must be filled out");
-        return false;
-    } 
-    var x = document.forms["form1"]["WebSiteLink"].value;
-    if (x == "") {
-        alert("Website link must be filled out");
-        document.form1.WebSiteLink.focus();
-        return false;
-    } 
-    var x = document.forms["form1"]["image"].value;
-    if (x == "") {
-        alert("first 3 images must be select out");
-        document.form1.image.focus();
-        return false;
-    } 
-    var x = document.forms["form1"]["image2"].value;
-    if (x == "") {
-        alert("first 3 images must be select out");
-        document.form1.image2.focus();
-        return false;
-    } 
-    var x = document.forms["form1"]["image3"].value;
-    if (x == "") {
-        alert("first 3 images must be select out");
-        document.form1.image3.focus();
-        return false;
-    } 
-    var x = document.forms["form1"]["Amount"].value;
-    if (x == "") {
-        alert("Amount must be filled out");
-        document.form1.Amount.focus();
-        return false;
-    }  
+    // var x = document.forms["form1"]["State"].value;
+    // if (x == "") {
+    //     alert("State must be filled out");
+    //     document.form1.State.focus();
+    //     return false;
+    // } 
+    // var x = document.forms["form1"]["City"].value;
+    // if (x == "1") {
+    //     alert("City must be filled out");
+    //     document.form1.City.focus();
+    //     return false;
+    // } 
+    // var x = document.forms["form1"]["Location"].value;
+    // if (x == "") {
+    //     alert("Location must be filled out");
+    //     document.form1.Location.focus();
+    //     return false;
+    // }  
+    // var x = document.forms["form1"]["PostalCode"].value;
+    // if (x == "") {
+    //     alert("Postal Code must be filled out");
+    //     document.form1.PostalCode.focus();
+    //     return false;
+    // }
+    // var x = document.forms["form1"]["Details"].value;
+    // if (x == "") {
+    //     alert("Details must be filled out");
+    //     document.form1.Details.focus();
+    //     return false;
+    // } 
+    // var x = document.forms["form1"]["Prize"].value;
+    // if (x == "") {
+    //     alert("Price must be filled out");
+    //     return false;
+    // } 
+    // var x = document.forms["form1"]["WebSiteLink"].value;
+    // if (x == "") {
+    //     alert("Website link must be filled out");
+    //     document.form1.WebSiteLink.focus();
+    //     return false;
+    // } 
+    // var x = document.forms["form1"]["image"].value;
+    // if (x == "") {
+    //     alert("first 3 images must be select out");
+    //     document.form1.image.focus();
+    //     return false;
+    // } 
+    // var x = document.forms["form1"]["image2"].value;
+    // if (x == "") {
+    //     alert("first 3 images must be select out");
+    //     document.form1.image2.focus();
+    //     return false;
+    // } 
+    // var x = document.forms["form1"]["image3"].value;
+    // if (x == "") {
+    //     alert("first 3 images must be select out");
+    //     document.form1.image3.focus();
+    //     return false;
+    // } 
+    // var x = document.forms["form1"]["Amount"].value;
+    // if (x == "") {
+    //     alert("Amount must be filled out");
+    //     document.form1.Amount.focus();
+    //     return false;
+    // }  
     return true;
     }   
 </script>

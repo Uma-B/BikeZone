@@ -25,7 +25,12 @@ if (isset($_GET["page"])) {
 }  
 
 $start_from = ($page-1) * $limit;    
-$sql =  $filterQuery1 . " and Status = 'UnBlock' LIMIT $start_from, $limit";  
+$sql1 =  $filterQuery1;
+$sql2="LIMIT $start_from, $limit";
+  echo $sql=$sql1." ".$sql2;
+
+$_SESSION['sortPersonal']=$sql;
+$_SESSION['paginationPersonal']=$sql1; 
 $rs_result = mysql_query ($sql);                            
                             
 ?>
@@ -115,7 +120,7 @@ $rs_result = mysql_query ($sql);
                                             <option value=""> Select Category </option>
                                             <option value="Used Bikes"> Used Bikes</option>
                               <option value="New Bikes"> New Bikes</option>
-                              <option value="Scooter"> Scooter</option>
+                              <option value="Scooters"> Scooters</option>
                                         </select>
                                         </div>
 
@@ -178,7 +183,7 @@ $rs_result = mysql_query ($sql);
                             <div class="locations-list  list-filter">
                                 <h5 class="list-title"><strong><a href="#">Seller</a></strong></h5>
                                 <ul class="browse-list list-unstyled long-list">
-                                    <li><a href="index_find.php">All Ads<span
+                                    <li><a href="index_find.php">All Ads <span
                                             class="count"><?php
 
                                             $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes) + (SELECT COUNT(*) FROM dealerbikes) as count");
@@ -228,16 +233,15 @@ $rs_result = mysql_query ($sql);
                 <div class="col-md-9 page-content col-thin-left">
                     <div class="category-list">
                         <div class="tab-box " >
-
                             <!-- Nav tabs -->
                              <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
                                 <li class="nav-item">
-                                   <a  href="index_find.php" class= "nav-link" role="tab" >All Ads 
+                                   <a  href="index_find.php" class= "nav-link" role="tab" >All Ads  
                                     <span class="badge badge-secondary">
                                     <?php
                                             $count=mysql_query("SELECT UserId FROM usedbikes");
                                                 $num_rows=mysql_num_rows($count);
-                                             echo $num_rows+1;
+                                             echo $num_rows;
                                     ?>
                                                  
                                     </span>
@@ -250,7 +254,7 @@ $rs_result = mysql_query ($sql);
                                     <?php
                                             $count=mysql_query("SELECT UserId FROM usedbikes");
                                                 $num_rows=mysql_num_rows($count);
-                                             echo $num_rows+1;
+                                             echo $num_rows;
                                     ?>
                                                  
                                     </span>
@@ -262,7 +266,7 @@ $rs_result = mysql_query ($sql);
                              <?php
                                             // $count=mysql_query("SELECT UserId FROM usedbikes");
                                                 $num_rows=mysql_num_rows($rs_result);
-                                             echo $num_rows+1;
+                                             echo $num_rows;
                                     ?>
                                                  
                                     </span>
@@ -271,7 +275,7 @@ $rs_result = mysql_query ($sql);
 
                             <div class="tab-filter">
                                 <select class="selectpicker select-sort-by" data-style="btn-select" data-width="auto" onchange="sort_by(this.value)">
-                                    <option value="-1">Sort by </option>
+                                    <option value="">Sort by </option>
                                     <option value="ASC">Price: Low to High</option>
                                     <option value="DESC">Price: High to Low</option>
                                 </select>
@@ -569,15 +573,15 @@ function recp() {
         var max = document.getElementById('maxPrice').value;
         //alert( min + max);
         jQuery('.oldList div').html('');
-         jQuery('#pagination').hide();
+         //jQuery('#pagination').hide();
   $('#myStyle').load('fetch_data_personal.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
 
 }
 
 function sort_by(value){
   jQuery('.oldList div').html('');
-   jQuery('#pagination').hide();
-  $('#myStyle').load('fetch_sort_personal.php?value=' + encodeURIComponent(value));
+   //jQuery('#pagination').hide();
+  $('#target-content').load('fetch_sort_personal.php?value=' + encodeURIComponent(value));
 }
 //category
 // function demo(category) {

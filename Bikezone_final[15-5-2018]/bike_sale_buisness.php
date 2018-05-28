@@ -23,9 +23,13 @@ if (isset($_GET["page"])) {
 } else { 
   $page=1; 
 }  
-
 $start_from = ($page-1) * $limit;    
-$sql =  $filterQuery1 . " LIMIT $start_from, $limit";  
+$sql1 =  $filterQuery1;
+$sql2="LIMIT $start_from, $limit";
+  echo $sql=$sql1." ".$sql2;
+
+$_SESSION['sortBikeSaleBusiness']=$sql;
+$_SESSION['paginationBikeSaleBusiness']=$sql1;  
 $rs_result = mysql_query ($sql);   
 
                            
@@ -581,7 +585,7 @@ function recp() {
         //alert( min + max);
         jQuery('.oldList div').html('');
           jQuery('#masterdiv div').hide();
-          jQuery('#pagination').hide();
+          //jQuery('#pagination').hide();
   $('#myStyle').load('fetch_data_business.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
 
 }
@@ -589,8 +593,8 @@ function recp() {
 function sort_by(value){
   jQuery('.oldList div').html('');
           jQuery('#masterdiv div').hide();
-          jQuery('#pagination').hide();
-  $('#myStyle').load('fetch_sort_bike_sale_all_buisness.php?value=' + encodeURIComponent(value));
+          //jQuery('#pagination').hide();
+  $('#target-content').load('fetch_sort_bike_sale_all_buisness.php?value=' + encodeURIComponent(value));
 }
 
 </script>

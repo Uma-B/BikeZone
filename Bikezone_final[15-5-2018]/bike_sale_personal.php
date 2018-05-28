@@ -27,11 +27,14 @@ if (isset($_GET["page"])) {
 }  
 
 $start_from = ($page-1) * $limit;    
-$sql =  $filterQuery1 . " LIMIT $start_from, $limit";  
-$rs_result = mysql_query ($sql);   
+$sql1 =  $filterQuery1;
+$sql2="LIMIT $start_from, $limit";
+  echo $sql=$sql1." ".$sql2;
 
+$_SESSION['sortBikeSalePersonal']=$sql;
+$_SESSION['paginationBikeSalePersonal']=$sql1;  
+$rs_result = mysql_query ($sql); 
 
-                           
 ?>
 
 <!DOCTYPE html>
@@ -579,7 +582,7 @@ function recp() {
         //alert( min + max);
         jQuery('.oldList div').html('');
           jQuery('#masterdiv div').hide();
-          jQuery('#pagination').hide();
+          //jQuery('#pagination').hide();
   $('#myStyle').load('fetch_data_personal.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
 
 }
@@ -588,8 +591,8 @@ function sort_by(value){
   jQuery('.oldList div').html('');
           jQuery('.oldList div').html('');
           jQuery('#masterdiv div').hide();
-          jQuery('#pagination').hide();
-  $('#myStyle').load('fetch_sort_bike_sale_all_personal.php?value=' + encodeURIComponent(value));
+          //jQuery('#pagination').hide();
+  $('#target-content').load('fetch_sort_bike_sale_all_personal.php?value=' + encodeURIComponent(value));
 }
 //category
 // function demo(category) {
