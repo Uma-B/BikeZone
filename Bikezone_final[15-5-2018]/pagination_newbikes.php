@@ -29,12 +29,11 @@ $_SESSION['sortNewBikes']=$sql;
 while ($row = mysql_fetch_assoc($rs_result)) {  
 ?> 
 
-
-<div class="item-list">
-    <div class="cornerRibbons featuredAds">
-        <!--<a href=""> Featured Ads</a> -->
-    </div>
-    <div class="row">
+<div id="masterdiv">
+<div class="item-list oldList" id="masterdiv">
+    <!-- <div class="cornerRibbons featuredAds" id="masterdiv">
+    </div> -->
+    <div class="row" id="masterdiv">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
          <a href="used_bikes_view.php?filename=new_bikes&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
@@ -94,7 +93,7 @@ function myFunction() {
  
 </div>
 </div>
-
+</div>
 
 
 <?php  

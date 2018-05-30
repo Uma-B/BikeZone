@@ -29,12 +29,10 @@ $start_from = ($page-1) * $limit;
 $sql1 =  $filterQuery2;
 $sql2="LIMIT $start_from, $limit";
  $sql=$sql1." ".$sql2;
+ $rs_result = mysql_query ($sql);     
 
-$_SESSION['sortSearchBusiness']=$sql;
-$_SESSION['paginationSearchBusiness']=$sql1;  
-$rs_result = mysql_query ($sql);                            
-                            
-
+$_SESSION['fetchToSort']=$sql;
+$_SESSION['fetchToPagination']=$sql1; 
 ?>
 
 <!DOCTYPE html>
@@ -111,7 +109,7 @@ $rs_result = mysql_query ($sql);
                                     <?php
                                         include_once 'db_connection.php';
 
-                                        $query ="SELECT BikeCategory FROM usedbikes UNION SELECT BikeCategory FROM dealerbikes Group by BikeCategory  ";
+                                        $query ="SELECT BikeCategory FROM dealerbikes Group by BikeCategory  ";
                                         $result= mysql_query($query);
 
                                         $row=mysql_fetch_array($result);
@@ -120,7 +118,7 @@ $rs_result = mysql_query ($sql);
                                         <li>                                        
                                         <div margin:0px auto; margin-top:30px;" >
                                                 <select id="category" class="chosen form-control" style="width:80%;" onchange="category(this.value)">
-                                            <option value=""> Select Category </option>
+                                            <option value="-1"> Select Category </option>
                                             <option value="Used Bikes"> Used Bikes</option>
                               <option value="New Bikes"> New Bikes</option>
                               <option value="Scooter"> Scooter</option>
@@ -141,7 +139,7 @@ $rs_result = mysql_query ($sql);
                                         ?>
                                         <div margin:0px auto; margin-top:30px;" >
                                                 <select id="city" class="chosen form-control" style="width:80%;" onchange="recp()">
-                                                <option value=""> Select City </option>
+                                                <option value="-1"> Select City </option>
                                                 <?php
                                         $query ="SELECT City FROM dealerbikes Group by City  ";
                                         $result= mysql_query($query);
@@ -366,16 +364,21 @@ $rs_result = mysql_query ($sql);
 <div>
 <div id="target-content" ></div>
 </div>
+<div>
+<div id='myStyle'></div>
+</div>
 <?php
 while($row=mysql_fetch_array($rs_result))
 {
    
 ?>
+<div id="masterdiv">
+
 <div class="item-list oldList" id="masterdiv">
-    <div class="cornerRibbons featuredAds" >
+    <!-- <div class="cornerRibbons featuredAds"> -->
         <!--<a href=""> Featured Ads</a> -->
-    </div>
-    <div class="row">
+    <!-- </div> -->
+    <div class="row" id="masterdiv">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
          <a href="used_bikes_view.php?filename=Advance_Business_Search&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
@@ -440,9 +443,7 @@ function myFunction() {
     <!--/.add-desc-box-->
 </div>
 
-<div id='myStyle'>
 </div>
-
 </div>
 <?php } ?>
 
@@ -454,10 +455,10 @@ function myFunction() {
   <ul class="pagination" id="pagination" >
     <?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
      if($i == 1):?>
-      <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_Advance_Business_search.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+      <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
       <?php else:?>
 
-       <li class="page-item" id="<?php echo $i;?>"><a href='pagination_Advance_Business_search.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+       <li class="page-item" id="<?php echo $i;?>"><a href='pagination_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
 
      <?php endif;?> 
    <?php endfor;endif;?> 
@@ -562,7 +563,7 @@ $('.pagination').pagination({
         onPageClick : function(pageNumber) {
             jQuery('#masterdiv div').html('');
             jQuery("#target-content").html('loading...');
-            jQuery("#target-content").load("pagination_Advance_Business_search.php?page=" + pageNumber);
+            jQuery("#target-content").load("pagination_all.php?page=" + pageNumber);
         }
     });
 });
@@ -591,15 +592,16 @@ function recp() {
         var city = document.getElementById('city').value;
         var min = document.getElementById('minPrice').value;
         var max = document.getElementById('maxPrice').value;
-        jQuery('.oldList div').html('');
-       // jQuery('#pagination').hide();
-  $('#myStyle').load('fetch_data.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
+    jQuery('.oldList div').html('');
+          jQuery('#masterdiv div').hide();
+          jQuery('#pagination').hide();
+  $('#myStyle').load('fetch_data_advance_search_business.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
 }
 
 function sort_by(value){
   jQuery('.oldList div').html('');
   //jQuery('#pagination').hide();
-  $('#target-content').load('fetch_sort_advance_buisness.php?value=' + encodeURIComponent(value));
+  $('#target-content').load('fetch_sorting.php?value=' + encodeURIComponent(value));
 }
 
 //category

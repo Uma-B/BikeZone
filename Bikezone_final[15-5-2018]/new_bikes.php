@@ -1,12 +1,9 @@
 <?php
 session_start();
 include_once 'db_connection.php';
-?>
-
-<?php
-include('db_connection.php'); 
+ 
 $limit = 10; 
-$sql = "SELECT COUNT(DealerBikeId) FROM dealerbikes WHERE BikeCategory LIKE 'New bikes'";  
+$sql = "SELECT COUNT(DealerBikeId) FROM dealerbikes WHERE BikeCategory = 'New Bikes' and Status='UnBlock'";  
 $rs_result = mysql_query($sql);  
 $row = mysql_fetch_row($rs_result);  
 $total_records = $row[0];  
@@ -37,14 +34,12 @@ dealerbikes.Prize as Prize,
   dealerbikes.PostalCode as PostalCode 
 from
   dealerbikes
-   WHERE BikeCategory LIKE 'New bikes' and Status ='UnBlock'";
+   WHERE BikeCategory = 'New Bikes' and Status ='UnBlock'";
    $sql2="LIMIT $start_from, $limit"; 
-   $sql=$sql1." ".$sql2;
-   $_SESSION['sortNewBikes']=$sql;
-   $_SESSION['paginationNewBikes']=$sql1;
-
-$rs_result = mysql_query ($sql);
-
+ $sql=$sql1." ".$sql2;
+ $rs_result = mysql_query ($sql);
+   $_SESSION['fetchToSort']=$sql;
+   $_SESSION['fetchToPagination']=$sql1;
 
 ?>
 <!DOCTYPE html>
@@ -58,10 +53,6 @@ $rs_result = mysql_query ($sql);
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 <script src="dist/jquery.simplePagination.js"></script>
-
-
-
-
     
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -128,10 +119,10 @@ $rs_result = mysql_query ($sql);
                                         <li>                                        
                                         <div margin:0px auto; margin-top:30px;" >
                                                 <select id="category"  style="width:80%;" onchange="category(this.value)" class="chosen form-control ">
-                                            <option value=""> Select Category </option>
+                                            <option value="-1"> Select Category </option>
                                             <option value="Used Bikes"> Used Bikes</option>
                               <option value="New Bikes"> New Bikes</option>
-                              <option value="Scooter"> Scooter</option>
+                              <option value="Scooters"> Scooters</option>
                                         </select>
                                         </div>
 
@@ -149,7 +140,7 @@ $rs_result = mysql_query ($sql);
                                         ?>
                                         <div margin:0px auto; margin-top:30px;" >
                                                 <select id="city" class="chosen form-control" style="width:80%;" onchange="recp()">
-                                                <option value=""> Select City </option>
+                                                <option value="-1"> Select City </option>
                                                 <?php
                                         $query ="SELECT City FROM dealerbikes WHERE BikeCategory LIKE 'New Bikes' Group by City";
                                         $result= mysql_query($query);
@@ -192,14 +183,15 @@ $rs_result = mysql_query ($sql);
                             <div class="locations-list  list-filter">
                                 <h5 class="list-title"><strong><a href="#">Seller</a></strong></h5>
                                 <ul class="browse-list list-unstyled long-list">
-                                    <li><a href="index_find.php"><strong>All Ads</strong> <span
-                                            class="count"><?php
+                                    <li><a href="new_bikes.php"><strong>New Bikes Ads</strong> <span
+                                            class="count"> <?php
 
-                                            $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes) + (SELECT COUNT(*) FROM dealerbikes) as count");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['count'];
-                                             ?></span></a></li>
-                                    <li><a href="BuisnessAds.php">Business <span
+                                            $count=mysql_query("SELECT DealerId FROM dealerbikes WHERE BikeCategory='New Bikes'");
+                                                $num_rows=mysql_num_rows($count);
+                                             echo $num_rows; ?>
+                            
+                                             </span></a></li>
+                                   <!--  <li><a href="BuisnessAds.php">Business <span
                                             class="count"><?php
 
                                             $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count");
@@ -212,7 +204,7 @@ $rs_result = mysql_query ($sql);
                                             $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count");
                                                 $res=mysql_fetch_array($count);
                                              echo  $res['COUNT(*)'];
-                                             ?></span></a></li>
+                                             ?></span></a></li> -->
                                 </ul>
                             </div>
                             <!--/.list-filter-->
@@ -251,10 +243,9 @@ $rs_result = mysql_query ($sql);
                                     <a  class="nav-link" href="ajax/ee.html" data-url="ajax/33.html" role="tab"
                                                       data-toggle="tab">New Bikes Ads <span class="badge badge-secondary">
                                                           
-                                                          <?php
-
-                                            // $count=mysql_query("SELECT DealerBikeId FROM dealerbikes");
-                                                $num_rows=mysql_num_rows($rs_result);
+                                                           <?php
+                                        $count=mysql_query("SELECT DealerId FROM dealerbikes WHERE BikeCategory='New Bikes'");
+                                                $num_rows=mysql_num_rows($count);
                                              echo $num_rows; ?>
                                                       </span></a>
                                 </li>
@@ -340,10 +331,10 @@ while ($row = mysql_fetch_assoc($rs_result)) {
 <div id="masterdiv">
 
 <div class="item-list oldList" id="masterdiv">
-    <div class="cornerRibbons featuredAds">
+    <!-- <div class="cornerRibbons featuredAds"> -->
         <!--<a href=""> Featured Ads</a> -->
-    </div>
-    <div class="row">
+    <!-- </div> -->
+    <div class="row" id="masterdiv">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
          <a href="used_bikes_view.php?filename=new_bikes&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
@@ -416,10 +407,10 @@ function myFunction() {
 
 <?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
  if($i == 1):?>
-            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_newbikes.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
  <?php else:?>
 
- <li class="page-item" id="<?php echo $i;?>"><a href='pagination_newbikes.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+ <li class="page-item" id="<?php echo $i;?>"><a href='pagination_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
 
  <?php endif;?> 
 <?php endfor;endif;?> 
@@ -432,12 +423,6 @@ function myFunction() {
 
 </div>
 </div>
-
-
-
-
-
-
                             </div>
                         </div>
                         <!--/.adds-wrapper-->
@@ -498,14 +483,14 @@ $(".chosen").chosen();
     else if(category=="New Bikes"){
         window.location.replace('new_bikes.php');
   }
-  else if (category=="Scooter"){
+  else if (category=="Scooters"){
     window.location.replace('scooter.php');
   }
 }
   // city
 function recp() {
 
-        var category = 'new bikes';
+        var category = 'New Bikes';
         var city = document.getElementById('city').value;
         var min = document.getElementById('minPrice').value;
         var max = document.getElementById('maxPrice').value;
@@ -513,19 +498,18 @@ function recp() {
         jQuery('.oldList div').html('');
           jQuery('#masterdiv div').hide();
           jQuery('#pagination').hide();
-  $('#myStyle').load('fetch_data.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
+  $('#myStyle').load('fetch_data_newbikes.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
 
 }
 
 function sort_by(value){
     jQuery('.oldList div').html('');
-  jQuery('#masterdiv div').hide();
+  //jQuery('#masterdiv div').hide();
   //jQuery('#pagination').hide();
-  $('#target-content').load('fetch_sort_new_bikes.php?value=' + encodeURIComponent(value));
+  $('#target-content').load('fetch_sorting.php?value=' + encodeURIComponent(value));
 }
 </script>
 <link rel="stylesheet" href="style.css">
-
 
 </body>
 
@@ -540,11 +524,10 @@ $('.pagination').pagination({
         onPageClick : function(pageNumber) {
             jQuery('#masterdiv div').hide();
             jQuery("#target-content").html('loading...');
-            jQuery("#target-content").load("pagination_newbikes.php?page=" + pageNumber);
+            jQuery("#target-content").load("pagination_all.php?page=" + pageNumber);
         }
     });
 });
 </script>
-
 
 </html>

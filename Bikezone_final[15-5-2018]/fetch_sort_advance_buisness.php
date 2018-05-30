@@ -20,15 +20,10 @@ $servername = "localhost";
       } 
 //city
 $value= $_GET['value'];
-//$filterQuery = $_GET['query'];
-//$filterQuery= $_GET['filterQuery'];
 
 if($value != null){
-  
-$splitQuery = explode("LIMIT", $filter);
-$filterQuery2 = $splitQuery[0] . " ORDER BY Prize $value LIMIT " . $splitQuery[1];  
-echo $filterQuery;
-}
+$filterQuery = "(".$filter.") ORDER BY Prize $value";  
+echo "filter query in sort page: ".$filterQuery;}
 $result = $conn->query($filterQuery2);
       /*echo $split[count($split)-1];*/
 //echo "\n Filter Query $filterQuery";
@@ -39,11 +34,13 @@ $result = $conn->query($filterQuery2);
  ?>
 
 
-<div class="item-list">
-    <div class="cornerRibbons featuredAds">
-        <!--<a href=""> Featured Ads</a> -->
-    </div>
-    <div class="row">
+<div id="masterdiv">
+
+
+<div class="item-list oldList" id="masterdiv">
+    <!-- <div class="cornerRibbons featuredAds" id="masterdiv">
+    </div> -->
+    <div class="row" id="masterdiv">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
          <a href="used_bikes_view.php?filename=Advance_Business_Search&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
@@ -108,3 +105,4 @@ function myFunction() {
 }
 
 ?>
+</div>

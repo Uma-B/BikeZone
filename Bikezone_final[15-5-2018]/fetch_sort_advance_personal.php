@@ -25,9 +25,8 @@ $value= $_GET['value'];
 
 if($value != null){
   
-$splitQuery = explode("LIMIT", $filter);
-$filterQuery = $splitQuery[0] . " ORDER BY Prize $value LIMIT " . $splitQuery[1];  
-echo $filterQuery;
+$filterQuery = "(".$filter.") ORDER BY Prize $value";  
+echo "filter query in sort page: ".$filterQuery;
 }
 $result = $conn->query($filterQuery);
 
@@ -40,11 +39,13 @@ $result = $conn->query($filterQuery);
  ?>
 
 
-<div class="item-list">
-    <div class="cornerRibbons featuredAds">
-        <!--<a href=""> Featured Ads</a> -->
-    </div>
-    <div class="row">
+<div id="masterdiv">
+
+
+<div class="item-list oldList" id="masterdiv">
+    <!-- <div class="cornerRibbons featuredAds" id="masterdiv">
+    </div> -->
+    <div class="row" id="masterdiv">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
          <a href="used_bikes_view.php?filename=Advance_Personal_Search&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
@@ -109,3 +110,4 @@ function myFunction() {
 }
 
 ?>
+</div>

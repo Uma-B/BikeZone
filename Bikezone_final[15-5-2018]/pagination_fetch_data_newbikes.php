@@ -1,48 +1,42 @@
-<?php
+  <?php
+    session_start();
+include('db_connection.php');
 
-session_start();
- 
-if(isset($_SESSION['sortUsedBikes'])  ){
-  $filter=$_SESSION['sortUsedBikes'];
+$limit = 10;  
+if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };  
+$start_from = ($page-1) * $limit;
+
+
+if(isset($_SESSION['Pagination'])){
+  $sql1=$_SESSION['Pagination'];
 }
 
-$servername = "localhost";
-      $username = "root";
-      $password = "";
-      $dbname = "bikezone";
-      $conn = new mysqli($servername, $username, $password, $dbname);
-      // Check connection
+$sql2="LIMIT $start_from, $limit";
+echo $sql=$sql1." ".$sql2;
+$rs_result = mysql_query ($sql);
 
-      if ($conn->connect_error) {
-          die("Connection failed: " . $conn->connect_error);
-      } 
-
-$value= $_GET['value'];
-
-
-if($value != null){
+$_SESSION['fetchToSort']=$sql;
   
-$filterQuery = "(".$filter.") ORDER BY Prize $value";  
-echo "filter query in sort page: ".$filterQuery;
-}
-$result = $conn->query($filterQuery);
-      
+while ($row = mysql_fetch_assoc($rs_result)) {  
+?>  
+<!DOCTYPE html>
+<html>
+<head>
 
-      if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
- ?>
+<body>
+
+
+      
 
 
 <div id="masterdiv">
-
-
 <div class="item-list oldList" id="masterdiv">
-    <!-- <div class="cornerRibbons featuredAds" id="masterdiv">
+      <!-- <div class="cornerRibbons featuredAds" id="masterdiv">
     </div> -->
     <div class="row" id="masterdiv">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
-         <a href="used_bikes_view.php?filename=used_bikes&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
+         <a href="used_bikes_view.php?filename=new_bikes&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
 
 <?php     
 
@@ -55,7 +49,7 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
     
     <div class="col-sm-7 add-desc-box">
         <div class="ads-details">
-            <h5 class="add-title"><a href="used_bikes_view.php?filename=used_bikes&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
+            <h5 class="add-title"><a href="used_bikes_view.php?filename=new_bikes&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
                 <?php echo $row['Brand'].'-'.$row['Model'] ;  ?></a></h5>
             <span class="info-row"> 
                 <span class="add-type business-ads tooltipHere" data-toggle="tooltip" data-placement="right" title="" data-original-title="Business Ads">B </span> 
@@ -69,14 +63,14 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
                   
               </i><?php echo $row['ContactNumber'] ?></span> </span></div>
     </div>
-    <!--/.add-desc-box-->
+
     <div class="col-md-3 text-right  price-box">
         <h2 class="item-price">RS:-<?php echo $row['Prize']  ?></h2>
-        <?php
+         <?php
         if (isset($_SESSION['usr_id'])) {
           $id=$_SESSION['usr_id'];
           ?>
-          <a href="favourite.php?filename=used_bikes&UserId=<?php echo $row['UserId']; ?> &UsedBikeId=<?php echo $row['UsedBikeId']; ?> &Brand=<?php echo $row['Brand'];?> &Category=<?php echo $row['BikeCategory'];?> &Price=<?php echo $row['Prize'];?> &ContactNumber=<?php echo $row['ContactNumber'];?> &Fav_Userid=<?php echo $id;?>" class="btn btn-danger btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
+          <a href="favourite.php?filename=new_bikes&UserId=<?php echo $row['UserId']; ?> &UsedBikeId=<?php echo $row['UsedBikeId']; ?> &Brand=<?php echo $row['Brand'];?> &Category=<?php echo $row['BikeCategory'];?> &Price=<?php echo $row['Prize'];?> &ContactNumber=<?php echo $row['ContactNumber'];?> &Fav_Userid=<?php echo $id;?>" class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
         </a>
         <?php
         }
@@ -96,15 +90,14 @@ function myFunction() {
         ?>
          
         </div>
-    <!--/.add-desc-box-->
+ 
 </div>
 </div>
-<div id='myStyle' id="masterdiv">
 </div>
 
 
-<?php
-}
-}
-
-?>
+<?php  
+};  
+?>  
+</body>
+</html>

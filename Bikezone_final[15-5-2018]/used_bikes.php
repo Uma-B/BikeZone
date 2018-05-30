@@ -61,10 +61,10 @@ $start_from = ($page-1) * $limit;
 $sql1 =  $filterQuery;
 $sql2="LIMIT $start_from, $limit";
  $sql=$sql1." ".$sql2;
-
-$_SESSION['sortUsedBikes']=$sql;
-$_SESSION['paginationUsedBikes']=$sql1;  
-$rs_result = mysql_query ($sql);                            
+$rs_result = mysql_query ($sql);    
+ $_SESSION['fetchToSort']=$sql;
+   $_SESSION['fetchToPagination']=$sql1;  
+                        
 ?>
 
 <!DOCTYPE html>
@@ -143,7 +143,7 @@ $rs_result = mysql_query ($sql);
                                         <li>                                        
                                         <div margin:0px auto; margin-top:30px;" >
                                                 <select id="category"  style="width:80%;" onchange="category(this.value)" class="chosen form-control">
-                                            <option value=""> Select Category </option>
+                                            <option value="-1"> Select Category </option>
                                             <option value="Used Bikes"> Used Bikes</option>
                               <option value="New Bikes"> New Bikes</option>
                               <option value="Scooter"> Scooter</option>
@@ -164,7 +164,7 @@ $rs_result = mysql_query ($sql);
                                         ?>
                                         <div margin:0px auto; margin-top:30px;" >
                                                 <select id="city" class="chosen form-control" style="width:80%;" onchange="recp()">
-                                                <option value=""> Select City </option>
+                                                <option value="-1"> Select City </option>
                                                 <?php
                                         $query ="SELECT City FROM usedbikes WHERE BikeCategory LIKE 'Used Bikes' UNION SELECT City FROM dealerbikes WHERE BikeCategory LIKE 'Used Bikes' Group by City  ";
                                         $result= mysql_query($query);
@@ -207,14 +207,14 @@ $rs_result = mysql_query ($sql);
                             <div class="locations-list  list-filter">
                                 <h5 class="list-title"><strong><a href="#">Seller</a></strong></h5>
                                 <ul class="browse-list list-unstyled long-list">
-                                    <li><a href="index_find.php"><strong>All Ads</strong> <span
+                                    <li><a href="used_bikes.php"><strong>Used Bikes Ads</strong> <span
                                             class="count"><?php
 
                                             $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes) + (SELECT COUNT(*) FROM dealerbikes) as count");
                                                 $res=mysql_fetch_array($count);
                                              echo  $res['count'];
                                              ?></span></a></li>
-                                    <li><a href="BuisnessAds.php">Business <span
+                                   <!--  <li><a href="BuisnessAds.php">Business <span
                                             class="count"><?php
 
                                             $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count");
@@ -227,7 +227,7 @@ $rs_result = mysql_query ($sql);
                                             $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count");
                                                 $res=mysql_fetch_array($count);
                                              echo  $res['COUNT(*)'];
-                                             ?></span></a></li>
+                                             ?></span></a></li> -->
                                 </ul>
                             </div>
                             <!--/.list-filter-->
@@ -422,10 +422,10 @@ function myFunction() {
 
 <?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
  if($i == 1):?>
-            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
  <?php else:?>
 
- <li class="page-item" id="<?php echo $i;?>"><a href='pagination.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+ <li class="page-item" id="<?php echo $i;?>"><a href='pagination_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
 
  <?php endif;?> 
 <?php endfor;endif;?> 
@@ -512,15 +512,15 @@ function recp() {
         //alert( min + max);
         jQuery('.oldList div').html('');
           jQuery('#masterdiv div').hide();
-            //jQuery('#pagination').hide();
-  $('#myStyle').load('fetch_data.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
+            jQuery('#pagination').hide();
+  $('#myStyle').load('fetch_data_usedbikes.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
 }
 
 function sort_by(value){
   jQuery('.oldList div').html('');
-          jQuery('#masterdiv div').hide();
+          //jQuery('#masterdiv div').hide();
             //jQuery('#pagination').hide();
-  $('#target-content').load('fetch_sort_used_bikes.php?value=' + encodeURIComponent(value));
+  $('#target-content').load('fetch_sorting.php?value=' + encodeURIComponent(value));
 }
 </script>
 <link rel="stylesheet" href="style.css">
@@ -538,7 +538,7 @@ $('.pagination').pagination({
         onPageClick : function(pageNumber) {
             jQuery('#masterdiv div').hide();
             jQuery("#target-content").html('loading...');
-            jQuery("#target-content").load("pagination.php?page=" + pageNumber);
+            jQuery("#target-content").load("pagination_all.php?page=" + pageNumber);
         }
     });
 });

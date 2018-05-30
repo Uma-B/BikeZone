@@ -1,10 +1,7 @@
 <?php
 session_start();
-include_once 'db_connection.php';
-?>
-
-<?php
 include('db_connection.php'); 
+
 $limit = 10; 
 $sql = "SELECT COUNT(DealerBikeId) FROM dealerbikes WHERE BikeCategory = 'Scooters' and Status='UnBlock' ";  
 $rs_result = mysql_query($sql);  
@@ -126,10 +123,10 @@ $_SESSION['fetchToPagination']=$sql1;
                                         <div margin:0px auto; margin-top:30px;" >
   <select id="category"  style="width:80%;" onchange="category(this.value)" 
   class="chosen form-control ">
-                             <option value=""> Select Category </option>
+                             <option value="-1"> Select Category </option>
                             <option value="Used Bikes"> Used Bikes</option>
                               <option value="New Bikes"> New Bikes</option>
-                              <option value="Scooter"> Scooter</option>
+                              <option value="Scooters"> Scooters</option>
                                         </select>
                                         </div>
 
@@ -147,7 +144,7 @@ $_SESSION['fetchToPagination']=$sql1;
                                         ?>
                                         <div margin:0px auto; margin-top:30px;" >
                                                 <select id="city" class="chosen form-control" style="width:80%;" onchange="recp()">
-                                                <option value=""> Select City </option>
+                                                <option value="-1"> Select City </option>
                                                 <?php
                                         $query ="SELECT City FROM dealerbikes WHERE BikeCategory LIKE 'Scooters' Group by City";
                                         $result= mysql_query($query);
@@ -190,14 +187,15 @@ $_SESSION['fetchToPagination']=$sql1;
                             <div class="locations-list  list-filter">
                                 <h5 class="list-title"><strong><a href="#">Seller</a></strong></h5>
                                 <ul class="browse-list list-unstyled long-list">
-                                    <li><a href="index_find.php"><strong>All Ads</strong> <span
-                                            class="count"><?php
+                                    <li><a href="scooter.php"><strong>Scooter Ads</strong> <span
+                                            class="count"> <?php
 
-                                            $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes) + (SELECT COUNT(*) FROM dealerbikes) as count");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['count'];
-                                             ?></span></a></li>
-                                    <li><a href="BuisnessAds.php">Business <span
+                                            $count=mysql_query("SELECT DealerId FROM dealerbikes WHERE BikeCategory='Scooters'");
+                                                $num_rows=mysql_num_rows($count);
+                                             echo $num_rows; ?>
+                                                 
+                                             </span></a></li>
+                                    <!-- <li><a href="BuisnessAds.php">Business <span
                                             class="count"><?php
 
                                             $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count");
@@ -210,7 +208,7 @@ $_SESSION['fetchToPagination']=$sql1;
                                             $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count");
                                                 $res=mysql_fetch_array($count);
                                              echo  $res['COUNT(*)'];
-                                             ?></span></a></li>
+                                             ?></span></a></li> -->
                                 </ul>
                             </div>
                             <!--/.list-filter-->
@@ -251,8 +249,8 @@ $_SESSION['fetchToPagination']=$sql1;
                                                           
                                                           <?php
 
-                                            // $count=mysql_query("SELECT DealerBikeId FROM dealerbikes ");
-                                                $num_rows=mysql_num_rows($rs_result);
+                                            $count=mysql_query("SELECT DealerId FROM dealerbikes WHERE BikeCategory='Scooters'");
+                                                $num_rows=mysql_num_rows($count);
                                              echo $num_rows; ?>
                                                       </span></a>
                                 </li>
@@ -265,7 +263,7 @@ $_SESSION['fetchToPagination']=$sql1;
 
                             <div class="tab-filter">
                                 <select class="selectpicker select-sort-by" data-style="btn-select" data-width="auto" onchange="sort_by(this.value)">
-                                    <option value="">Sort by </option>
+                                    <option value="-1">Sort by </option>
                                     <option value="ASC">Price: Low to High</option>
                                     <option value="DESC">Price: High to Low</option>
                                 </select>
@@ -337,10 +335,10 @@ while ($row = mysql_fetch_assoc($rs_result)) {
 <div id="masterdiv">
 
 <div class="item-list oldList" id="masterdiv">
-    <div class="cornerRibbons featuredAds" id="masterdiv">
-        <!--<a href=""> Featured Ads</a> -->
-    </div>
-    <div class="row">
+    <!-- <div class="cornerRibbons featuredAds" > -->
+        <!--<a href=""> Featured Ads</a>
+    </div> -->
+    <div class="row" id="masterdiv">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
          <a href="used_bikes_view.php?filename=scooter&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
@@ -413,30 +411,17 @@ function myFunction() {
 
 <?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
  if($i == 1):?>
-            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_scooter.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
  <?php else:?>
 
- <li class="page-item" id="<?php echo $i;?>"><a href='pagination_scooter.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+ <li class="page-item" id="<?php echo $i;?>"><a href='pagination_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
 
  <?php endif;?> 
 <?php endfor;endif;?> 
-
-
-
-
 </ul>
 </nav>
-
 </div>
-</div>
-
-
-
-
-
-
-                            </div>
-                        </div>
+</div> </div></div>
                         <!--/.adds-wrapper-->
 
                        <div class="post-promo text-center">
@@ -506,25 +491,23 @@ $(".chosen").chosen();
 }
 
 function recp() {
-
-
-        var category = 'scooter';
+        var category = 'Scooters';
         var city = document.getElementById('city').value;
         var min = document.getElementById('minPrice').value;
         var max = document.getElementById('maxPrice').value;
         //alert( min + max);
           jQuery('.oldList div').html('');
           jQuery('#masterdiv div').hide();
-          //jQuery('#pagination').hide();
-  $('#myStyle').load('fetch_data.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
+          jQuery('#pagination').hide();
+  $('#myStyle').load('fetch_data_scooters.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
 
 }
 
 function sort_by(value){
   jQuery('.oldList div').html('');
-  jQuery('#masterdiv div').hide();
+  //jQuery('#masterdiv div').hide();
   //jQuery('#pagination').hide();
-  $('#target-content').load('fetch_sort_scooter.php?value=' + encodeURIComponent(value));
+  $('#target-content').load('fetch_sorting.php?value=' + encodeURIComponent(value));
 }
 //category
 // function demo(category) {
@@ -547,7 +530,7 @@ $('.pagination').pagination({
         onPageClick : function(pageNumber) {
             jQuery('#masterdiv div').hide();
             jQuery("#target-content").html('loading...');
-            jQuery("#target-content").load("pagination_scooter.php?page=" + pageNumber);
+            jQuery("#target-content").load("pagination_all.php?page=" + pageNumber);
         }
     });
 });
