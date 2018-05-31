@@ -1,4 +1,54 @@
+<?php
+session_start();
+if(isset($_POST['get_option']))
+{
+ include "db_connection.php";
 
+ $brand_name = $_POST['get_option'];
+ $find=mysql_query("select Model from usedbikes where Brand='$brand_name' union select Model from dealerbikes where Brand='$brand_name'");
+ ?>
+<option value=""> Select Model</option>
+ <?php
+ while($row=mysql_fetch_array($find))
+ {
+  echo "<option>".$row['Model']."</option>";
+ }
+ exit;
+}
+
+if(isset($_POST['get_option2']))
+{
+ include "db_connection.php";
+
+ $state = $_POST['get_option2'];
+ $find=mysql_query("select City from usedbikes where State='$state' union select City from dealerbikes where State='$state'");
+ ?>
+<option value=""> Select City</option>
+ <?php
+ while($row=mysql_fetch_array($find))
+ {
+  echo "<option>".$row['City']."</option>";
+ }
+ exit;
+}
+
+if(isset($_POST['get_option3']))
+{
+ include "db_connection.php";
+
+ $brand_name = $_POST['get_option3'];
+ $find=mysql_query("select Model from bikemodel where Brand='$brand_name'");
+ ?>
+<option value=""> Select Model</option>
+ <?php
+ while($row=mysql_fetch_array($find))
+ {
+  echo "<option>".$row['Model']."</option>";
+ }
+ exit;
+}
+
+?>
 <body>
 <?php
 
@@ -33,11 +83,6 @@ $priceMax = $_GET['maxPrice'];
 
 
 $filter="select dealerbikes.DealerBikeId as UsedBikeId, dealerbikes.BikeCategory as BikeCategory, dealerbikes.DealerBikeImage1 as UsedBikeImage1, dealerbikes.Brand as Brand, dealerbikes.Model as Model, dealerbikes.DealerId as UserId, dealerbikes.Username as UserName, dealerbikes.ContactNumber as ContactNumber, dealerbikes.Prize as Prize, dealerbikes.Year as Year, dealerbikes.Transmission as Transmission, dealerbikes.FuelType as FuelType, dealerbikes.EngineSize as EngineSize, dealerbikes.KilometreDriven as KilometreDriven, dealerbikes.Stroke as Stroke, dealerbikes.Location as Location, dealerbikes.PostalCode as PostalCode from dealerbikes WHERE Status='UnBlock' and";
-
-// if($Category != ""){
-//   //$filter1=$filter1. " usedbikes.City LIKE '$City' AND";
-//   $filter=$filter. " dealerbikes.BikeCategory LIKE '$Category' AND";
-// }
 
 if($City != ""){
   //$filter1=$filter1. " usedbikes.City LIKE '$City' AND";

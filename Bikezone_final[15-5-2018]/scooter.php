@@ -42,21 +42,13 @@ $_SESSION['fetchToPagination']=$sql1;
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-
 <head>
-
-
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
 <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.js"></script>
 <script type="text/javascript" charset="utf8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
 <script src="dist/jquery.simplePagination.js"></script>
-
-
-
-
     
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -500,7 +492,6 @@ function recp() {
           jQuery('#masterdiv div').hide();
           jQuery('#pagination').hide();
   $('#myStyle').load('fetch_data_scooters.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
-
 }
 
 function sort_by(value){
@@ -515,10 +506,7 @@ function sort_by(value){
 // }
 </script>
 <link rel="stylesheet" href="style.css">
-
-
 </body>
-
 
 <script type="text/javascript">
 $(document).ready(function(){

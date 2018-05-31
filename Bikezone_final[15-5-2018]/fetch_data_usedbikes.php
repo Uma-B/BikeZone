@@ -29,7 +29,6 @@ $priceMax = $_GET['maxPrice'];
 //echo $Category;
 //echo $City;
 
-
 $filter1 = "select
   usedbikes.UsedBikeId as UsedBikeId,
   usedbikes.BikeCategory as BikeCategory,

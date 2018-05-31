@@ -49,6 +49,7 @@ if(isset($_POST['get_option3']))
 }
 
 ?>
+<body>
 <?php
 
 $servername = "localhost";
@@ -78,38 +79,81 @@ $priceMax = $_GET['maxPrice'];
 //echo $Category;
 //echo $City;
 
-$filter1 = "select usedbikes.UsedBikeId as UsedBikeId, usedbikes.BikeCategory as BikeCategory, usedbikes.UsedBikeImage1 as UsedBikeImage1, usedbikes.Brand as Brand, usedbikes.Model as Model, usedbikes.KilometreDriven as KilometreDriven, usedbikes.Location as Location, usedbikes.UserId as UserId, usedbikes.UserName as UserName, usedbikes.ContactNumber as ContactNumber, usedbikes.Prize as Prize from usedbikes where";
-$filter2 = "select dealerbikes.DealerBikeId as DealerBikeId, dealerbikes.BikeCategory as BikeCategory, dealerbikes.DealerBikeImage1 as BikeImage1, dealerbikes.Brand as Brand, dealerbikes.Model as Model, dealerbikes.KilometreDriven as KilometreDriven, dealerbikes.Location as Location, dealerbikes.DealerId as UserId, dealerbikes.UserName as UserName, dealerbikes.ContactNumber as ContactNumber, dealerbikes.Prize as Prize from dealerbikes where";
 
-if($Category != ""){
-  $filter1=$filter1. " usedbikes.BikeCategory LIKE '$Category' AND";
-  $filter2=$filter2. " dealerbikes.BikeCategory LIKE '$Category' AND";
-}
+
+
+$filter="select
+usedbikes.UsedBikeId as UsedBikeId,
+usedbikes.BikeCategory as BikeCategory,
+usedbikes.UsedBikeImage1 as UsedBikeImage1,
+usedbikes.Brand as Brand,
+usedbikes.Model as Model,
+usedbikes.UserId as UserId,
+usedbikes.UserName as UserName,
+usedbikes.ContactNumber as ContactNumber,
+usedbikes.Prize as Prize,
+usedbikes.Year as Year,
+usedbikes.Transmission as Transmission,
+usedbikes.FuelType as FuelType,
+usedbikes.EngineSize as EngineSize,
+usedbikes.KilometreDriven as KilometreDriven,
+usedbikes.Stroke as Stroke,
+usedbikes.Location as Location,
+usedbikes.PostalCode as PostalCode
+from
+usedbikes WHERE Status='UnBlock' and";
 
 if($City != ""){
-  $filter1=$filter1. " usedbikes.City LIKE '$City' AND";
-  $filter2=$filter2. " dealerbikes.City LIKE '$City' AND";
+  $filter=$filter. " usedbikes.City LIKE '$City' AND";
+  //$filter=$filter. " dealerbikes.City LIKE '$City' AND";
 }
 if($priceMin != "" && $priceMax != ""){
-    $filter2 = $filter2." dealerbikes.Prize IN (SELECT Prize from dealerbikes WHERE Prize BETWEEN $priceMin AND $priceMax)";
-     $filter1 = $filter1." usedbikes.Prize IN (SELECT Prize from usedbikes WHERE Prize BETWEEN $priceMin AND $priceMax)";
+    //$filter = $filter." dealerbikes.Prize IN (SELECT Prize from dealerbikes WHERE Prize BETWEEN $priceMin AND $priceMax)";
+     $filter = $filter." usedbikes.Prize IN (SELECT Prize from usedbikes WHERE Prize BETWEEN $priceMin AND $priceMax)";
 }
 
 
-$split = explode(" ", $filter1);
+$split = explode(" ", $filter);
 if($split[count($split)-1] == "AND"){
-     $filter1 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter1);
-    $filter2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter2);
+     $filter = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter);
+    //$filter2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter2);
 }
 
-// $limit = 10;  
-// if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };  
-// $start_from = ($page-1) * $limit;  
+$limit = 10; 
+$sql = $filter; 
+/*For No Of Rows Selected*/
+$result = $conn->query($sql);
+$rowcount = mysqli_num_rows($result);
+/*----------------------*/
+$rs_result = $conn->query($sql);  
+$row = $rs_result->fetch_assoc();  
+$total_records = $rowcount;
+$total_pages = ceil($total_records / $limit);
 
-$filterQuery = $filter1." AND Status = 'UnBlock' UNION ".$filter2. " AND Status = 'UnBlock'";
+ 
+if (isset($_GET["page"])) {
+ $page  = $_GET["page"]; 
+} else { 
+  $page=1; 
+}  
+
+$start_from = ($page-1) * $limit;
+$_SESSION['Pagination']=$filter;
+$filterQuery=$filter." LIMIT $start_from, $limit";
+$_SESSION['fetchToSort']=$filterQuery;
+//$_SESSION['fetchToPagination']=$filterQuery;
 
 /*  $filterQuery= $sub." LIMIT $start_from, $limit ";*/
-
+?>
+ <div class="tab-content">
+<div>
+<div id="target-content" ></div>
+</div>
+<div>
+<div id='myStyle'>
+</div>
+</div>
+<?php
 
       $result = $conn->query($filterQuery);
 
@@ -119,11 +163,13 @@ $filterQuery = $filter1." AND Status = 'UnBlock' UNION ".$filter2. " AND Status 
  ?>
 
 
-<div class="item-list">
-    <div class="cornerRibbons featuredAds">
-        <!--<a href=""> Featured Ads</a> -->
-    </div>
-    <div class="row">
+<div id="masterdiv">
+
+
+<div class="item-list oldList" id="masterdiv">
+    <!-- <div class="cornerRibbons featuredAds" id="masterdiv">
+    </div> -->
+    <div class="row" id="masterdiv">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
          <a href="used_bikes_view.php?filename=<?php echo $uri;?>&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
@@ -182,11 +228,43 @@ function myFunction() {
     <!--/.add-desc-box-->
 </div>
 </div>
+</div>
 <?php
 }
 }
-
-//category
-
 ?>
 
+<div class="pagination-bar text-center">
+     <nav aria-label="Page navigation " class="d-inline-b">
+
+<ul class="pagination" id="pagination" >
+
+<?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
+ if($i == 1):?>
+            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_fetch_data_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+ <?php else:?>
+
+ <li class="page-item" id="<?php echo $i;?>"><a href='pagination_fetch_data_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+
+ <?php endif;?> 
+<?php endfor;endif;?> 
+</ul>
+</nav>
+</div>
+</div>
+</body>
+<script type="text/javascript">
+$(document).ready(function(){
+$('.pagination').pagination({
+        items: <?php echo $total_records;?>,
+        itemsOnPage: <?php echo $limit;?>,
+        cssStyle: 'light-theme',
+        currentPage : 1,
+        onPageClick : function(pageNumber) {
+            jQuery('#masterdiv div').hide();
+            jQuery("#target-content").html('loading...');
+            jQuery("#target-content").load("pagination_fetch_data_all.php?page=" + pageNumber);
+        }
+    });
+});
+</script>

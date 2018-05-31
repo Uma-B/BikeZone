@@ -2,8 +2,8 @@
 
 session_start();
 
-if(isset($_SESSION['fetchToSort'])  ){
-  $filter=$_SESSION['fetchToSort'];
+if(isset($_SESSION['sortNewBikes'])  ){
+  $filter=$_SESSION['sortNewBikes'];
 }
 
 
@@ -25,7 +25,7 @@ if($value != null){
 
 //$splitQuery = explode("LIMIT", $filter);
 $filterQuery = "(".$filter.") ORDER BY Prize $value";  
-echo "filter query in sort page: ".$filterQuery;
+echo "filter query in sort page new bikes: ".$filterQuery;
 }
 $result = $conn->query($filterQuery);
       

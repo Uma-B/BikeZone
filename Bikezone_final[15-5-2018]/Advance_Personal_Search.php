@@ -2,12 +2,13 @@
 session_start();
 include "db_connection.php";
 
-GLOBAL $filterQuery1;
+
+GLOBAL $Advance_Search1;
 if(isset($_SESSION['Advance_Search1'])) {
-$filterQuery1 = $_SESSION['Advance_Search1'];
+$filterQuery2 = $_SESSION['Advance_Search1'];
 }
 $limit = 10; 
-$sql = $filterQuery1; 
+$sql = $filterQuery2; 
 /*For No Of Rows Selected*/
 $result=mysql_query($sql);
 $rowcount = mysql_num_rows($result);
@@ -25,15 +26,15 @@ if (isset($_GET["page"])) {
 }  
 
 $start_from = ($page-1) * $limit;    
-$sql1 =  $filterQuery1;
+$sql1 =  $filterQuery2;
 $sql2="LIMIT $start_from, $limit";
- $sql=$sql1." ".$sql2;
+ echo $sql=$sql1." ".$sql2;
+ $rs_result = mysql_query ($sql);     
 
-$_SESSION['sortSearchPersonal']=$sql;
-$_SESSION['paginationSearchPersonal']=$sql1;  
-$rs_result = mysql_query ($sql);                            
-                            
+$_SESSION['fetchToSort']=$sql;
+$_SESSION['fetchToPagination']=$sql1; 
 ?>
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
@@ -50,7 +51,7 @@ $rs_result = mysql_query ($sql);
     <!-- Bootstrap core CSS -->
     <link href="assets/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="style.css">
     <!-- styles needed for carousel slider -->
     <link href="assets/plugins/owl-carousel/owl.carousel.css" rel="stylesheet">
     <link href="assets/plugins/owl-carousel/owl.theme.css" rel="stylesheet">
@@ -76,9 +77,8 @@ $rs_result = mysql_query ($sql);
 
 </head>
 <body>
-
          <?php
-            include "header.php";
+          include "header.php";
          ?>
     <!-- /.header -->
 
@@ -94,7 +94,7 @@ $rs_result = mysql_query ($sql);
             </div>
         </div>
 
-     <!-- /.search-row -->
+  <!-- /.search-row -->
     <div class="main-container">
         <div class="container">
             <div class="row">
@@ -109,7 +109,7 @@ $rs_result = mysql_query ($sql);
                                     <?php
                                         include_once 'db_connection.php';
 
-                                        $query ="SELECT BikeCategory FROM usedbikes UNION SELECT BikeCategory FROM dealerbikes Group by BikeCategory  ";
+                                        $query ="SELECT BikeCategory FROM usedbikes Group by BikeCategory  ";
                                         $result= mysql_query($query);
 
                                         $row=mysql_fetch_array($result);
@@ -118,7 +118,7 @@ $rs_result = mysql_query ($sql);
                                         <li>                                        
                                         <div margin:0px auto; margin-top:30px;" >
                                                 <select id="category" class="chosen form-control" style="width:80%;" onchange="category(this.value)">
-                                            <option value=""> Select Category </option>
+                                            <option value="-1"> Select Category </option>
                                             <option value="Used Bikes"> Used Bikes</option>
                               <option value="New Bikes"> New Bikes</option>
                               <option value="Scooter"> Scooter</option>
@@ -139,7 +139,7 @@ $rs_result = mysql_query ($sql);
                                         ?>
                                         <div margin:0px auto; margin-top:30px;" >
                                                 <select id="city" class="chosen form-control" style="width:80%;" onchange="recp()">
-                                                <option value=""> Select City </option>
+                                                <option value="-1"> Select City </option>
                                                 <?php
                                         $query ="SELECT City FROM usedbikes Group by City  ";
                                         $result= mysql_query($query);
@@ -162,7 +162,7 @@ $rs_result = mysql_query ($sql);
                             </div>
                             <!--/.locations-list-->
 
-                            <div class="locations-list  list-filter" class="form-inline ">
+                           <div class="locations-list  list-filter" class="form-inline ">
                                 <h5 class="list-title"><strong><a href="#">Price range</a></strong></h5>
 
                                 <!-- <form role="form" class="form-inline "> -->
@@ -181,24 +181,24 @@ $rs_result = mysql_query ($sql);
                                 <div style="clear:both"></div>
                             </div>
                             <!--/.list-filter-->
-                            <div class="locations-list  list-filter">
+                           <div class="locations-list  list-filter">
                                 <h5 class="list-title"><strong><a href="#">Seller</a></strong></h5>
                                 <ul class="browse-list list-unstyled long-list">
-                                    <li><a href="Advance_Search_Find.php">All Ads<span
+                                    <li><a href="Advance_Search_Find.php">All Ads <span
                                             class="count"><?php
 
                                             $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes) + (SELECT COUNT(*) FROM dealerbikes) as count");
                                                 $res=mysql_fetch_array($count);
                                              echo  $res['count'];
                                              ?></span></a></li>
-                                    <li><a href="Advance_Business_Search.php">Business <span
+                                    <li><a href="Advance_Business_Search.php"><strong>Business </strong><span
                                             class="count"><?php
 
                                             $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count");
                                                 $res=mysql_fetch_array($count);
                                              echo  $res['COUNT(*)'];
                                              ?></span></a></li>
-                                    <li><a href="Advance_Personal_Search.php"><strong> Personal </strong><span
+                                    <li><a href="Advance_Personal_Search.php">Personal <span
                                             class="count"><?php
 
                                             $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count");
@@ -236,28 +236,16 @@ $rs_result = mysql_query ($sql);
                         <div class="tab-box " >
 
                             <!-- Nav tabs -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
+                           <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
                                 <li class="nav-item">
-                                   <a  href="Advance_Search_Find.php" class= "nav-link" role="tab" >All Ads 
+                                                                   <a  href="Advance_Search_Find.php" class= "nav-link" role="tab" >
+
+                                    All Ads 
                                     <span class="badge badge-secondary">
                                     <?php
-                                            $count=mysql_query("SELECT UserId FROM usedbikes");
+                                            $count=mysql_query("SELECT DealerId FROM dealerbikes");
                                                 $num_rows=mysql_num_rows($count);
-                                             echo $num_rows+1;
+                                             echo $num_rows;
                                     ?>
                                                  
                                     </span>
@@ -268,9 +256,9 @@ $rs_result = mysql_query ($sql);
                                     <a  href="Advance_Business_Search.php" class= "nav-link" role="tab" >Business Ads 
                                     <span class="badge badge-secondary">
                                     <?php
-                                            $count=mysql_query("SELECT UserId FROM usedbikes");
-                                                $num_rows=mysql_num_rows($count);
-                                             echo $num_rows+1;
+                                            // $count=mysql_query("SELECT DealerId FROM dealerbikes");
+                                                $num_rows=mysql_num_rows($rs_result);
+                                             echo $num_rows;
                                     ?>
                                                  
                                     </span>
@@ -280,14 +268,22 @@ $rs_result = mysql_query ($sql);
                                  <a href="Advance_Personal_Search.php" class="nav-link" role="tab">Personal
                                     <span class="badge badge-secondary">
                              <?php
-                                            // $count=mysql_query("SELECT UserId FROM usedbikes");
-                                                $num_rows=mysql_num_rows($rs_result);
+                                            $count=mysql_query("SELECT UserId FROM usedbikes");
+                                                $num_rows=mysql_num_rows($count);
                                              echo $num_rows;
                                     ?>
                                                  
                                     </span>
                                     </a>
                                 </li>  </ul>
+
+                                <!-- <a href="BuisnessAds.php"><button>Business Ads</button></a> -->
+                                <!-- <li class="nav-item"><a class="nav-link"  href="BuisnessAds.php" role="tab" data-toggle="tab">Business
+                                    <span class="badge badge-secondary">22,805</span></a></li> -->
+<!--                                  <a href="PersonalAds.php"><button>Personal</button></a>
+ -->                                <!-- <li class="nav-item"><a class="nav-link"  href="ajax/33.html" data-url="ajax/33.html" role="tab" data-toggle="tab">Personal
+                                    <span class="badge badge-secondary">18,705</span></a></li> -->
+
 
                             <div class="tab-filter">
                                 <select class="selectpicker select-sort-by" data-style="btn-select" data-width="auto" onchange="sort_by(this.value)">
@@ -308,7 +304,7 @@ $rs_result = mysql_query ($sql);
                                     <span class="cityName"> New York </span> <a href="#selectRegion" id="dropdownMenu1"
                                                                                 data-toggle="modal"> <span
                                             class="caret"></span> </a></div> -->
-                          <!--   </div>
+                           <!--  </div>
                             <div class="pull-right col-xs-6 text-right listing-view-action"><span
                                     class="list-view active"><i class="  icon-th"></i></span> <span
                                     class="compact-view"><i class=" icon-th-list  "></i></span> <span
@@ -319,7 +315,7 @@ $rs_result = mysql_query ($sql);
 
 
                         <!-- Mobile Filter bar-->
-                       <!--  <div class="mobile-filter-bar col-xl-12  ">
+                        <!-- <div class="mobile-filter-bar col-xl-12  ">
                             <ul class="list-unstyled list-inline no-margin no-padding">
                                 <li class="filter-toggle">
                                     <a class="">
@@ -352,17 +348,15 @@ $rs_result = mysql_query ($sql);
                                 <div class="tab-pane active" id="allAds"><div class="row">
 
 
-                                    <br/>
+<br/>
     <div class="col-md-2 no-padding photobox">
-       <!--  <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span> <a href="ads-details.html"><img class="thumbnail no-margin" src="images/category/sample_bike.jpg" alt="img"></a>
+        <!-- <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span> <a href="ads-details.html"><img class="thumbnail no-margin" src="images/category/sample_bike.jpg" alt="img"></a>
         </div> -->
     </div>
     <!--/.photobox-->
     <div class="col-sm-7 add-desc-box">
        
     </div>
-    <!--/.add-desc-box-->
-    <!--/.add-desc-box-->
 
         </div>
 
@@ -370,18 +364,21 @@ $rs_result = mysql_query ($sql);
 <div>
 <div id="target-content" ></div>
 </div>
+<div>
+<div id='myStyle'></div>
+</div>
 <?php
 while($row=mysql_fetch_array($rs_result))
 {
    
 ?>
-
+<div id="masterdiv">
 
 <div class="item-list oldList" id="masterdiv">
-    <div class="cornerRibbons featuredAds">
+    <!-- <div class="cornerRibbons featuredAds"> -->
         <!--<a href=""> Featured Ads</a> -->
-    </div>
-    <div class="row">
+    <!-- </div> -->
+    <div class="row" id="masterdiv">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
          <a href="used_bikes_view.php?filename=Advance_Personal_Search&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
@@ -418,7 +415,7 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
     </div>
     <!--/.add-desc-box-->
     <div class="col-md-3 text-right  price-box">
-        <h2 class="item-price">RS:-<?php echo $row['Prize']  ?></h2>
+      <h2 class="item-price">RS:-<?php echo $row['Prize']  ?></h2>
         <?php
         if (isset($_SESSION['usr_id'])) {
           $id=$_SESSION['usr_id'];
@@ -446,11 +443,10 @@ function myFunction() {
     <!--/.add-desc-box-->
 </div>
 
-<div id='myStyle'>
 </div>
-
 </div>
 <?php } ?>
+
 
 
 
@@ -459,19 +455,16 @@ function myFunction() {
   <ul class="pagination" id="pagination" >
     <?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
      if($i == 1):?>
-      <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_Advance_Personal_Search.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+      <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
       <?php else:?>
 
-       <li class="page-item" id="<?php echo $i;?>"><a href='pagination_Advance_Personal_Search.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+       <li class="page-item" id="<?php echo $i;?>"><a href='pagination_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
 
      <?php endif;?> 
    <?php endfor;endif;?> 
  </ul>
 </nav>
 </div>
-
-
-
 
                             </div>
                         </div>
@@ -480,7 +473,7 @@ function myFunction() {
                         <div class="tab-box save-search-bar text-center"><!-- <a href="#"> <i class=" icon-star-empty"></i>
                             Save Search </a> --></div>
                     </div>
-                  
+                    
 
                     <div class="post-promo text-center">
                         <h2> Do you get any bike for sell ? </h2>
@@ -500,10 +493,10 @@ function myFunction() {
         }
         ?>
                   </div>
-                
+                    <!--/.post-promo-->
 
                 </div>
-                
+                <!--/.page-content-->
 
             </div>
         </div>
@@ -512,13 +505,19 @@ function myFunction() {
 <?php
 include 'footer.php';
 ?>
-    <!-- /.footer -->
+<!-- /.wrapper -->
 
+<!-- Modal Change City -->
+
+<div class="modal fade modalHasList" id="selectRegion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+</div>
+
+<!-- Modal Change City -->
 
 <div class="modal fade modalHasList" id="select-country" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     
-    </div>
 </div>
 
 <!-- /.modal -->
@@ -564,13 +563,13 @@ $('.pagination').pagination({
         onPageClick : function(pageNumber) {
             jQuery('#masterdiv div').html('');
             jQuery("#target-content").html('loading...');
-            jQuery("#target-content").load("pagination_Advance_Personal_Search.php?page=" + pageNumber);
+            jQuery("#target-content").load("pagination_all.php?page=" + pageNumber);
         }
     });
 });
 </script> 
 
-  <script type="text/javascript">
+<script type="text/javascript">
   // city
   function category(category){
 
@@ -589,23 +588,22 @@ $('.pagination').pagination({
 }
 
 function recp() {
-
     var category = document.getElementById('category').value;
         var city = document.getElementById('city').value;
         var min = document.getElementById('minPrice').value;
         var max = document.getElementById('maxPrice').value;
-        //alert( min + max);
-        jQuery('.oldList div').html('');
-        //jQuery('#pagination').hide();
-  $('#myStyle').load('fetch_data.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
-
+    jQuery('.oldList div').html('');
+          jQuery('#masterdiv div').hide();
+          jQuery('#pagination').hide();
+  $('#myStyle').load('fetch_data_advance_search_personal.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
 }
 
 function sort_by(value){
   jQuery('.oldList div').html('');
   //jQuery('#pagination').hide();
-  $('#target-content').load('fetch_sort_advance_personal.php?value=' + encodeURIComponent(value));
+  $('#target-content').load('fetch_sorting.php?value=' + encodeURIComponent(value));
 }
+
 //category
 // function demo(category) {
 //   $('#myStyle2').load('fetch_data.php?category=' + category);

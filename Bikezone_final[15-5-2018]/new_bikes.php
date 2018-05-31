@@ -1,9 +1,9 @@
 <?php
 session_start();
-include_once 'db_connection.php';
- 
+include('db_connection.php'); 
+
 $limit = 10; 
-$sql = "SELECT COUNT(DealerBikeId) FROM dealerbikes WHERE BikeCategory = 'New Bikes' and Status='UnBlock'";  
+$sql = "SELECT COUNT(DealerBikeId) FROM dealerbikes WHERE BikeCategory = 'New Bikes' and Status='UnBlock' ";  
 $rs_result = mysql_query($sql);  
 $row = mysql_fetch_row($rs_result);  
 $total_records = $row[0];  
@@ -33,25 +33,21 @@ dealerbikes.Prize as Prize,
   dealerbikes.Location as Location,
   dealerbikes.PostalCode as PostalCode 
 from
-  dealerbikes
-   WHERE BikeCategory = 'New Bikes' and Status ='UnBlock'";
-   $sql2="LIMIT $start_from, $limit"; 
+  dealerbikes WHERE BikeCategory = 'New Bikes' and Status='UnBlock'";
+  $sql2="LIMIT $start_from, $limit";
  $sql=$sql1." ".$sql2;
- $rs_result = mysql_query ($sql);
-   $_SESSION['fetchToSort']=$sql;
-   $_SESSION['fetchToPagination']=$sql1;
-
+$rs_result = mysql_query ($sql);
+$_SESSION['fetchToSort']=$sql;
+$_SESSION['fetchToPagination']=$sql1;
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
 <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.js"></script>
 <script type="text/javascript" charset="utf8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
 <script src="dist/jquery.simplePagination.js"></script>
     
     <meta charset="utf-8">
@@ -110,17 +106,17 @@ from
                                     <?php
                                         include_once 'db_connection.php';
 
-                                        $query ="SELECT BikeCategory FROM usedbikes UNION SELECT BikeCategory FROM dealerbikes Group by BikeCategory  ";
+                                        $query ="SELECT BikeCategory FROM usedbikes UNION SELECT BikeCategory FROM dealerbikes Group by BikeCategory";
                                         $result= mysql_query($query);
-
                                         $row=mysql_fetch_array($result);
                                                                                 
                                         ?>
                                         <li>                                        
                                         <div margin:0px auto; margin-top:30px;" >
-                                                <select id="category"  style="width:80%;" onchange="category(this.value)" class="chosen form-control ">
-                                            <option value="-1"> Select Category </option>
-                                            <option value="Used Bikes"> Used Bikes</option>
+  <select id="category"  style="width:80%;" onchange="category(this.value)" 
+  class="chosen form-control ">
+                             <option value="-1"> Select Category </option>
+                            <option value="Used Bikes"> Used Bikes</option>
                               <option value="New Bikes"> New Bikes</option>
                               <option value="Scooters"> Scooters</option>
                                         </select>
@@ -189,9 +185,9 @@ from
                                             $count=mysql_query("SELECT DealerId FROM dealerbikes WHERE BikeCategory='New Bikes'");
                                                 $num_rows=mysql_num_rows($count);
                                              echo $num_rows; ?>
-                            
+                                                 
                                              </span></a></li>
-                                   <!--  <li><a href="BuisnessAds.php">Business <span
+                                    <!-- <li><a href="BuisnessAds.php">Business <span
                                             class="count"><?php
 
                                             $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count");
@@ -215,7 +211,7 @@ from
 
                                             $count=mysql_query("SELECT UserId FROM usedbikes");
                                                 $num_rows=mysql_num_rows($count);
-                                             echo $num_rows+1;
+                                             echo $num_rows;
                                              ?></span></a>
                                     </li>
                                     <li><a href="">Used <span class="count">28,705</span></a>
@@ -243,8 +239,9 @@ from
                                     <a  class="nav-link" href="ajax/ee.html" data-url="ajax/33.html" role="tab"
                                                       data-toggle="tab">New Bikes Ads <span class="badge badge-secondary">
                                                           
-                                                           <?php
-                                        $count=mysql_query("SELECT DealerId FROM dealerbikes WHERE BikeCategory='New Bikes'");
+                                                          <?php
+
+                                            $count=mysql_query("SELECT DealerId FROM dealerbikes WHERE BikeCategory='New Bikes'");
                                                 $num_rows=mysql_num_rows($count);
                                              echo $num_rows; ?>
                                                       </span></a>
@@ -278,8 +275,8 @@ from
                         <!--/.listing-filter-->
 
 
-                        <!-- Mobile Filter bar-- remove tag below nidhii>
-                       < <div class="mobile-filter-bar col-xl-12  ">
+                        <!-- Mobile Filter bar-->
+                        <!-- <div class="mobile-filter-bar col-xl-12  ">
                             <ul class="list-unstyled list-inline no-margin no-padding">
                                 <li class="filter-toggle">
                                     <a class="">
@@ -323,7 +320,6 @@ from
 
 
 
-
 <?php  
 while ($row = mysql_fetch_assoc($rs_result)) {  
 ?>  
@@ -331,9 +327,9 @@ while ($row = mysql_fetch_assoc($rs_result)) {
 <div id="masterdiv">
 
 <div class="item-list oldList" id="masterdiv">
-    <!-- <div class="cornerRibbons featuredAds"> -->
-        <!--<a href=""> Featured Ads</a> -->
-    <!-- </div> -->
+    <!-- <div class="cornerRibbons featuredAds" > -->
+        <!--<a href=""> Featured Ads</a>
+    </div> -->
     <div class="row" id="masterdiv">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
@@ -391,7 +387,7 @@ function myFunction() {
         ?>
          
         </div>
-    <!--/.add-desc-box-->
+  
 </div>
 
 
@@ -414,17 +410,10 @@ function myFunction() {
 
  <?php endif;?> 
 <?php endfor;endif;?> 
-
-
-
-
 </ul>
 </nav>
-
 </div>
-</div>
-                            </div>
-                        </div>
+</div> </div></div>
                         <!--/.adds-wrapper-->
 
                        <div class="post-promo text-center">
@@ -466,53 +455,58 @@ function myFunction() {
 <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 <script src="assets/js/vendors.min.js"></script>
 
-
+<!-- include custom script for site  -->
+<!-- <script src="assets/js/script.js"></script> -->
 
 <script src="choosen.js"></script>
 
 <script type="text/javascript">
 $(".chosen").chosen();
 </script>
+
  <script type="text/javascript">
   // city
   function category(category){
 
     if (category=="Used Bikes") {
-        window.location.replace('used_bikes.php');
+       // document.write(category);
+         window.location.replace('used_bikes.php');
     }
     else if(category=="New Bikes"){
+        //document.write(category);
         window.location.replace('new_bikes.php');
   }
-  else if (category=="Scooters"){
+  else {
+    //document.write(category);
     window.location.replace('scooter.php');
   }
 }
-  // city
-function recp() {
 
+function recp() {
         var category = 'New Bikes';
         var city = document.getElementById('city').value;
         var min = document.getElementById('minPrice').value;
         var max = document.getElementById('maxPrice').value;
         //alert( min + max);
-        jQuery('.oldList div').html('');
+          jQuery('.oldList div').html('');
           jQuery('#masterdiv div').hide();
           jQuery('#pagination').hide();
   $('#myStyle').load('fetch_data_newbikes.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
-
 }
 
 function sort_by(value){
-    jQuery('.oldList div').html('');
+  jQuery('.oldList div').html('');
   //jQuery('#masterdiv div').hide();
   //jQuery('#pagination').hide();
   $('#target-content').load('fetch_sorting.php?value=' + encodeURIComponent(value));
 }
+//category
+// function demo(category) {
+//   $('#myStyle2').load('fetch_data.php?category=' + category);
+// }
 </script>
 <link rel="stylesheet" href="style.css">
-
 </body>
-
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -530,4 +524,6 @@ $('.pagination').pagination({
 });
 </script>
 
+
 </html>
+    
