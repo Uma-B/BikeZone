@@ -1,57 +1,6 @@
+
 <?php
 session_start();
-if(isset($_POST['get_option']))
-{
- include "db_connection.php";
-
- $brand_name = $_POST['get_option'];
- $find=mysql_query("select Model from usedbikes where Brand='$brand_name' union select Model from dealerbikes where Brand='$brand_name'");
- ?>
-<option value=""> Select Model</option>
- <?php
- while($row=mysql_fetch_array($find))
- {
-  echo "<option>".$row['Model']."</option>";
- }
- exit;
-}
-
-if(isset($_POST['get_option2']))
-{
- include "db_connection.php";
-
- $state = $_POST['get_option2'];
- $find=mysql_query("select City from usedbikes where State='$state' union select City from dealerbikes where State='$state'");
- ?>
-<option value=""> Select City</option>
- <?php
- while($row=mysql_fetch_array($find))
- {
-  echo "<option>".$row['City']."</option>";
- }
- exit;
-}
-
-if(isset($_POST['get_option3']))
-{
- include "db_connection.php";
-
- $brand_name = $_POST['get_option3'];
- $find=mysql_query("select Model from bikemodel where Brand='$brand_name'");
- ?>
-<option value=""> Select Model</option>
- <?php
- while($row=mysql_fetch_array($find))
- {
-  echo "<option>".$row['Model']."</option>";
- }
- exit;
-}
-
-?>
-<body>
-<?php
-
 $servername = "localhost";
       $username = "root";
       $password = "";
@@ -233,7 +182,6 @@ function myFunction() {
 </nav>
 </div>
 </div>
-</body>
 <script type="text/javascript">
 $(document).ready(function(){
 $('.pagination').pagination({

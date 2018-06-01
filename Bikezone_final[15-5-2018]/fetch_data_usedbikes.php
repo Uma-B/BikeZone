@@ -1,7 +1,6 @@
 
-<body>
 <?php
-
+session_start();
 $servername = "localhost";
       $username = "root";
       $password = "";
@@ -28,8 +27,7 @@ $priceMax = $_GET['maxPrice'];
 
 //echo $Category;
 //echo $City;
-
-$filter1 = "select
+$filter1="select
   usedbikes.UsedBikeId as UsedBikeId,
   usedbikes.BikeCategory as BikeCategory,
   usedbikes.UsedBikeImage1 as UsedBikeImage1,
@@ -42,9 +40,24 @@ $filter1 = "select
   usedbikes.ContactNumber as ContactNumber,
   usedbikes.Prize as Prize
 from
-  usedbikes Where BikeCategory = 'Used Bikes'  and Status='UnBlock' and";
+  usedbikes WHERE Status='UnBlock' and BikeCategory='Used Bikes' and";
 
-$filter2="select dealerbikes.DealerBikeId as UsedBikeId, dealerbikes.BikeCategory as BikeCategory, dealerbikes.DealerBikeImage1 as UsedBikeImage1, dealerbikes.Brand as Brand, dealerbikes.Model as Model, dealerbikes.DealerId as UserId, dealerbikes.Username as UserName, dealerbikes.ContactNumber as ContactNumber, dealerbikes.Prize as Prize, dealerbikes.Year as Year, dealerbikes.Transmission as Transmission, dealerbikes.FuelType as FuelType, dealerbikes.EngineSize as EngineSize, dealerbikes.KilometreDriven as KilometreDriven, dealerbikes.Stroke as Stroke, dealerbikes.Location as Location, dealerbikes.PostalCode as PostalCode from dealerbikes WHERE BikeCategory = 'New Bikes' and Status='UnBlock' and";
+
+
+$filter2="select
+  dealerbikes.DealerBikeId as UsedBikeId,
+  dealerbikes.BikeCategory as BikeCategory,
+  dealerbikes.DealerBikeImage1 as UsedBikeImage1,
+  dealerbikes.Brand as Brand,
+  dealerbikes.Model as Model,
+  dealerbikes.KilometreDriven as KilometreDriven,
+  dealerbikes.Location as Location,
+  dealerbikes.DealerId as UserId,
+  dealerbikes.UserName as UserName,
+  dealerbikes.ContactNumber as ContactNumber,
+  dealerbikes.Prize as Prize
+from
+  dealerbikes WHERE Status='UnBlock' and BikeCategory='Used Bikes' and";
 
 if($City != ""){
   $filter1=$filter1. " usedbikes.City LIKE '$City' AND";
@@ -58,11 +71,11 @@ if($priceMin != "" && $priceMax != ""){
 
 $split = explode(" ", $filter1);
 if($split[count($split)-1] == "AND"){
-     $filter = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter1);
+     $filter1 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter1);
     $filter2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter2);
 }
 
-$filter = $filter1 . " UNION " . $filter2;
+$filter=$filter1. "UNION ". $filter2;
 
 $limit = 10; 
 $sql = $filter; 
@@ -83,7 +96,7 @@ if (isset($_GET["page"])) {
 }  
 
 $start_from = ($page-1) * $limit;
-$_SESSION['Pagination']=$filter;
+$_SESSION['fetchToPagination']=$filter;
 $filterQuery=$filter." LIMIT $start_from, $limit";
 $_SESSION['fetchToSort']=$filterQuery;
 //$_SESSION['fetchToPagination']=$filterQuery;
@@ -186,10 +199,10 @@ function myFunction() {
 
 <?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
  if($i == 1):?>
-            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_fetch_data_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_fetch_data_union.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
  <?php else:?>
 
- <li class="page-item" id="<?php echo $i;?>"><a href='pagination_fetch_data_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+ <li class="page-item" id="<?php echo $i;?>"><a href='pagination_fetch_data_union.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
 
  <?php endif;?> 
 <?php endfor;endif;?> 
@@ -197,7 +210,6 @@ function myFunction() {
 </nav>
 </div>
 </div>
-</body>
 <script type="text/javascript">
 $(document).ready(function(){
 $('.pagination').pagination({
@@ -208,7 +220,7 @@ $('.pagination').pagination({
         onPageClick : function(pageNumber) {
             jQuery('#masterdiv div').hide();
             jQuery("#target-content").html('loading...');
-            jQuery("#target-content").load("pagination_fetch_data_all.php?page=" + pageNumber);
+            jQuery("#target-content").load("pagination_fetch_data_union.php?page=" + pageNumber);
         }
     });
 });

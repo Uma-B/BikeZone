@@ -2,31 +2,8 @@
 session_start();
 
 include "db_connection.php";
-
- // if(isset($_POST['BtnSubmit'])) {
-
- //       $_SESSON['Keyword']=$_POST['Keyword'];
- //       $_SESSION['BikeCategory']=$_POST['BikeCategory'];
- //       $_SESSION['Brand']=$_POST['Brand'];
- //       $_SESSION['Model']=$_POST['Model'];
- //       $_SESSION['State']=$_POST['State'];
- //       $_SESSION['City']=$_POST['City'];
- //       $_SESSION['Prize_Minimum']=$_POST['Prize_Minimum'];
- //       $_SESSION['Prize_Maximum']=$_POST['Prize_Maximum']; 
-GLOBAL $filterQuery;
-
- if(isset($_SESSION['BikeCategory'])) {
-
-    $Keyword = $_SESSION['Keyword'];
-    $BikeCategory= $_SESSION['BikeCategory'];
-    $Brand = $_SESSION['Brand'];
-    $Model = $_SESSION['Model'];
-    $State = $_SESSION['State'];
-    $City = $_SESSION['City'];
-    $Prize_Minimum = $_SESSION['Prize_Minimum'];
-    $Prize_Maximum= $_SESSION['Prize_Maximum'];
-        
-       }
+ 
+GLOBAL $bike_sale_all,$Bike_sale1,$Bike_sale2;
 
 $filterQuery1 = "select
   usedbikes.UsedBikeId as UsedBikeId,
@@ -41,14 +18,13 @@ $filterQuery1 = "select
   usedbikes.ContactNumber as ContactNumber,
   usedbikes.Prize as Prize
 from
-  usedbikes
-where
+  usedbikes Where Status='UnBlock'
 ";
 
 $filterQuery2 = "select
   dealerbikes.DealerBikeId as UsedBikeId,
   dealerbikes.BikeCategory as BikeCategory,
-  dealerbikes.DealerBikeImage1 as BikeImage1,
+  dealerbikes.DealerBikeImage1 as UsedBikeImage1,
   dealerbikes.Brand as Brand,
   dealerbikes.Model as Model,
   dealerbikes.KilometreDriven as KilometreDriven,
@@ -58,146 +34,42 @@ $filterQuery2 = "select
   dealerbikes.ContactNumber as ContactNumber,
   dealerbikes.Prize as Prize
 from
-  dealerbikes
-where
-";
+  dealerbikes Where Status='UnBlock'";
 
-if($Keyword != null){
-    $filterQuery = "select
-  usedbikes.UsedBikeId as UsedBikeId,
-  usedbikes.BikeCategory as BikeCategory,
-  usedbikes.UsedBikeImage1 as UsedBikeImage1,
-  usedbikes.Brand as Brand,
-  usedbikes.Model as Model,
-  usedbikes.KilometreDriven as KilometreDriven,
-  usedbikes.Location as Location,
-  usedbikes.UserId as UserId,
-  usedbikes.UserName as UserName,
-  usedbikes.ContactNumber as ContactNumber,
-  usedbikes.Prize as Prize
-from
-  usedbikes
-where
-  usedbikes.BikeCategory LIKE '$Keyword'
-  OR usedbikes.Brand LIKE '$Keyword'
-  OR usedbikes.Model LIKE '$Keyword'
-  OR usedbikes.State LIKE '$Keyword'
-  OR usedbikes.City LIKE '$Keyword'
-UNION
-select
-  dealerbikes.DealerBikeId as UsedBikeId,
-  dealerbikes.BikeCategory as BikeCategory,
-  dealerbikes.DealerBikeImage1 as BikeImage1,
-  dealerbikes.Brand as Brand,
-  dealerbikes.Model as Model,
-  dealerbikes.KilometreDriven as KilometreDriven,
-  dealerbikes.Location as Location,
-  dealerbikes.DealerId as UserId,
-  dealerbikes.UserName as UserName,
-  dealerbikes.ContactNumber as ContactNumber,
-  dealerbikes.Prize as Prize
-from
-  dealerbikes
-where
-  dealerbikes.BikeCategory LIKE '$Keyword'
-  OR dealerbikes.Brand LIKE '$Keyword'
-  OR dealerbikes.Model LIKE '$Keyword'
-  OR dealerbikes.State LIKE '$Keyword'
-  OR dealerbikes.City LIKE '$Keyword'
-";
+$_SESSION['Bike_sale1'] = $filterQuery1;
+$_SESSION['Bike_sale2'] = $filterQuery2;
 
 
-}else{
+$filter = $filterQuery1." UNION ".$filterQuery2;
+//$_SESSION['bike_sale_all']=$filter;
 
-if($BikeCategory != ""){
-    $filterQuery2 = $filterQuery2." dealerbikes.BikeCategory LIKE '$BikeCategory' AND";
-    $filterQuery1 = $filterQuery1." usedbikes.BikeCategory LIKE '$BikeCategory' AND";
-}
-if($Brand != ""){
-     $filterQuery2 = $filterQuery2." dealerbikes.Brand LIKE '$Brand' AND";
-    $filterQuery1 = $filterQuery1." usedbikes.Brand LIKE '$Brand' AND";
-}
-if($Model != ""){
-    $filterQuery2 = $filterQuery2." dealerbikes.Model LIKE '$Model' AND";
-    $filterQuery1 = $filterQuery1." usedbikes.Model LIKE '$Model' AND";
-}
+$limit = 10; 
+$sql = $filter; 
+/*For No Of Rows Selected*/
+$result=mysql_query($sql);
+$rowcount = mysql_num_rows($result);
+/*----------------------*/
+$rs_result = mysql_query($sql);  
+$row = mysql_fetch_row($rs_result);  
+$total_records = $rowcount;
+$total_pages = ceil($total_records / $limit);
 
-if($State != ""){
-    $filterQuery2 = $filterQuery2." dealerbikes.State LIKE '$State' AND";
-    $filterQuery1 = $filterQuery1." usedbikes.State LIKE '$State' AND";
-}
-if($City != ""){
-    $filterQuery2 = $filterQuery2." dealerbikes.City LIKE '$City' AND";
-    $filterQuery1 = $filterQuery1." usedbikes.City LIKE '$City' AND";
-}
-if($Prize_Minimum != "" && $Prize_Maximum != ""){
-    $filterQuery2 = $filterQuery2." dealerbikes.Prize IN (SELECT Prize from dealerbikes WHERE Prize BETWEEN $Prize_Minimum AND $Prize_Maximum)";
-    $filterQuery1 = $filterQuery1." usedbikes.Prize IN (SELECT Prize from usedbikes WHERE Prize BETWEEN $Prize_Minimum AND $Prize_Maximum)";
-}
-/*trim($filterQuery1);
-trim($filterQuery2);*/
-$split = explode(" ", $filterQuery1);
-if($split[count($split)-1] == "AND"){
-    $filterQuery1 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filterQuery1);
-    $filterQuery2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filterQuery2);
-}
-$filterQuery = $filterQuery1." UNION ".$filterQuery2;
+ 
+if (isset($_GET["page"])) {
+ $page  = $_GET["page"]; 
+} else { 
+  $page=1; 
+}  
 
-}
+$start_from = ($page-1) * $limit;    
+$sql1 =  $filter;
+$sql2="LIMIT $start_from, $limit";
+  $sql=$sql1." ".$sql2;
 
-$_SESSION['filterQuery'] = $filterQuery;
-
-
-    $_SESSION['Keyword'] = $Keyword;
-    $_SESSION['BikeCategory'] = $BikeCategory;
-    $_SESSION['Brand'] = $Brand;
-    $_SESSION['Model'] = $Model;
-     $_SESSION['State'] = $State;
-    $_SESSION['City'] = $City;
-    $_SESSION['Prize_Minimum'] = $Prize_Minimum;
-    $_SESSION['Prize_Maximum'] = $Prize_Maximum;
-
-    $_SESSION['Keyword'] = $_SESSION['Keyword'];
-    $_SESSION['BikeCategory'] = $_SESSION['BikeCategory'];
-    $_SESSION['Brand'] = $_SESSION['Brand'];
-    $_SESSION['Model'] = $_SESSION['Model'];
-     $_SESSION['State'] = $_SESSION['State'];
-    $_SESSION['City'] = $_SESSION['City'];
-    $_SESSION['Prize_Minimum'] = $_SESSION['Prize_Minimum'];
-    $_SESSION['Prize_Maximum'] = $_SESSION['Prize_Maximum'];
-
-
-    // $_SESSION['Keyword'] = $_SESSION['Keyword'];
-    // $_SESSION['BikeCategory'] = $_SESSION['BikeCategory'];
-    // $_SESSION['Brand'] = $_SESSION['Brand'];
-    // $_SESSION['Model'] = $_SESSION['Model'];
-    //  $_SESSION['State'] = $_SESSION['State'];
-    // $_SESSION['City'] = $_SESSION['City'];
-    // $_SESSION['Prize_Minimum'] = $_SESSION['Prize_Minimum'];
-    // $_SESSION['Prize_Maximum'] = $_SESSION['Prize_Maximum'];
-
-    
-    // $_SESSION['Keyword'] = $Keyword;
-    // $_SESSION['BikeCategory'] = $BikeCategory;
-    // $_SESSION['Brand'] = $Brand;
-    // $_SESSION['Model'] = $Model;
-    // $_SESSION['State'] = $State;
-    // $_SESSION['City'] = $City;
-    // $_SESSION['Prize_Minimum'] = $Prize_Minimum;
-    // $_SESSION['Prize_Maximum'] = $Prize_Maximum;
-
-    //  $_SESSION['Keyword'] = $_SESSION['Keyword'];
-    // $_SESSION['BikeCategory'] = $_SESSION['BikeCategory'];
-    // $_SESSION['Brand'] = $_SESSION['Brand'];
-    // $_SESSION['Model'] = $_SESSION['Model'];
-    //  $_SESSION['State'] = $_SESSION['State'];
-    // $_SESSION['City'] = $_SESSION['City'];
-    // $_SESSION['Prize_Minimum'] = $_SESSION['Prize_Minimum'];
-    // $_SESSION['Prize_Maximum'] = $_SESSION['Prize_Maximum'];
-    
-                           
+$_SESSION['fetchToPagination']=$sql1;
+$_SESSION['fetchToSort']=$sql;  
+$rs_result = mysql_query ($sql);                             
 ?>
-
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
@@ -222,15 +94,6 @@ $_SESSION['filterQuery'] = $filterQuery;
 
     <!-- bxSlider CSS file -->
     <link href="assets/plugins/bxslider/jquery.bxslider.css" rel="stylesheet"/>
-
-    <!-- Just for debugging purposes. -->
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- include pace script for automatic web page progress bar  -->
     <script>
         paceOptions = {
             elements: true
@@ -244,14 +107,9 @@ $_SESSION['filterQuery'] = $filterQuery;
 
 </head>
 <body>
-
-<div id="wrapper">
-
          <?php
-          include "header.php";
+            include "header.php";
          ?>
-    <!-- /.header -->
-
         <div class="search-row-wrapper">
             <div class="container ">
                 <form action="#" method="GET">
@@ -287,8 +145,8 @@ $_SESSION['filterQuery'] = $filterQuery;
                                         ?>
                                         <li>                                        
                                         <div margin:0px auto; margin-top:30px;" >
-                                                <select id="category"  style="width:80%;" onchange="recp()" class="chosen form-control ">
-                                            <option value=""> Select Category </option>
+                                                <select id="category"  style="width:80%;" onchange="category(this.value)" class="chosen form-control ">
+                                            <option value="-1"> Select Category </option>
                                             <option value="Used Bikes"> Used Bikes</option>
                               <option value="New Bikes"> New Bikes</option>
                               <option value="Scooter"> Scooter</option>
@@ -309,7 +167,7 @@ $_SESSION['filterQuery'] = $filterQuery;
                                         ?>
                                         <div margin:0px auto; margin-top:30px;" >
                                                 <select id="city" class="chosen form-control" style="width:80%;" onchange="recp()">
-                                                <option value=""> Select City </option>
+                                                <option value="-1"> Select City </option>
                                                 <?php
                                         $query ="SELECT City FROM usedbikes UNION SELECT City FROM dealerbikes Group by City  ";
                                         $result= mysql_query($query);
@@ -352,21 +210,21 @@ $_SESSION['filterQuery'] = $filterQuery;
                             <div class="locations-list  list-filter">
                                 <h5 class="list-title"><strong><a href="#">Seller</a></strong></h5>
                                 <ul class="browse-list list-unstyled long-list">
-                                    <li><a href="index_find.php"><strong>All Ads</strong> <span
+                                    <li><a href="bike_sale_all.php"><strong>All Ads</strong> <span
                                             class="count"><?php
 
                                             $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes) + (SELECT COUNT(*) FROM dealerbikes) as count");
                                                 $res=mysql_fetch_array($count);
                                              echo  $res['count'];
                                              ?></span></a></li>
-                                    <li><a href="BuisnessAds.php">Business <span
+                                    <li><a href="bike_sale_buisness.php">Business <span
                                             class="count"><?php
 
                                             $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count");
                                                 $res=mysql_fetch_array($count);
                                              echo  $res['COUNT(*)'];
                                              ?></span></a></li>
-                                    <li><a href="PersonalAds.php">Personal <span
+                                    <li><a href="bike_sale_personal.php">Personal <span
                                             class="count"><?php
 
                                             $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count");
@@ -407,12 +265,12 @@ $_SESSION['filterQuery'] = $filterQuery;
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
                                 <li class="active nav-item">
-                                    <a  class="nav-link" href="ajax/ee.html" data-url="ajax/33.html" role="tab" data-toggle="tab">All Ads 
+                                    <a  class="nav-link" href="bike_sale_all.php" data-url="ajax/33.html" role="tab" data-toggle="tab">All Ads 
                                     <span class="badge badge-secondary">
                                     <?php
-                                            $count=mysql_query($filterQuery);
-                                                $num_rows=mysql_num_rows($count);
-                                             echo $num_rows;
+                                            $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
+                                                $res=mysql_fetch_array($count);
+                                             echo  $res['count'];
                                     ?>
                                                  
                                     </span>
@@ -420,38 +278,29 @@ $_SESSION['filterQuery'] = $filterQuery;
                                 </li>
 
                                 <li class="nav-item ">
-                                    <a  href="BuisnessAds.php" class= "nav-link" role="tab" >Business Ads 
+                                    <a  href="bike_sale_buisness.php" class= "nav-link" role="tab" >Business Ads 
                                     <span class="badge badge-secondary">
                                     <?php
-                                            $count=mysql_query($filterQuery2);
-                                                $num_rows=mysql_num_rows($count);
-                                             echo $num_rows+1;
+                                             $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count Where Status='UnBlock'");
+                                                $res=mysql_fetch_array($count);
+                                             echo  $res['COUNT(*)'];
                                     ?>
                                                  
                                     </span>
                                     </a>
                                 </li>
                                <li class="nav-item ">
-                                 <a href="PersonalAds.php" class="nav-link" role="tab">Personal
+                                 <a href="bike_sale_personal.php" class="nav-link" role="tab">Personal
                                     <span class="badge badge-secondary">
                              <?php
-                                            $count=mysql_query($filterQuery1);
-                                                $num_rows=mysql_num_rows($count);
-                                             echo $num_rows+1;
+                                           $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count Where Status='UnBlock'");
+                                                $res=mysql_fetch_array($count);
+                                             echo  $res['COUNT(*)'];
                                     ?>
                                                  
                                     </span>
                                     </a>
                                 </li>  </ul>
-
-                                <!-- <a href="BuisnessAds.php"><button>Business Ads</button></a> -->
-                                <!-- <li class="nav-item"><a class="nav-link"  href="BuisnessAds.php" role="tab" data-toggle="tab">Business
-                                    <span class="badge badge-secondary">22,805</span></a></li> -->
-<!--                                  <a href="PersonalAds.php"><button>Personal</button></a>
- -->                                <!-- <li class="nav-item"><a class="nav-link"  href="ajax/33.html" data-url="ajax/33.html" role="tab" data-toggle="tab">Personal
-                                    <span class="badge badge-secondary">18,705</span></a></li> -->
-                          
-
 
                             <div class="tab-filter">
                                 <select class="selectpicker select-sort-by" data-style="btn-select" data-width="auto" onchange="sort_by(this.value)">
@@ -483,7 +332,7 @@ $_SESSION['filterQuery'] = $filterQuery;
 
 
                         <!-- Mobile Filter bar-->
-                        <div class="mobile-filter-bar col-xl-12  ">
+                        <!-- <div class="mobile-filter-bar col-xl-12  ">
                             <ul class="list-unstyled list-inline no-margin no-padding">
                                 <li class="filter-toggle">
                                     <a class="">
@@ -494,9 +343,7 @@ $_SESSION['filterQuery'] = $filterQuery;
                                 <li>
 
 
-                                    <div class="dropdown"> <a data-toggle="dropdown" class="dropdown-toggle"> Short
-
-                                        by </a>
+                                    <div class="dropdown"> <a data-toggle="dropdown"></a>
                                         <ul class="dropdown-menu">
                                             <li class="dropdown-item"><a href="#" rel="nofollow">Relevance</a>
                                             </li>
@@ -509,7 +356,7 @@ $_SESSION['filterQuery'] = $filterQuery;
 
                                 </li>
                             </ul>
-                        </div>
+                        </div> -->
                         <div class="menu-overly-mask"></div>
                         <!-- Mobile Filter bar End-->
 
@@ -518,7 +365,7 @@ $_SESSION['filterQuery'] = $filterQuery;
                                 <div class="tab-pane active" id="allAds"><div class="row">
 
 
-<br/>
+                                    <br/>
     <div class="col-md-2 no-padding photobox">
         <!-- <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span> <a href="ads-details.html"><img class="thumbnail no-margin" src="images/category/sample_bike.jpg" alt="img"></a>
         </div> -->
@@ -531,36 +378,26 @@ $_SESSION['filterQuery'] = $filterQuery;
     <!--/.add-desc-box-->
 
         </div>
-
+</div>
+<div>
+<div id="target-content" ></div>
+</div>
+<div>
+<div id='myStyle' ></div>
 </div>
 <?php
-
-include "db_connection.php";
-
-//echo "\n Filter Query $filterQuery";
-$sql=mysql_query($filterQuery);
-
-while($row=mysql_fetch_array($sql))
+while($row=mysql_fetch_array($rs_result))
 {
-   // $_SESSION['Keyword'] = $row['Keyword'];
-   //  $_SESSION['BikeCategory'] = $row['BikeCategory'];
-   //  $_SESSION['Brand'] = $row['Brand'];
-   //  $_SESSION['Model'] = $row['Model'];
-   //   $_SESSION['State'] = $row['State'];
-   //  $_SESSION['City'] = $row['City'];
-   //  $_SESSION['Prize_Minimum'] = $row['Prize_Minimum'];
-   //  $_SESSION['Prize_Maximum'] = $row['Prize_Maximum'];
 ?>
 
+<div id="masterdiv">
 
-<div class="item-list oldList">
-    <div class="cornerRibbons featuredAds">
-        <!--<a href=""> Featured Ads</a> -->
-    </div>
-    <div class="row">
+<div class="item-list oldList" id="masterdiv">
+    
+    <div class="row" id="masterdiv">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
-         <a href="used_bikes_view.php?usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
+         <a href="used_bikes_view.php?filename=bike_sale_all&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
 
 <?php     
 
@@ -576,7 +413,7 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
 
     <div class="col-sm-7 add-desc-box">
         <div class="ads-details">
-            <h5 class="add-title"><a href="ads-details.html">
+            <h5 class="add-title"><a href="used_bikes_view.php?filename=bike_sale_all&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
                 <?php echo $row['Brand'].'-'.$row['Model'] ;  ?></a></h5>
             <span class="info-row"> 
                 <span class="add-type business-ads tooltipHere" data-toggle="tooltip" data-placement="right" title="" data-original-title="Business Ads">B </span> 
@@ -599,7 +436,7 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
         if (isset($_SESSION['usr_id'])) {
           $id=$_SESSION['usr_id'];
           ?>
-          <a href="favourite.php?filename=pop&UserId=<?php echo $row['UserId']; ?> &UsedBikeId=<?php echo $row['UsedBikeId']; ?> &Brand=<?php echo $row['Brand'];?> &Category=<?php echo $row['BikeCategory'];?> &Price=<?php echo $row['Prize'];?> &ContactNumber=<?php echo $row['ContactNumber'];?> &Fav_Userid=<?php echo $id;?>" class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
+          <a href="favourite.php?filename=bike_sale_all&UserId=<?php echo $row['UserId']; ?> &UsedBikeId=<?php echo $row['UsedBikeId']; ?> &Brand=<?php echo $row['Brand'];?> &Category=<?php echo $row['BikeCategory'];?> &Price=<?php echo $row['Prize'];?> &ContactNumber=<?php echo $row['ContactNumber'];?> &Fav_Userid=<?php echo $id;?>" class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
         </a>
         <?php
         }
@@ -622,35 +459,38 @@ function myFunction() {
     <!--/.add-desc-box-->
 </div>
 
-<div id='myStyle'>
-</div>
 
+
+</div>
 </div>
 <?php } ?>
 
-                            </div>
+
+
+<div class="pagination-bar text-center">
+  <nav aria-label="Page navigation " class="d-inline-b">
+  <ul class="pagination" id="pagination" >
+    <?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
+     if($i == 1):?>
+      <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_all_union.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+      <?php else:?>
+
+       <li class="page-item" id="<?php echo $i;?>"><a href='pagination_all_union.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+
+     <?php endif;?> 
+   <?php endfor;endif;?> 
+ </ul>
+</nav>
+</div>
+
+                    </div>
                         </div>
                         <!--/.adds-wrapper-->
 
                         <div class="tab-box save-search-bar text-center"><!-- <a href="#"> <i class=" icon-star-empty"></i>
                             Save Search </a> --></div>
                     </div>
-                    <div class="pagination-bar text-center">
-                        <nav aria-label="Page navigation " class="d-inline-b">
-                            <ul class="pagination">
-
-                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                <li class="page-item"><a class="page-link" href="#">...</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">Next</a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                    <!--/.pagination-bar -->
+                    
 
                     <div class="post-promo text-center">
                         <h2> Do you get any bike for sell ? </h2>
@@ -679,29 +519,73 @@ function myFunction() {
         </div>
     </div>
     <!-- /.main-container -->
-
+<br/>
 <?php
-  include "footer.php";
+include 'footer.php';
 ?>
-    <!-- /.footer -->
-</div>
+
+
 
 
 
 <!-- Placed at the end of the document so the pages load faster -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-<script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js></script>
+<script src="dist/jquery.simplePagination.js"></script>
+
+
+<!-- Placed at the end of the document so the pages load faster -->
+
+
+<!-- <script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js></script> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 <script src="assets/js/vendors.min.js"></script>
 
-<!-- include custom script for site  -->
-<script src="assets/js/script.js"></script>
+
 
 
 
 <script src="choosen.js"></script>
-  <script type="text/javascript">
+
+<script type="text/javascript">
+$(document).ready(function(){
+$('.pagination').pagination({
+        items: <?php echo $total_records;?>,
+        itemsOnPage: <?php echo $limit;?>,
+        cssStyle: 'light-theme',
+        currentPage : 1,
+        onPageClick : function(pageNumber) {
+            jQuery('#masterdiv div').html('');
+            jQuery("#target-content").html('loading...');
+            jQuery("#target-content").load("pagination_all_union.php?page=" + pageNumber);
+        }
+    });
+});
+</script> 
+
+
+    <script type="text/javascript">
+  // city
+  function category(category){
+
+    if (category=="Used Bikes") {
+       // document.write(category);
+         window.location.replace('used_bikes.php');
+    }
+    else if(category=="New Bikes"){
+        //document.write(category);
+        window.location.replace('new_bikes.php');
+  }
+  else {
+    //document.write(category);
+    window.location.replace('scooter.php');
+  }
+}
+
   // city
 function recp() {
 
@@ -710,14 +594,19 @@ function recp() {
         var min = document.getElementById('minPrice').value;
         var max = document.getElementById('maxPrice').value;
         //alert( min + max);
-        jQuery('.oldList div').html('');
-  $('#myStyle').load('fetch_data.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
+       jQuery('.oldList div').html('');
+          jQuery('#masterdiv div').hide();
+          jQuery('#pagination').hide();
+
+  $('#myStyle').load('fetch_data_index_find.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
 
 }
 
 function sort_by(value){
   jQuery('.oldList div').html('');
-  $('#myStyle').load('fetch_data_sort.php?value=' + encodeURIComponent(value));
+          //jQuery('#masterdiv div').hide();
+           //jQuery('#pagination').hide();
+  $('#target-content').load('fetch_sort_union.php?value=' + encodeURIComponent(value));
 }
 //category
 // function demo(category) {
@@ -727,30 +616,18 @@ function sort_by(value){
 <script type="text/javascript">
 $(".chosen").chosen();
 </script>
-<link rel="stylesheet" href="style.css">
-<!-- grid problem -->
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<!-- <script
-  src="https://code.jquery.com/jquery-1.11.2.js"
-  integrity="sha256-WMJwNbei5YnfOX5dfgVCS5C4waqvc+/0fV7W2uy3DyU="
-  crossorigin="anonymous"></script> -->
-<!-- <script src="http://ajax.gogoleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script> -->
-<!-- <script src="choosen.js"></script> -->
-
-
- <link rel="stylesheet" href="http://www.jacklmoore.com/colorbox/example1/colorbox.css" />
- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="http://www.jacklmoore.com/colorbox/jquery.colorbox.js"></script>
-    <script>
+<link rel="stylesheet" href="http://www.jacklmoore.com/colorbox/example1/colorbox.css" />
+<script src="http://www.jacklmoore.com/colorbox/jquery.colorbox.js"></script>
+<script>
         function openColorBox() {
-            $.colorbox({ iframe: true, width: "23%", height: "40%", href: "n1.html" });
+            $.colorbox({ iframe: true, width: "23%", height: "40%", href: "post.html" });
         }
 
         setTimeout(openColorBox, 000);
     </script>
+<link rel="stylesheet" href="style.css">
 
-        
-</html>
 </body>
 
 </html>
+

@@ -644,7 +644,7 @@ include 'footer.php';
     {
        $.ajax({
        type: 'post',
-       url: 'fetch_data.php',
+       url: 'fetch_data_scooters.php',
        data: {
         get_option:val
      },
@@ -657,7 +657,7 @@ include 'footer.php';
 
        $.ajax({
        type: 'post',
-       url: 'fetch_data.php',
+       url: 'fetch_data_scooters.php',
        data: {
         get_option2:val
      },

@@ -1,7 +1,7 @@
 <?php
 session_start();
 include "db_connection.php";
-GLOBAL $bike_sale_all,$Bike_sale1,$Bike_sale2,$sql;
+
 
 
 $filterQuery1 = "select
@@ -62,8 +62,8 @@ $sql1 =  $filterQuery;
 $sql2="LIMIT $start_from, $limit";
  $sql=$sql1." ".$sql2;
 $rs_result = mysql_query ($sql);    
- $_SESSION['fetchToSort']=$sql;
-   $_SESSION['fetchToPagination']=$sql1;  
+ $_SESSION['fetchToPagination']=$sql1;
+$_SESSION['fetchToSort']=$sql;   
                         
 ?>
 
@@ -210,7 +210,7 @@ $rs_result = mysql_query ($sql);
                                     <li><a href="used_bikes.php"><strong>Used Bikes Ads</strong> <span
                                             class="count"><?php
 
-                                            $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes) + (SELECT COUNT(*) FROM dealerbikes) as count");
+                                            $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes Where BikeCategory='Used Bikes') + (SELECT COUNT(*) FROM dealerbikes Where BikeCategory='Used Bikes') as count");
                                                 $res=mysql_fetch_array($count);
                                              echo  $res['count'];
                                              ?></span></a></li>
@@ -268,9 +268,10 @@ $rs_result = mysql_query ($sql);
                                                           
                                                           <?php
 
-                                           
-                                                $num_rows=mysql_num_rows($rs_result);
-                                             echo $num_rows; ?>
+                                      $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock' AND BikeCategory='Used bikes') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock' AND BikeCategory='Used Bikes') as count");
+                                                $res=mysql_fetch_array($count);
+                                             echo  $res['count'];
+                                                          ?>
                                                       </span></a>
                                 </li>
                                
@@ -338,7 +339,9 @@ $rs_result = mysql_query ($sql);
 <div>
 <div id="target-content" ></div>
 </div>
+<div>
 <div id='myStyle'>
+</div>
 </div>
 
 <?php  
@@ -422,10 +425,10 @@ function myFunction() {
 
 <?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
  if($i == 1):?>
-            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_all_union.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
  <?php else:?>
 
- <li class="page-item" id="<?php echo $i;?>"><a href='pagination_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+ <li class="page-item" id="<?php echo $i;?>"><a href='pagination_all_union.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
 
  <?php endif;?> 
 <?php endfor;endif;?> 
@@ -520,7 +523,7 @@ function sort_by(value){
   jQuery('.oldList div').html('');
           //jQuery('#masterdiv div').hide();
             //jQuery('#pagination').hide();
-  $('#target-content').load('fetch_sorting.php?value=' + encodeURIComponent(value));
+  $('#target-content').load('fetch_sort_union.php?value=' + encodeURIComponent(value));
 }
 </script>
 <link rel="stylesheet" href="style.css">
@@ -538,7 +541,7 @@ $('.pagination').pagination({
         onPageClick : function(pageNumber) {
             jQuery('#masterdiv div').hide();
             jQuery("#target-content").html('loading...');
-            jQuery("#target-content").load("pagination_all.php?page=" + pageNumber);
+            jQuery("#target-content").load("pagination_all_union.php?page=" + pageNumber);
         }
     });
 });

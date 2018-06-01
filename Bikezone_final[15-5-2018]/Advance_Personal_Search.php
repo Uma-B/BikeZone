@@ -28,7 +28,7 @@ if (isset($_GET["page"])) {
 $start_from = ($page-1) * $limit;    
 $sql1 =  $filterQuery2;
 $sql2="LIMIT $start_from, $limit";
- echo $sql=$sql1." ".$sql2;
+$sql=$sql1." ".$sql2;
  $rs_result = mysql_query ($sql);     
 
 $_SESSION['fetchToSort']=$sql;
@@ -191,14 +191,14 @@ $_SESSION['fetchToPagination']=$sql1;
                                                 $res=mysql_fetch_array($count);
                                              echo  $res['count'];
                                              ?></span></a></li>
-                                    <li><a href="Advance_Business_Search.php"><strong>Business </strong><span
+                                    <li><a href="Advance_Business_Search.php">Business <span
                                             class="count"><?php
 
                                             $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count");
                                                 $res=mysql_fetch_array($count);
                                              echo  $res['COUNT(*)'];
                                              ?></span></a></li>
-                                    <li><a href="Advance_Personal_Search.php">Personal <span
+                                    <li><a href="Advance_Personal_Search.php"><strong>Personal </strong><span
                                             class="count"><?php
 
                                             $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count");
@@ -243,9 +243,9 @@ $_SESSION['fetchToPagination']=$sql1;
                                     All Ads 
                                     <span class="badge badge-secondary">
                                     <?php
-                                            $count=mysql_query("SELECT DealerId FROM dealerbikes");
-                                                $num_rows=mysql_num_rows($count);
-                                             echo $num_rows;
+                                           $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
+                                                $res=mysql_fetch_array($count);
+                                             echo  $res['count'];
                                     ?>
                                                  
                                     </span>
@@ -256,9 +256,9 @@ $_SESSION['fetchToPagination']=$sql1;
                                     <a  href="Advance_Business_Search.php" class= "nav-link" role="tab" >Business Ads 
                                     <span class="badge badge-secondary">
                                     <?php
-                                            // $count=mysql_query("SELECT DealerId FROM dealerbikes");
-                                                $num_rows=mysql_num_rows($rs_result);
-                                             echo $num_rows;
+                                              $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count Where Status='UnBlock'");
+                                                $res=mysql_fetch_array($count);
+                                             echo  $res['COUNT(*)'];
                                     ?>
                                                  
                                     </span>
@@ -268,9 +268,9 @@ $_SESSION['fetchToPagination']=$sql1;
                                  <a href="Advance_Personal_Search.php" class="nav-link" role="tab">Personal
                                     <span class="badge badge-secondary">
                              <?php
-                                            $count=mysql_query("SELECT UserId FROM usedbikes");
-                                                $num_rows=mysql_num_rows($count);
-                                             echo $num_rows;
+                                            $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count Where Status='UnBlock'");
+                                                $res=mysql_fetch_array($count);
+                                             echo  $res['COUNT(*)'];
                                     ?>
                                                  
                                     </span>

@@ -182,10 +182,9 @@ $_SESSION['fetchToPagination']=$sql1;
                                     <li><a href="new_bikes.php"><strong>New Bikes Ads</strong> <span
                                             class="count"> <?php
 
-                                            $count=mysql_query("SELECT DealerId FROM dealerbikes WHERE BikeCategory='New Bikes'");
-                                                $num_rows=mysql_num_rows($count);
-                                             echo $num_rows; ?>
-                                                 
+                                            $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes Where BikeCategory='New bikes') + (SELECT COUNT(*) FROM dealerbikes Where BikeCategory='New Bikes') as count");
+                                                $res=mysql_fetch_array($count);
+                                             echo  $res['count']; ?>
                                              </span></a></li>
                                     <!-- <li><a href="BuisnessAds.php">Business <span
                                             class="count"><?php
@@ -241,9 +240,9 @@ $_SESSION['fetchToPagination']=$sql1;
                                                           
                                                           <?php
 
-                                            $count=mysql_query("SELECT DealerId FROM dealerbikes WHERE BikeCategory='New Bikes'");
-                                                $num_rows=mysql_num_rows($count);
-                                             echo $num_rows; ?>
+                                            $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock' AND BikeCategory='New bikes') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock' AND BikeCategory='New Bikes') as count");
+                                                $res=mysql_fetch_array($count);
+                                             echo  $res['count']; ?>
                                                       </span></a>
                                 </li>
                                <!--  <li class="nav-item"><a class="nav-link"  href="ajax/33.html" data-url="ajax/33.html" role="tab" data-toggle="tab">Business

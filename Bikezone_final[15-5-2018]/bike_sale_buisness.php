@@ -1,7 +1,8 @@
 <?php
 session_start();
-
 include "db_connection.php";
+
+
 GLOBAL $Bike_sale2;
 if(isset($_SESSION['Bike_sale2'])) {
 $filterQuery1 = $_SESSION['Bike_sale2'];
@@ -23,16 +24,15 @@ if (isset($_GET["page"])) {
 } else { 
   $page=1; 
 }  
+
 $start_from = ($page-1) * $limit;    
 $sql1 =  $filterQuery1;
 $sql2="LIMIT $start_from, $limit";
-  echo $sql=$sql1." ".$sql2;
+ $sql=$sql1." ".$sql2;
+ $rs_result = mysql_query ($sql);     
 
-$_SESSION['sortBikeSaleBusiness']=$sql;
-$_SESSION['paginationBikeSaleBusiness']=$sql1;  
-$rs_result = mysql_query ($sql);   
-
-                           
+$_SESSION['fetchToSort']=$sql;
+$_SESSION['fetchToPagination']=$sql1; 
 ?>
 
 <!DOCTYPE html>
@@ -51,8 +51,7 @@ $rs_result = mysql_query ($sql);
     <!-- Bootstrap core CSS -->
     <link href="assets/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-
+        <link rel="stylesheet" href="style.css">
     <!-- styles needed for carousel slider -->
     <link href="assets/plugins/owl-carousel/owl.carousel.css" rel="stylesheet">
     <link href="assets/plugins/owl-carousel/owl.theme.css" rel="stylesheet">
@@ -72,21 +71,15 @@ $rs_result = mysql_query ($sql);
         paceOptions = {
             elements: true
         };
-
-        
-
     </script>
     <script src="assets/js/pace.min.js"></script>
 
 
 </head>
 <body>
-
-<!-- <div id="wrapper"> -->
-
-         <?php 
-        include "header.php";
-    ?>
+         <?php
+          include "header.php";
+         ?>
     <!-- /.header -->
 
         <div class="search-row-wrapper">
@@ -101,6 +94,7 @@ $rs_result = mysql_query ($sql);
             </div>
         </div>
 
+  <!-- /.search-row -->
     <!-- /.search-row -->
     <div class="main-container">
         <div class="container">
@@ -125,7 +119,7 @@ $rs_result = mysql_query ($sql);
                                         <li>                                        
                                         <div margin:0px auto; margin-top:30px;" >
                                                 <select id="category"  style="width:80%;" onchange="category()" class="chosen form-control ">
-                                            <option value=""> Select Category </option>
+                                            <option value="-1"> Select Category </option>
                                             <option value="Used Bikes"> Used Bikes</option>
                               <option value="New Bikes"> New Bikes</option>
                               <option value="Scooter"> Scooter</option>
@@ -146,7 +140,7 @@ $rs_result = mysql_query ($sql);
                                         ?>
                                         <div margin:0px auto; margin-top:30px;" >
                                                 <select id="city" class="chosen form-control" style="width:80%;" onchange="recp()">
-                                                <option value=""> Select City </option>
+                                                <option value="-1"> Select City </option>
                                                 <?php
                                         $query ="SELECT City FROM dealerbikes Group by City  ";
                                         $result= mysql_query($query);
@@ -247,9 +241,9 @@ $rs_result = mysql_query ($sql);
                                     <a  href="bike_sale_all.php" class= "nav-link" role="tab" >All Ads  
                                     <span class="badge badge-secondary">
                                     <?php
-                                            $count=mysql_query($filterQuery1);
-                                                $num_rows=mysql_num_rows($count);
-                                             echo $num_rows;
+                                            $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
+                                                $res=mysql_fetch_array($count);
+                                             echo  $res['count'];
                                     ?>
                                                  
                                     </span>
@@ -260,9 +254,9 @@ $rs_result = mysql_query ($sql);
                                     <a  href="bike_sale_buisness.php" class= "nav-link" role="tab" >Business Ads 
                                     <span class="badge badge-secondary">
                                     <?php
-                                            //$count=mysql_query($filterQuery1);
-                                                $num_rows=mysql_num_rows($rs_result);
-                                             echo $num_rows;
+                                            $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count Where Status='UnBlock'");
+                                                $res=mysql_fetch_array($count);
+                                             echo  $res['COUNT(*)'];
                                     ?>
                                                  
                                     </span>
@@ -272,9 +266,9 @@ $rs_result = mysql_query ($sql);
                                  <a href="bike_sale_personal.php" class="nav-link" role="tab">Personal
                                     <span class="badge badge-secondary">
                              <?php
-                                            $count=mysql_query($filterQuery1);
-                                                $num_rows=mysql_num_rows($count);
-                                             echo $num_rows;
+                                            $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count Where Status='UnBlock'");
+                                                $res=mysql_fetch_array($count);
+                                             echo  $res['COUNT(*)'];
                                     ?>                                                
                                     </span>
                                     </a>
@@ -299,22 +293,22 @@ $rs_result = mysql_query ($sql);
                         </div>
                         <!--/.tab-box-->
 
-                        <div class="listing-filter">
+                       <!--  <div class="listing-filter">
                             <div class="pull-left col-xs-6">
-                               <!--  <div class="breadcrumb-list"><a href="#" class="current"> <span>All ads</span></a>
+                         -->       <!--  <div class="breadcrumb-list"><a href="#" class="current"> <span>All ads</span></a>
                                     in
 
                                     cityName will replace with selected location/area from location modal 
                                     <span class="cityName"> New York </span> <a href="#selectRegion" id="dropdownMenu1"
                                                                                 data-toggle="modal"> <span
                                             class="caret"></span> </a></div> -->
-                            </div>
+                           <!--  </div>
                             <div class="pull-right col-xs-6 text-right listing-view-action"><span
-                                    class="list-view active"><!-- <i class="  icon-th"></i> --></span> <span
-                                    class="compact-view"><!-- <i class=" icon-th-list  "></i> --></span> <span
-                                    class="grid-view "><!-- <i class=" icon-th-large "></i> --></span></div>
+                                    class="list-view active"><i class="  icon-th"></i></span> <span
+                                    class="compact-view"><i class=" icon-th-list  "></i></span> <span
+                                    class="grid-view "><i class=" icon-th-large "></i></span></div>
                             <div style="clear:both"></div>
-                        </div>
+                        </div> -->
                         <!--/.listing-filter-->
 
 
@@ -330,9 +324,7 @@ $rs_result = mysql_query ($sql);
                                 <li>
 
 
-                                    <div class="dropdown"> <a data-toggle="dropdown" class="dropdown-toggle"> Short
-
-                                        by </a>
+                                    <div class="dropdown"> <a data-toggle="dropdown"> </a>
                                         <ul class="dropdown-menu">
                                             <li class="dropdown-item"><a href="#" rel="nofollow">Relevance</a>
                                             </li>
@@ -354,7 +346,7 @@ $rs_result = mysql_query ($sql);
                                 <div class="tab-pane active" id="allAds"><div class="row">
 
 
-                                    <br/>
+<br/>
     <div class="col-md-2 no-padding photobox">
         <!-- <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span> <a href="ads-details.html"><img class="thumbnail no-margin" src="images/category/sample_bike.jpg" alt="img"></a>
         </div> -->
@@ -363,28 +355,28 @@ $rs_result = mysql_query ($sql);
     <div class="col-sm-7 add-desc-box">
        
     </div>
-    <!--/.add-desc-box-->
-    <!--/.add-desc-box-->
 
         </div>
 
 </div>
 <div>
-<div id="target-content"></div>
+<div id="target-content" ></div>
 </div>
-<div id='myStyle'>
+<div>
+<div id='myStyle'></div>
 </div>
 <?php
 while($row=mysql_fetch_array($rs_result))
 {
+   
 ?>
-
 <div id="masterdiv">
+
 <div class="item-list oldList" id="masterdiv">
-    <div class="cornerRibbons featuredAds">
+    <!-- <div class="cornerRibbons featuredAds"> -->
         <!--<a href=""> Featured Ads</a> -->
-    </div>
-    <div class="row">
+    <!-- </div> -->
+    <div class="row" id="masterdiv">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
          <a href="used_bikes_view.php?filename=bike_sale_buisness&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
@@ -419,10 +411,10 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
                   
               </i><?php echo $row['ContactNumber'] ?></span> </span></div>
     </div>
-     <!--/.add-desc-box-->
+    <!--/.add-desc-box-->
     <div class="col-md-3 text-right  price-box">
-        <h2 class="item-price">RS:-<?php echo $row['Prize']  ?></h2>
-          <?php
+      <h2 class="item-price">RS:-<?php echo $row['Prize']  ?></h2>
+        <?php
         if (isset($_SESSION['usr_id'])) {
           $id=$_SESSION['usr_id'];
           ?>
@@ -449,10 +441,11 @@ function myFunction() {
     <!--/.add-desc-box-->
 </div>
 
-
 </div>
 </div>
 <?php } ?>
+
+
 
 
 <div class="pagination-bar text-center">
@@ -460,10 +453,10 @@ function myFunction() {
   <ul class="pagination" id="pagination" >
     <?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
      if($i == 1):?>
-      <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_Bike_Sale_Buisness.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+      <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
       <?php else:?>
 
-       <li class="page-item" id="<?php echo $i;?>"><a href='pagination_Bike_Sale_Buisness.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+       <li class="page-item" id="<?php echo $i;?>"><a href='pagination_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
 
      <?php endif;?> 
    <?php endfor;endif;?> 
@@ -471,11 +464,9 @@ function myFunction() {
 </nav>
 </div>
 
-
-
-
                             </div>
-                        </div>                        <!--/.adds-wrapper-->
+                        </div>
+                        <!--/.adds-wrapper-->
 
                         <div class="tab-box save-search-bar text-center"><!-- <a href="#"> <i class=" icon-star-empty"></i>
                             Save Search </a> --></div>
@@ -485,7 +476,7 @@ function myFunction() {
                     <div class="post-promo text-center">
                         <h2> Do you get any bike for sell ? </h2>
                         <h5>Sell your bikes online FOR FREE. It's easier than you think !</h5>
-                       <?php
+                        <?php
         if (isset($_SESSION['usr_id'])) {
           $id=$_SESSION['usr_id'];
           ?>
@@ -509,14 +500,28 @@ function myFunction() {
         </div>
     </div>
     <!-- /.main-container -->
+<?php
+include 'footer.php';
+?>
+<!-- /.wrapper -->
 
-    <?php 
-        include "footer.php";
-    ?>
-    <!-- /.footer -->
+<!-- Modal Change City -->
+
+<div class="modal fade modalHasList" id="selectRegion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
 </div>
 
+<!-- Modal Change City -->
 
+<div class="modal fade modalHasList" id="select-country" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    
+</div>
+
+<!-- /.modal -->
+
+<!-- Le javascript
+================================================== -->
 
 <!-- Placed at the end of the document so the pages load faster -->
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -527,19 +532,24 @@ function myFunction() {
 <script src="dist/jquery.simplePagination.js"></script>
 
 
-<!-- Placed at the end of the document so the pages load faster -->
 
 
-<!-- <script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js></script> -->
+<!-- 
+<script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-<script src="assets/js/vendors.min.js"></script>
+<script src="assets/js/vendors.min.js"></script> -->
 
+<!-- include custom script for site  -->
+<!-- <script src="assets/js/script.js"></script> -->
+<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
 
-
-
-
+<!-- dropdown -->
+<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script> -->
 <script src="choosen.js"></script>
+
+
+
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -549,16 +559,15 @@ $('.pagination').pagination({
         cssStyle: 'light-theme',
         currentPage : 1,
         onPageClick : function(pageNumber) {
-            jQuery('#masterdiv div').hide();
+            jQuery('#masterdiv div').html('');
             jQuery("#target-content").html('loading...');
-            jQuery("#target-content").load("pagination_Bike_Sale_Buisness.php?page=" + pageNumber);
+            jQuery("#target-content").load("pagination_all.php?page=" + pageNumber);
         }
     });
 });
 </script> 
 
-
-    <script type="text/javascript">
+<script type="text/javascript">
   // city
   function category(category){
 
@@ -575,35 +584,35 @@ $('.pagination').pagination({
     window.location.replace('scooter.php');
   }
 }
-  // city
-function recp() {
 
-        var category = document.getElementById('category').value;
+function recp() {
+    var category = document.getElementById('category').value;
         var city = document.getElementById('city').value;
         var min = document.getElementById('minPrice').value;
         var max = document.getElementById('maxPrice').value;
-        //alert( min + max);
-        jQuery('.oldList div').html('');
+    jQuery('.oldList div').html('');
           jQuery('#masterdiv div').hide();
-          //jQuery('#pagination').hide();
+          jQuery('#pagination').hide();
   $('#myStyle').load('fetch_data_business.php?category=' + encodeURIComponent(category) + '&city=' + encodeURIComponent(city)+ '&minPrice=' + min+ '&maxPrice=' + max);
-
 }
 
 function sort_by(value){
   jQuery('.oldList div').html('');
-          jQuery('#masterdiv div').hide();
-          //jQuery('#pagination').hide();
-  $('#target-content').load('fetch_sort_bike_sale_all_buisness.php?value=' + encodeURIComponent(value));
+  //jQuery('#pagination').hide();
+  $('#target-content').load('fetch_sorting.php?value=' + encodeURIComponent(value));
 }
 
+//category
+// function demo(category) {
+//   $('#myStyle2').load('fetch_data.php?category=' + category);
+// }
 </script>
 <script type="text/javascript">
 $(".chosen").chosen();
 </script>
 <link rel="stylesheet" href="style.css">
-
-
+<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script> -->
+<script src="choosen.js"></script>
 </body>
 
 </html>
