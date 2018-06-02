@@ -228,9 +228,17 @@ $_SESSION['fetchToPagination']=$sql1;
 
 
                 <!--/.page-side-bar-->
-                <div class="col-md-9 page-content col-thin-left">
-                    <div class="category-list">
-                        <div class="tab-box ">
+                <div class="col-md-9 page-content col-thin-left" >
+                    <div id="target-content" ></div>
+
+<!-- city and price change values will print here -->
+
+                        <div id='myStyle'></div>
+                          <div id="masterdiv">
+                    <div class="category-list" >
+                        <!-- sorting values will print here -->
+
+                        <div class="tab-box  oldList">
 
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
@@ -240,7 +248,7 @@ $_SESSION['fetchToPagination']=$sql1;
                                                           
                                                           <?php
 
-                                            $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock' AND BikeCategory='New bikes') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock' AND BikeCategory='New Bikes') as count");
+                                            $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock' AND BikeCategory LIKE 'New Bikes') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock' AND BikeCategory LIKE 'New Bikes') as count");
                                                 $res=mysql_fetch_array($count);
                                              echo  $res['count']; ?>
                                                       </span></a>
@@ -310,12 +318,6 @@ $_SESSION['fetchToPagination']=$sql1;
                                
 
 
-<div>
-<div id="target-content" ></div>
-</div>
-<div>
-<div id='myStyle'></div>
-</div>
 
 
 
@@ -323,13 +325,13 @@ $_SESSION['fetchToPagination']=$sql1;
 while ($row = mysql_fetch_assoc($rs_result)) {  
 ?>  
       
-<div id="masterdiv">
+<div>
 
-<div class="item-list oldList" id="masterdiv">
+<div class="item-list">
     <!-- <div class="cornerRibbons featuredAds" > -->
         <!--<a href=""> Featured Ads</a>
     </div> -->
-    <div class="row" id="masterdiv">
+    <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
          <a href="used_bikes_view.php?filename=new_bikes&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
@@ -386,14 +388,14 @@ function myFunction() {
         ?>
          
         </div>
-  
 </div>
-
-
 </div>
 </div>
 <?php } ?>
-
+</div>
+</div>
+</div>
+</div>
 
 <div class="pagination-bar text-center">
      <nav aria-label="Page navigation " class="d-inline-b">
@@ -412,7 +414,6 @@ function myFunction() {
 </ul>
 </nav>
 </div>
-</div> </div></div>
                         <!--/.adds-wrapper-->
 
                        <div class="post-promo text-center">
@@ -495,7 +496,7 @@ function recp() {
 
 function sort_by(value){
   jQuery('.oldList div').html('');
-  //jQuery('#masterdiv div').hide();
+  jQuery('#masterdiv div').hide();
   //jQuery('#pagination').hide();
   $('#target-content').load('fetch_sorting.php?value=' + encodeURIComponent(value));
 }

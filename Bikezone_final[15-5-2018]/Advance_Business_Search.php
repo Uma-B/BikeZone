@@ -231,9 +231,17 @@ $_SESSION['fetchToPagination']=$sql1;
                     </aside>
                 </div>
                 <!--/.page-side-bar-->
-                <div class="col-md-9 page-content col-thin-left">
-                    <div class="category-list">
-                        <div class="tab-box " >
+                <div class="col-md-9 page-content col-thin-left" >
+                    <div id="target-content" ></div>
+
+<!-- city and price change values will print here -->
+
+                        <div id='myStyle'></div>
+                          <div id="masterdiv">
+                    <div class="category-list" >
+                        <!-- sorting values will print here -->
+
+                        <div class="tab-box  oldList">
 
                             <!-- Nav tabs -->
                            <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
@@ -241,6 +249,7 @@ $_SESSION['fetchToPagination']=$sql1;
                                                                    <a  href="Advance_Search_Find.php" class= "nav-link" role="tab" >
 
                                     All Ads 
+
                                     <span class="badge badge-secondary">
                                     <?php
                                             $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
@@ -253,12 +262,11 @@ $_SESSION['fetchToPagination']=$sql1;
                                 </li>
 
                                 <li class=" active nav-item ">
-                                    <a  href="Advance_Business_Search.php" class= "nav-link" role="tab" >Business Ads 
+                                    <a  href="Advance_Business_Search.php" class= "nav-link" role="tab">Business Ads
                                     <span class="badge badge-secondary">
                                     <?php
-                                             $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count Where Status='UnBlock'");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
+                                             $res=mysql_num_rows($rs_result);
+                                            echo  $res;
                                     ?>
                                                  
                                     </span>
@@ -295,22 +303,15 @@ $_SESSION['fetchToPagination']=$sql1;
                         </div>
                         <!--/.tab-box-->
 
-                       <!--  <div class="listing-filter">
+                        <div class="listing-filter">
                             <div class="pull-left col-xs-6">
-                         -->       <!--  <div class="breadcrumb-list"><a href="#" class="current"> <span>All ads</span></a>
-                                    in
-
-                                    cityName will replace with selected location/area from location modal 
-                                    <span class="cityName"> New York </span> <a href="#selectRegion" id="dropdownMenu1"
-                                                                                data-toggle="modal"> <span
-                                            class="caret"></span> </a></div> -->
-                           <!--  </div>
+                            </div>
                             <div class="pull-right col-xs-6 text-right listing-view-action"><span
-                                    class="list-view active"><i class="  icon-th"></i></span> <span
-                                    class="compact-view"><i class=" icon-th-list  "></i></span> <span
-                                    class="grid-view "><i class=" icon-th-large "></i></span></div>
+                                    class="list-view active"><!-- <i class="  icon-th"></i> --></span> <span
+                                    class="compact-view"><!-- <i class=" icon-th-list  "></i> --></span> <span
+                                    class="grid-view "><!-- <i class=" icon-th-large "></i> --></span></div>
                             <div style="clear:both"></div>
-                        </div> -->
+                        </div>
                         <!--/.listing-filter-->
 
 
@@ -326,7 +327,9 @@ $_SESSION['fetchToPagination']=$sql1;
                                 <li>
 
 
-                                    <div class="dropdown"> <a data-toggle="dropdown"> </a>
+                                    <div class="dropdown"> <a data-toggle="dropdown" class="dropdown-toggle"> Short
+
+                                        by </a>
                                         <ul class="dropdown-menu">
                                             <li class="dropdown-item"><a href="#" rel="nofollow">Relevance</a>
                                             </li>
@@ -345,40 +348,19 @@ $_SESSION['fetchToPagination']=$sql1;
 
                         <div class="adds-wrapper">
                             <div class="tab-content">
-                                <div class="tab-pane active" id="allAds"><div class="row">
-
-
-<br/>
-    <div class="col-md-2 no-padding photobox">
-        <!-- <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span> <a href="ads-details.html"><img class="thumbnail no-margin" src="images/category/sample_bike.jpg" alt="img"></a>
-        </div> -->
-    </div>
-    <!--/.photobox-->
-    <div class="col-sm-7 add-desc-box">
-       
-    </div>
-
-        </div>
-
-</div>
-<div>
-<div id="target-content" ></div>
-</div>
-<div>
-<div id='myStyle'></div>
-</div>
+                               
 <?php
 while($row=mysql_fetch_array($rs_result))
 {
    
 ?>
-<div id="masterdiv">
+<div>
 
-<div class="item-list oldList" id="masterdiv">
+<div class="item-list">
     <!-- <div class="cornerRibbons featuredAds"> -->
         <!--<a href=""> Featured Ads</a> -->
     <!-- </div> -->
-    <div class="row" id="masterdiv">
+    <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
          <a href="used_bikes_view.php?filename=Advance_Business_Search&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
@@ -446,8 +428,10 @@ function myFunction() {
 </div>
 </div>
 <?php } ?>
-
-
+</div>
+</div>
+</div>
+</div>
 
 
 <div class="pagination-bar text-center">
@@ -455,25 +439,16 @@ function myFunction() {
   <ul class="pagination" id="pagination" >
     <?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
      if($i == 1):?>
-      <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+      <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_advance_business_search.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
       <?php else:?>
 
-       <li class="page-item" id="<?php echo $i;?>"><a href='pagination_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+       <li class="page-item" id="<?php echo $i;?>"><a href='pagination_advance_business_search.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
 
      <?php endif;?> 
    <?php endfor;endif;?> 
  </ul>
 </nav>
 </div>
-
-                            </div>
-                        </div>
-                        <!--/.adds-wrapper-->
-
-                        <div class="tab-box save-search-bar text-center"><!-- <a href="#"> <i class=" icon-star-empty"></i>
-                            Save Search </a> --></div>
-                    </div>
-                    
 
                     <div class="post-promo text-center">
                         <h2> Do you get any bike for sell ? </h2>
@@ -563,7 +538,7 @@ $('.pagination').pagination({
         onPageClick : function(pageNumber) {
             jQuery('#masterdiv div').html('');
             jQuery("#target-content").html('loading...');
-            jQuery("#target-content").load("pagination_all.php?page=" + pageNumber);
+            jQuery("#target-content").load("pagination_advance_business_search.php?page=" + pageNumber);
         }
     });
 });
@@ -600,8 +575,9 @@ function recp() {
 
 function sort_by(value){
   jQuery('.oldList div').html('');
+  jQuery('#masterdiv div').hide();
   //jQuery('#pagination').hide();
-  $('#target-content').load('fetch_sorting.php?value=' + encodeURIComponent(value));
+  $('#target-content').load('fetch_sorting_advance_business.php?value=' + encodeURIComponent(value));
 }
 
 //category

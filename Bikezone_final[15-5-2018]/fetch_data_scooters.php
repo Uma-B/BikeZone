@@ -126,14 +126,41 @@ $_SESSION['fetchToSort']=$filterQuery;
 
 /*  $filterQuery= $sub." LIMIT $start_from, $limit ";*/
 ?>
+
  <div class="tab-content">
-<div>
-<div id="target-content" ></div>
-</div>
-<div>
-<div id='myStyle'>
-</div>
-</div>
+
+<div id="masterdiv">
+ <div class="category-list" id="masterdiv">
+<div class="tab-box  oldList">
+
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
+                                <li class="active nav-item">
+                                    <a  class="nav-link" href="ajax/ee.html" data-url="ajax/33.html" role="tab"
+                                                      data-toggle="tab">Scooter Ads <span class="badge badge-secondary">
+                                                          
+                                                          <?php
+
+                                            //$count=mysql_query($rs_result);
+                                                $num_rows = mysqli_num_rows($rs_result);
+                                             echo  $num_rows; ?>
+                                                      </span></a>
+                                </li>
+                               <!--  <li class="nav-item"><a class="nav-link"  href="ajax/33.html" data-url="ajax/33.html" role="tab" data-toggle="tab">Business
+                                    <span class="badge badge-secondary">22,805</span></a></li>
+                                <li class="nav-item"><a class="nav-link"  href="ajax/33.html" data-url="ajax/33.html" role="tab" data-toggle="tab">Personal
+                                    <span class="badge badge-secondary">18,705</span></a></li> -->
+                            </ul>
+
+
+                            <div class="tab-filter">
+                                <select class="selectpicker select-sort-by" data-style="btn-select" data-width="auto" onchange="sort_by(this.value)">
+                                    <option value="-1">Sort by </option>
+                                    <option value="ASC">Price: Low to High</option>
+                                    <option value="DESC">Price: High to Low</option>
+                                </select>
+                            </div>
+                        </div>
 <?php
 
       $result = $conn->query($filterQuery);
@@ -144,13 +171,13 @@ $_SESSION['fetchToSort']=$filterQuery;
  ?>
 
 
-<div id="masterdiv">
+<div>
 
 
-<div class="item-list oldList" id="masterdiv">
+<div class="item-list">
     <!-- <div class="cornerRibbons featuredAds" id="masterdiv">
     </div> -->
-    <div class="row" id="masterdiv">
+    <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
          <a href="used_bikes_view.php?filename=<?php echo $uri;?>&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
@@ -210,11 +237,13 @@ function myFunction() {
 </div>
 </div>
 </div>
+
 <?php
 }
 }
 ?>
-
+</div>
+</div>
 <div class="pagination-bar text-center">
      <nav aria-label="Page navigation " class="d-inline-b">
 
@@ -232,7 +261,8 @@ function myFunction() {
 </ul>
 </nav>
 </div>
-</div>
+
+
 </body>
 <script type="text/javascript">
 $(document).ready(function(){

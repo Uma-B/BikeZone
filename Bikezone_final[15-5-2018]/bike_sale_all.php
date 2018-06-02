@@ -258,9 +258,15 @@ $rs_result = mysql_query ($sql);
                     </aside>
                 </div>
                 <!--/.page-side-bar-->
-                <div class="col-md-9 page-content col-thin-left">
-                    <div class="category-list">
-                        <div class="tab-box " >
+               <div class="col-md-9 page-content col-thin-left" >
+                    <div id="target-content" ></div>
+
+<!-- city and price change values will print here -->
+
+                        <div id='myStyle'></div>
+                          <div id="masterdiv">
+                    <div class="category-list" >
+      <div class="tab-box  oldList">
 
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
@@ -379,12 +385,7 @@ $rs_result = mysql_query ($sql);
 
         </div>
 </div>
-<div>
-<div id="target-content" ></div>
-</div>
-<div>
-<div id='myStyle' ></div>
-</div>
+
 <?php
 while($row=mysql_fetch_array($rs_result))
 {

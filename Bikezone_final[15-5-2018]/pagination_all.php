@@ -28,16 +28,58 @@ $sql=$sql1." ".$sql2;
 $rs_result = mysql_query ($sql);
 
 $_SESSION['fetchToSort']=$sql;
+?>
+ <div class="category-list" id="masterdiv">
+<div class="tab-box  oldList">
+
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
+                                <li class="active nav-item">
+                                    <a  class="nav-link" href="ajax/ee.html" data-url="ajax/33.html" role="tab"
+                                                      data-toggle="tab"><?php echo $uri?> ads <span class="badge badge-secondary">
+                                                          
+                                                          <?php
+                                                $res=mysql_num_rows($rs_result);
+                                             echo  $res; ?>
+                                                      </span></a>
+                                </li>
+                               <!--  <li class="nav-item"><a class="nav-link"  href="ajax/33.html" data-url="ajax/33.html" role="tab" data-toggle="tab">Business
+                                    <span class="badge badge-secondary">22,805</span></a></li>
+                                <li class="nav-item"><a class="nav-link"  href="ajax/33.html" data-url="ajax/33.html" role="tab" data-toggle="tab">Personal
+                                    <span class="badge badge-secondary">18,705</span></a></li> -->
+                            </ul>
+
+
+                            <div class="tab-filter">
+                                <select class="selectpicker select-sort-by" data-style="btn-select" data-width="auto" onchange="sort_by(this.value)">
+                                    <option value="-1">Sort by </option>
+                                    <option value="ASC">Price: Low to High</option>
+                                    <option value="DESC">Price: High to Low</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="listing-filter">
+                            <div class="pull-left col-xs-6">
+                            </div>
+                            <div class="pull-right col-xs-6 text-right listing-view-action"><span
+                                    class="list-view active"><!-- <i class="  icon-th"></i> --></span> <span
+                                    class="compact-view"><!-- <i class=" icon-th-list  "></i> --></span> <span
+                                    class="grid-view "><!-- <i class=" icon-th-large "></i> --></span></div>
+                            <div style="clear:both"></div>
+                        </div>
+                        <div class="menu-overly-mask"></div>
+                        <div class="adds-wrapper">
+                            <div class="tab-content">
+<?php
 while ($row = mysql_fetch_assoc($rs_result)) {  
 ?>  
       
 
 
-<div id="masterdiv">
-<div class="item-list oldList" id="masterdiv">
-    <!-- <div class="cornerRibbons featuredAds" id="masterdiv">
-    </div> -->
-    <div class="row" id="masterdiv">
+<div>
+<div class="item-list">
+    
+    <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
          <a href="used_bikes_view.php?filename=<?php echo $uri;?>&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
@@ -100,8 +142,21 @@ function myFunction() {
 </div>
 
 
+
+
 <?php  
 };  
-?>  
+?>
+</div>
+</div>
+</div>  
 </body>
+<script type="text/javascript">
+  function sort_by(value){
+     jQuery('.oldList div').html('');
+  //jQuery('#masterdiv div').hide();
+  //jQuery('#pagination').hide();
+  $('#target-content').load('fetch_sorting.php?value=' + encodeURIComponent(value));
+}
+</script>
 </html>

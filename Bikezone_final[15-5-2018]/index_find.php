@@ -30,7 +30,7 @@ $filterQuery1 = "select
   usedbikes.Prize as Prize
 from
   usedbikes
-where
+where Status='UnBlock' and
 ";
 
 $filterQuery2 = "select
@@ -47,7 +47,7 @@ $filterQuery2 = "select
   dealerbikes.Prize as Prize
 from
   dealerbikes
-where
+where Status='UnBlock' and
 ";
 
 if($Keyword != null){
@@ -66,7 +66,8 @@ if($Keyword != null){
 from
   usedbikes
 where
-  usedbikes.BikeCategory LIKE '$Keyword'
+usedbikes.Status LIKE 'UnBlock'
+  OR usedbikes.BikeCategory LIKE '$Keyword'
   OR usedbikes.Brand LIKE '$Keyword'
   OR usedbikes.Model LIKE '$Keyword'
   OR usedbikes.State LIKE '$Keyword'
@@ -87,7 +88,8 @@ select
 from
   dealerbikes
 where
-  dealerbikes.BikeCategory LIKE '$Keyword'
+usedbikes.Status LIKE 'UnBlock'
+  OR dealerbikes.BikeCategory LIKE '$Keyword'
   OR dealerbikes.Brand LIKE '$Keyword'
   OR dealerbikes.Model LIKE '$Keyword'
   OR dealerbikes.State LIKE '$Keyword'
@@ -128,7 +130,7 @@ if($split[count($split)-1] == "AND"){
     $filterQuery2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filterQuery2);
 }  
 
-$filterQuery = $filterQuery1." AND Status = 'UnBlock' UNION ".$filterQuery2. " AND Status = 'UnBlock'";
+$filterQuery = $filterQuery1." UNION ".$filterQuery2;
 
 }
     
@@ -383,20 +385,24 @@ $rs_result = mysql_query ($sql);
                     </aside>
                 </div>
                 <!--/.page-side-bar-->
-                <div class="col-md-9 page-content col-thin-left">
-                    <div class="category-list">
-                        <div class="tab-box " >
+                     <div class="col-md-9 page-content col-thin-left" >
+                    <div id="target-content" ></div>
 
+<!-- city and price change values will print here -->
+
+                        <div id='myStyle'></div>
+                          <div id="masterdiv">
+                    <div class="category-list" >
+      <div class="tab-box  oldList">
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
                                 <li class="active nav-item">
-                                    <a  class="nav-link" href="ajax/ee.html" data-url="ajax/33.html" role="tab" data-toggle="tab">All Ads 
+                                    <a  href="index_find.php" class= "nav-link" role="tab" >All Ads 
                                     <span class="badge badge-secondary">
                                     <?php
-
-                                            $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['count'];
+                                            $result=mysql_query($filterQuery);
+                                           $res=mysql_num_rows($result);
+                                            echo  $res;
                                              ?>          
                                     </span>
                                     </a>
@@ -519,12 +525,8 @@ $rs_result = mysql_query ($sql);
 
 
 </div>
-<div>
-<div id="target-content" ></div>
-</div>
-<div>
-<div id='myStyle' ></div>
-</div>
+
+
 <?php
 
 while($row = mysql_fetch_assoc($rs_result))   
@@ -533,13 +535,13 @@ while($row = mysql_fetch_assoc($rs_result))
 ?>
 
 
-<div id="masterdiv">
+<div>
 
-<div class="item-list oldList" id="masterdiv">
+<div class="item-list">
     <!-- <div class="cornerRibbons featuredAds" > -->
         <!--<a href=""> Featured Ads</a>
     </div> -->
-    <div class="row" id="masterdiv">
+    <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
          <a href="used_bikes_view.php?filename=index_find&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
@@ -603,9 +605,11 @@ function myFunction() {
 </div>
 </div>
 </div>
+
 <?php } ?>
 
-
+</div>
+  </div>
 
 
 <div class="pagination-bar text-center">
@@ -613,18 +617,17 @@ function myFunction() {
   <ul class="pagination" id="pagination" >
     <?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
      if($i == 1):?>
-      <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_all_union.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+      <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_index_find.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
       <?php else:?>
 
-       <li class="page-item" id="<?php echo $i;?>"><a href='pagination_all_union.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+       <li class="page-item" id="<?php echo $i;?>"><a href='pagination_index_find.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
 
      <?php endif;?> 
    <?php endfor;endif;?> 
  </ul>
 </nav>
 </div>
-                            </div>
-                        </div>
+                            
                     <div class="post-promo text-center">
                         <h2> Do you get any bike for sell ? </h2>
                         <h5>Sell your bikes online FOR FREE. It's easier than you think !</h5>
@@ -685,7 +688,7 @@ $('.pagination').pagination({
         onPageClick : function(pageNumber) {
             jQuery('#masterdiv div').html('');
             jQuery("#target-content").html('loading...');
-            jQuery("#target-content").load("pagination_all_union.php?page=" + pageNumber);
+            jQuery("#target-content").load("pagination_index_find.php?page=" + pageNumber);
         }
     });
 });
@@ -726,8 +729,9 @@ function recp() {
 
 function sort_by(value){
   jQuery('.oldList div').html('');
+  jQuery('#masterdiv div').hide();
    //jQuery('#pagination').hide();
-  $('#target-content').load('fetch_sort_union.php?value=' + encodeURIComponent(value));
+  $('#target-content').load('fetch_sorting_index_find.php?value=' + encodeURIComponent(value));
 }
 //category
 // function demo(category) {

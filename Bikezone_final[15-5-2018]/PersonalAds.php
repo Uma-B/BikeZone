@@ -229,9 +229,17 @@ $_SESSION['fetchToPagination']=$sql1;
                     </aside>
                 </div>
                 <!--/.page-side-bar-->
-                <div class="col-md-9 page-content col-thin-left">
-                    <div class="category-list">
-                        <div class="tab-box " >
+               <div class="col-md-9 page-content col-thin-left" >
+                    <div id="target-content" ></div>
+
+<!-- city and price change values will print here -->
+
+                        <div id='myStyle'></div>
+                          <div id="masterdiv">
+                    <div class="category-list" >
+                        <!-- sorting values will print here -->
+
+                        <div class="tab-box  oldList">
                             <!-- Nav tabs -->
                              <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
                                 <li class="nav-item">
@@ -350,12 +358,7 @@ $_SESSION['fetchToPagination']=$sql1;
         </div>
 
 </div>
-<div>
-<div id="target-content" ></div>
-</div>
-<div>
-<div id='myStyle'></div>
-</div>
+
 </div>
 <?php
 while($row=mysql_fetch_array($rs_result))
@@ -364,13 +367,13 @@ while($row=mysql_fetch_array($rs_result))
 ?>
 
 
-<div id="masterdiv">
+<div>
 
-<div class="item-list oldList" id="masterdiv">
+<div class="item-list">
     <!-- <div class="cornerRibbons featuredAds" > -->
         <!--<a href=""> Featured Ads</a>
     </div> -->
-    <div class="row" id="masterdiv">
+    <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
          <a href="used_bikes_view.php?filename=PersonalAds&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
@@ -438,33 +441,29 @@ function myFunction() {
 </div>
 </div>
 <?php } ?>
-
-
-
+</div>
+</div>
+</div>
 
 <div class="pagination-bar text-center">
   <nav aria-label="Page navigation " class="d-inline-b">
   <ul class="pagination" id="pagination" >
     <?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
      if($i == 1):?>
-      <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+      <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_index_personal.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
       <?php else:?>
 
-       <li class="page-item" id="<?php echo $i;?>"><a href='pagination_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+       <li class="page-item" id="<?php echo $i;?>"><a href='pagination_index_personal.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
 
      <?php endif;?> 
    <?php endfor;endif;?> 
  </ul>
 </nav>
 </div>
-                            </div>
-                        </div>
+                            
                         <!--/.adds-wrapper-->
 
-                        <div class="tab-box save-search-bar text-center"><!-- <a href="#"> <i class=" icon-star-empty"></i>
-                            Save Search </a> --></div>
-                    </div></div></div>
-                    
+                                            
                     <!--/.pagination-bar -->
 
                     <div class="post-promo text-center">
@@ -542,7 +541,7 @@ $('.pagination').pagination({
         onPageClick : function(pageNumber) {
             jQuery('#masterdiv div').html('');
             jQuery("#target-content").html('loading...');
-            jQuery("#target-content").load("pagination_all.php?page=" + pageNumber);
+            jQuery("#target-content").load("pagination_index_personal.php?page=" + pageNumber);
         }
     });
 });
@@ -582,8 +581,9 @@ function recp() {
 
 function sort_by(value){
   jQuery('.oldList div').html('');
+  jQuery('#masterdiv div').hide();
    //jQuery('#pagination').hide();
-  $('#target-content').load('fetch_sorting.php?value=' + encodeURIComponent(value));
+  $('#target-content').load('fetch_sorting_index_personal.php?value=' + encodeURIComponent(value));
 }
 //category
 // function demo(category) {

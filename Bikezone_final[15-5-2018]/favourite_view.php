@@ -324,33 +324,33 @@ session_start();
 include "db_connection.php";
 
 $userId=$_SESSION['usr_id'];
-$fav="Select Fav_UserId,UserId,UsedBikeId,BikeCategory,Brand,MobileNumber,Price from favourite Where favourite.Fav_UserId=$userId";
+echo $fav="Select Fav_UserId,UserId,UsedBikeId,BikeCategory,Brand,MobileNumber,Price from favourite Where favourite.Fav_UserId=$userId";
 
 //pagination
-$limit = 10; 
-$sql = $fav; 
-/*For No Of Rows Selected*/
-$result=mysql_query($sql);
-$rowcount = mysql_num_rows($result);
-/*----------------------*/
-$rs_result = mysql_query($sql);  
-$row = mysql_fetch_row($rs_result);  
-$total_records = $rowcount;
-$total_pages = ceil($total_records / $limit);
-if (isset($_GET["page"])) {
- $page  = $_GET["page"]; 
-} else { 
-  $page=1; 
-}  
+// $limit = 10; 
+ //$sql = $fav; 
+// /*For No Of Rows Selected*/
+// $result=mysql_query($sql);
+// $rowcount = mysql_num_rows($result);
+// /*----------------------*/
+// $rs_result = mysql_query($sql);  
+// $row = mysql_fetch_row($rs_result);  
+// $total_records = $rowcount;
+// $total_pages = ceil($total_records / $limit);
+// if (isset($_GET["page"])) {
+//  $page  = $_GET["page"]; 
+// } else { 
+//   $page=1; 
+// }  
 
-$start_from = ($page-1) * $limit;
-$sql1 =  $fav;
-$sql2="LIMIT $start_from, $limit";
-  echo $sql=$sql1." ".$sql2;
+// $start_from = ($page-1) * $limit;
+//$sql1 =  $fav;
+//$sql2="LIMIT $start_from, $limit";
+  //echo $sql=$sql1." ".$sql2;
 
-$_SESSION['fetchToPagination']=$sql1;
-$_SESSION['fetchToSort']=$sql;  
-$rs_result = mysql_query ($sql);     
+//$_SESSION['fetchToPagination']=$sql1;
+//$_SESSION['fetchToSort']=$sql;  
+$rs_result = mysql_query ($fav);     
 
 //$rs_result = mysql_query ($fav);
 while ($res=mysql_fetch_array($rs_result)) {
