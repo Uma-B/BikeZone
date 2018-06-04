@@ -119,7 +119,7 @@ if (isset($_GET["page"])) {
 }  
 
 $start_from = ($page-1) * $limit;
-$_SESSION['Pagination']=$filter;
+$_SESSION['fetchToPagination']=$filter;
 $filterQuery=$filter." LIMIT $start_from, $limit";
 $_SESSION['fetchToSort']=$filterQuery;
 //$_SESSION['fetchToPagination']=$filterQuery;
@@ -141,8 +141,8 @@ $_SESSION['fetchToSort']=$filterQuery;
                                                           
                                                           <?php
 
-                                            //$count=mysql_query($rs_result);
-                                                $num_rows = mysqli_num_rows($rs_result);
+                                            $count=mysqli_query($conn,$sql);
+                                                $num_rows = mysqli_num_rows($count);
                                              echo  $num_rows; ?>
                                                       </span></a>
                                 </li>
@@ -251,10 +251,10 @@ function myFunction() {
 
 <?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
  if($i == 1):?>
-            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_fetch_data_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
  <?php else:?>
 
- <li class="page-item" id="<?php echo $i;?>"><a href='pagination_fetch_data_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+ <li class="page-item" id="<?php echo $i;?>"><a href='pagination_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
 
  <?php endif;?> 
 <?php endfor;endif;?> 
@@ -274,7 +274,7 @@ $('.pagination').pagination({
         onPageClick : function(pageNumber) {
             jQuery('#masterdiv div').hide();
             jQuery("#target-content").html('loading...');
-            jQuery("#target-content").load("pagination_fetch_data_all.php?page=" + pageNumber);
+            jQuery("#target-content").load("pagination_all.php?page=" + pageNumber);
         }
     });
 });

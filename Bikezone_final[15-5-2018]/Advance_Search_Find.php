@@ -448,9 +448,15 @@ $rs_result = mysql_query ($sql);
                     </aside>
                 </div>
                 <!--/.page-side-bar-->
-                <div class="col-md-9 page-content col-thin-left">
-                    <div class="category-list">
-                        <div class="tab-box " >
+                <div class="col-md-9 page-content col-thin-left" >
+                    <div id="target-content" ></div>
+
+<!-- city and price change values will print here -->
+
+                        <div id='myStyle'></div>
+                          <div id="masterdiv">
+                    <div class="category-list" >
+      <div class="tab-box  oldList">
 
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
@@ -458,9 +464,9 @@ $rs_result = mysql_query ($sql);
                                     <a  class="nav-link" href="Advance_Search_Find.php" data-url="ajax/33.html" role="tab" data-toggle="tab">All Ads 
                                     <span class="badge badge-secondary">
                                     <?php
-                                        $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['count'];
+                                           $result=mysql_query($filterQuery);
+                                           $res=mysql_num_rows($result);
+                                            echo  $res;
                                     ?>
                                                  
                                     </span>
@@ -581,21 +587,16 @@ $rs_result = mysql_query ($sql);
         </div>
 
 </div>
-<div>
-<div id="target-content" ></div>
-</div>
-<div>
-<div id='myStyle' ></div>
-</div>
+
 <?php 
 while($row=mysql_fetch_array($rs_result))
 {
 ?>
 
-<div id="masterdiv">
-<div class="item-list oldList" id="masterdiv">
+<div>
+<div class="item-list">
     
-    <div class="row" id="masterdiv">
+    <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
          <a href="used_bikes_view.php?filename=Advance_Search_Find&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
@@ -663,34 +664,25 @@ function myFunction() {
 
 </div>
 <?php } ?>
-
-
-
-
+</div>
+</div>
+</div>
+</div>
 <div class="pagination-bar text-center">
   <nav aria-label="Page navigation " class="d-inline-b">
   <ul class="pagination" id="pagination" >
     <?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
      if($i == 1):?>
-      <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_all_union.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+      <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_advance_search_find.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
       <?php else:?>
 
-       <li class="page-item" id="<?php echo $i;?>"><a href='pagination_all_union.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+       <li class="page-item" id="<?php echo $i;?>"><a href='pagination_advance_search_find.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
 
      <?php endif;?> 
    <?php endfor;endif;?> 
  </ul>
 </nav>
 </div>
-
-                            </div>
-                        </div>
-                        <!--/.adds-wrapper-->
-
-                        
-                    <div class="tab-box save-search-bar text-center"><!-- <a href="#"> <i class=" icon-star-empty"></i>
-                            Save Search </a> --></div>
-                    </div>
                    
                     <div class="post-promo text-center">
                         <h2> Do you get any bike for sell ? </h2>
@@ -784,7 +776,7 @@ $('.pagination').pagination({
         onPageClick : function(pageNumber) {
             jQuery('#masterdiv div').html('');
             jQuery("#target-content").html('loading...');
-            jQuery("#target-content").load("pagination_all_union.php?page=" + pageNumber);
+            jQuery("#target-content").load("pagination_advance_search_find.php?page=" + pageNumber);
         }
     });
 });
@@ -806,8 +798,9 @@ function recp() {
 
 function sort_by(value){
   jQuery('.oldList div').html('');
+  jQuery('#masterdiv div').hide();
   //jQuery('#pagination').hide();
-  $('#target-content').load('fetch_sort_union.php?value=' + encodeURIComponent(value));
+  $('#target-content').load('fetch_sorting_advance_search_find.php?value=' + encodeURIComponent(value));
 }
 
 </script>

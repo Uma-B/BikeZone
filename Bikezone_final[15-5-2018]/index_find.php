@@ -610,7 +610,7 @@ function myFunction() {
 
 </div>
   </div>
-
+</div>
 
 <div class="pagination-bar text-center">
   <nav aria-label="Page navigation " class="d-inline-b">

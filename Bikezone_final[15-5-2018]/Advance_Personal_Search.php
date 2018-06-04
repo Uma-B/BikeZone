@@ -276,7 +276,7 @@ $_SESSION['fetchToPagination']=$sql1;
                                  <a href="Advance_Personal_Search.php" class="nav-link" role="tab">Personal
                                     <span class="badge badge-secondary">
                              <?php
-                                            $count=mysql_query($sql);
+                                            $count=mysql_query($filterQuery2);
                                             $res=mysql_num_rows($count);
                                             echo  $res;
                                     ?>
@@ -576,7 +576,7 @@ function sort_by(value){
   jQuery('.oldList div').html('');
   jQuery('#masterdiv div').hide();
   //jQuery('#pagination').hide();
-  $('#target-content').load('fetch_sorting_advance_personal.php?value=' + encodeURIComponent(value));
+  $('#target-content').load('fetch_sorting_advance_search_personal.php?value=' + encodeURIComponent(value));
 }
 
 //category

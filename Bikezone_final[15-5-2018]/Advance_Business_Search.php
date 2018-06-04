@@ -265,7 +265,8 @@ $_SESSION['fetchToPagination']=$sql1;
                                     <a  href="Advance_Business_Search.php" class= "nav-link" role="tab">Business Ads
                                     <span class="badge badge-secondary">
                                     <?php
-                                             $res=mysql_num_rows($rs_result);
+                                            $result=mysql_query($filterQuery2);
+                                             $res=mysql_num_rows($result);
                                             echo  $res;
                                     ?>
                                                  
@@ -577,7 +578,7 @@ function sort_by(value){
   jQuery('.oldList div').html('');
   jQuery('#masterdiv div').hide();
   //jQuery('#pagination').hide();
-  $('#target-content').load('fetch_sorting_advance_business.php?value=' + encodeURIComponent(value));
+  $('#target-content').load('fetch_sorting_advance_search_business.php?value=' + encodeURIComponent(value));
 }
 
 //category

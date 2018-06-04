@@ -28,6 +28,7 @@ $priceMax = $_GET['maxPrice'];
 //echo $Category;
 //echo $City;
 $filter1="select
+ usedbikes.UserId as UserId,
   usedbikes.UsedBikeId as UsedBikeId,
   usedbikes.BikeCategory as BikeCategory,
   usedbikes.UsedBikeImage1 as UsedBikeImage1,
@@ -40,12 +41,13 @@ $filter1="select
   usedbikes.ContactNumber as ContactNumber,
   usedbikes.Prize as Prize
 from
-  usedbikes WHERE Status='UnBlock' and BikeCategory='Used Bikes' and";
+  usedbikes where usedbikes.UserId in (SELECT userid FROM `favourite` where favourite.Fav_UserId = 10) and  usedbikes.UsedBikeId in (SELECT usedbikeid FROM `favourite` where favourite.Fav_UserId = 10) and";
 
 
 
 $filter2="select
-  dealerbikes.DealerBikeId as UsedBikeId,
+  dealerbikes.DealerId as UserId,
+ dealerbikes.DealerBikeId as UsedBikeId,
   dealerbikes.BikeCategory as BikeCategory,
   dealerbikes.DealerBikeImage1 as UsedBikeImage1,
   dealerbikes.Brand as Brand,
@@ -57,7 +59,7 @@ $filter2="select
   dealerbikes.ContactNumber as ContactNumber,
   dealerbikes.Prize as Prize
 from
-  dealerbikes WHERE Status='UnBlock' and BikeCategory='Used Bikes' and";
+  dealerbikes where dealerbikes.DealerId in (SELECT userid FROM `favourite` where favourite.Fav_UserId = 10) and  dealerbikes.DealerId in (SELECT usedbikeid FROM `favourite` where favourite.Fav_UserId = 10) and";
 
 if($City != ""){
   $filter1=$filter1. " usedbikes.City LIKE '$City' AND";
@@ -75,8 +77,12 @@ if($split[count($split)-1] == "AND"){
     $filter2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter2);
 }
 
-$filter=$filter1. "UNION ". $filter2;
-
+$filter=$filter1. "UNION " .$filter2;
+$_SESSION['favourite']=$filter;
+//$filter=$filter1. "UNION ". $filter2;
+// if(isset($_SESSION['favourite'])){
+//   $filter=$_SESSION['favourite'];
+// }
 $limit = 10; 
 $sql = $filter; 
 /*For No Of Rows Selected*/
@@ -113,7 +119,7 @@ $_SESSION['fetchToSort']=$filterQuery;
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
                                 <li class="active nav-item">
                                     <a  class="nav-link" href="ajax/ee.html" data-url="ajax/33.html" role="tab"
-                                                      data-toggle="tab">Used Bikes Ads <span class="badge badge-secondary">
+                                                      data-toggle="tab">Favourite Ads <span class="badge badge-secondary">
                                                           
                                                           <?php
 
@@ -184,30 +190,7 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
     </div>
     <!--/.add-desc-box-->
     <div class="col-md-3 text-right  price-box">
-        <h2 class="item-price">RS:-<?php echo $row['Prize']  ?></h2>
-        <?php
-        if (isset($_SESSION['usr_id'])) {
-          $id=$_SESSION['usr_id'];
-          ?>
-          <a href="favourite.php?filename=<?php echo $uri;?>&UserId=<?php echo $row['UserId']; ?> &UsedBikeId=<?php echo $row['UsedBikeId']; ?> &Brand=<?php echo $row['Brand'];?> &Category=<?php echo $row['BikeCategory'];?> &Price=<?php echo $row['Prize'];?> &ContactNumber=<?php echo $row['ContactNumber'];?> &Fav_Userid=<?php echo $id;?>" class="btn btn-danger btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
-        </a>
-        <?php
-        }
-        else{
-          ?>
-          <a href onclick="myFunction()" class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
-        </a>
-       <!--  <button onclick="myFunction()">Try it</button> -->
-
-<script>
-function myFunction() {
-    alert("Please login before adding favourites");
-}
-</script>
-        <?php
-        }
-        ?>
-         
+        <h2 class="item-price">RS:-<?php echo $row['Prize']  ?></h2>         
         </div>
     <!--/.add-desc-box-->
 </div>
@@ -219,7 +202,7 @@ function myFunction() {
 ?>
 </div>
 </div>
-<div class="pagination-bar text-center">
+<!-- <div class="pagination-bar text-center">
      <nav aria-label="Page navigation " class="d-inline-b">
 
 <ul class="pagination" id="pagination" >
@@ -235,9 +218,9 @@ function myFunction() {
 <?php endfor;endif;?> 
 </ul>
 </nav>
+</div> -->
 </div>
-</div>
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 $(document).ready(function(){
 $('.pagination').pagination({
         items: <?php echo $total_records;?>,
@@ -251,4 +234,4 @@ $('.pagination').pagination({
         }
     });
 });
-</script>
+</script> -->

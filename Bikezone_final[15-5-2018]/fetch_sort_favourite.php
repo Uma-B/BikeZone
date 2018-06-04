@@ -1,33 +1,10 @@
-
 <?php
+
+
 session_start();
-$servername = "localhost";
-      $username = "root";
-      $password = "";
-      $dbname = "bikezone";
-      $conn = new mysqli($servername, $username, $password, $dbname);
-      // Check connection
 
-
-
-      if ($conn->connect_error) {
-          die("Connection failed: " . $conn->connect_error);
-      } 
-
-      $url=$_SERVER['HTTP_REFERER'];
-      $path_parts = pathinfo($url);
-     $uri=$path_parts['filename'];
-      
-
-/*forAllCatagory*/
-$Category =html_entity_decode($_GET['category'],null,'UTF-8');
-$City = html_entity_decode($_GET['city'],null,'UTF-8');
-$priceMin = $_GET['minPrice'];
-$priceMax = $_GET['maxPrice'];
-
-//echo $Category;
-//echo $City;
-$filter1="select
+$filter="select
+ usedbikes.UserId as UserId,
   usedbikes.UsedBikeId as UsedBikeId,
   usedbikes.BikeCategory as BikeCategory,
   usedbikes.UsedBikeImage1 as UsedBikeImage1,
@@ -40,12 +17,11 @@ $filter1="select
   usedbikes.ContactNumber as ContactNumber,
   usedbikes.Prize as Prize
 from
-  usedbikes WHERE Status='UnBlock' and BikeCategory='Used Bikes' and";
-
-
-
-$filter2="select
-  dealerbikes.DealerBikeId as UsedBikeId,
+  usedbikes where usedbikes.UserId in (SELECT userid FROM `favourite` where favourite.Fav_UserId = 10) and  usedbikes.UsedBikeId in (SELECT usedbikeid FROM `favourite` where favourite.Fav_UserId = 10)
+  UNION
+  select
+  dealerbikes.DealerId as UserId,
+ dealerbikes.DealerBikeId as UsedBikeId,
   dealerbikes.BikeCategory as BikeCategory,
   dealerbikes.DealerBikeImage1 as UsedBikeImage1,
   dealerbikes.Brand as Brand,
@@ -57,69 +33,54 @@ $filter2="select
   dealerbikes.ContactNumber as ContactNumber,
   dealerbikes.Prize as Prize
 from
-  dealerbikes WHERE Status='UnBlock' and BikeCategory='Used Bikes' and";
+  dealerbikes where dealerbikes.DealerId in (SELECT userid FROM `favourite` where favourite.Fav_UserId = 10) and  dealerbikes.DealerId in (SELECT usedbikeid FROM `favourite` where favourite.Fav_UserId = 10)";
+// if(isset($_SESSION['favourite'])){
+//   $filter=$_SESSION['favourite'];
+// }
 
-if($City != ""){
-  $filter1=$filter1. " usedbikes.City LIKE '$City' AND";
-  $filter2=$filter2. " dealerbikes.City LIKE '$City' AND";
+
+$servername = "localhost";
+      $username = "root";
+      $password = "";
+      $dbname = "bikezone";
+      $conn = new mysqli($servername, $username, $password, $dbname);
+      // Check connection
+
+      if ($conn->connect_error) {
+          die("Connection failed: " . $conn->connect_error);
+      } 
+
+$url=$_SERVER['HTTP_REFERER'];
+      $path_parts = pathinfo($url);
+     $uri=$path_parts['filename'];
+
+
+$value= $_GET['value'];
+
+
+if($value != null){
+
+//$splitQuery = explode("LIMIT", $filter);
+$filterQuery = $filter." ORDER BY Prize $value";  
+//$splitQuery = explode("LIMIT", $filter);
+ //echo $filterQuery = $splitQuery[0] ." ORDER BY Prize $value LIMIT ". $splitQuery[1];
+
 }
-if($priceMin != "" && $priceMax != ""){
-    $filter2 = $filter2." dealerbikes.Prize IN (SELECT Prize from dealerbikes WHERE Prize BETWEEN $priceMin AND $priceMax)";
-     $filter1 = $filter1." usedbikes.Prize IN (SELECT Prize from usedbikes WHERE Prize BETWEEN $priceMin AND $priceMax)";
-}
-
-
-$split = explode(" ", $filter1);
-if($split[count($split)-1] == "AND"){
-     $filter1 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter1);
-    $filter2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter2);
-}
-
-$filter=$filter1. "UNION ". $filter2;
-
-$limit = 10; 
-$sql = $filter; 
-/*For No Of Rows Selected*/
-$result = $conn->query($sql);
-$rowcount = mysqli_num_rows($result);
-/*----------------------*/
-$rs_result = $conn->query($sql);  
-$row = $rs_result->fetch_assoc();  
-$total_records = $rowcount;
-$total_pages = ceil($total_records / $limit);
-
- 
-if (isset($_GET["page"])) {
- $page  = $_GET["page"]; 
-} else { 
-  $page=1; 
-}  
-
-$start_from = ($page-1) * $limit;
-$_SESSION['fetchToPagination']=$filter;
-$filterQuery=$filter." LIMIT $start_from, $limit";
-$_SESSION['fetchToSort']=$filterQuery;
-//$_SESSION['fetchToPagination']=$filterQuery;
-
-/*  $filterQuery= $sub." LIMIT $start_from, $limit ";*/
+//$rs_result = $conn->query($count);
+$result = $conn->query($filterQuery);
 ?>
-<div class="tab-content">
-
-<div id="masterdiv">
- <div class="category-list" id="masterdiv">
+     
+ <div class="category-list" id="masterdiv" >
 <div class="tab-box  oldList">
 
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
                                 <li class="active nav-item">
                                     <a  class="nav-link" href="ajax/ee.html" data-url="ajax/33.html" role="tab"
-                                                      data-toggle="tab">Used Bikes Ads <span class="badge badge-secondary">
-                                                          
+                                                      data-toggle="tab">Favourite Ads <span class="badge badge-secondary">
                                                           <?php
-
-                                            $count=mysqli_query($conn,$sql);
-                                                $num_rows = mysqli_num_rows($count);
-                                             echo  $num_rows; ?>
+                                                $res=mysqli_num_rows($result);
+                                             echo  $res; ?>
                                                       </span></a>
                                 </li>
                                <!--  <li class="nav-item"><a class="nav-link"  href="ajax/33.html" data-url="ajax/33.html" role="tab" data-toggle="tab">Business
@@ -137,23 +98,31 @@ $_SESSION['fetchToSort']=$filterQuery;
                                 </select>
                             </div>
                         </div>
+                        <div class="listing-filter">
+                            <div class="pull-left col-xs-6">
+                            </div>
+                            <div class="pull-right col-xs-6 text-right listing-view-action"><span
+                                    class="list-view active"><!-- <i class="  icon-th"></i> --></span> <span
+                                    class="compact-view"><!-- <i class=" icon-th-list  "></i> --></span> <span
+                                    class="grid-view "><!-- <i class=" icon-th-large "></i> --></span></div>
+                            <div style="clear:both"></div>
+                        </div>
+                        <div class="menu-overly-mask"></div>
+                        <div class="adds-wrapper">
+                            <div class="tab-content">
+
 <?php
-
-      $result = $conn->query($filterQuery);
-
       if ($result->num_rows > 0) {
-    // output data of each row
     while($row = $result->fetch_assoc()) {
  ?>
 
 
-<div>
+<div >
 
 
-<div class="item-list">
-    <!-- <div class="cornerRibbons featuredAds" id="masterdiv">
-    </div> -->
-    <div class="row">
+<div class="item-list" >
+   
+    <div class="row" >
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
          <a href="used_bikes_view.php?filename=<?php echo $uri;?>&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
@@ -185,7 +154,8 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
     <!--/.add-desc-box-->
     <div class="col-md-3 text-right  price-box">
         <h2 class="item-price">RS:-<?php echo $row['Prize']  ?></h2>
-        <?php
+       <?php
+
         if (isset($_SESSION['usr_id'])) {
           $id=$_SESSION['usr_id'];
           ?>
@@ -212,43 +182,12 @@ function myFunction() {
     <!--/.add-desc-box-->
 </div>
 </div>
-</div>
 <?php
 }
 }
+
 ?>
 </div>
 </div>
-<div class="pagination-bar text-center">
-     <nav aria-label="Page navigation " class="d-inline-b">
-
-<ul class="pagination" id="pagination" >
-
-<?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
- if($i == 1):?>
-            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_usedbikes.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
- <?php else:?>
-
- <li class="page-item" id="<?php echo $i;?>"><a href='pagination_usedbikes.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
-
- <?php endif;?> 
-<?php endfor;endif;?> 
-</ul>
-</nav>
 </div>
 </div>
-<script type="text/javascript">
-$(document).ready(function(){
-$('.pagination').pagination({
-        items: <?php echo $total_records;?>,
-        itemsOnPage: <?php echo $limit;?>,
-        cssStyle: 'light-theme',
-        currentPage : 1,
-        onPageClick : function(pageNumber) {
-            jQuery('#masterdiv div').hide();
-            jQuery("#target-content").html('loading...');
-            jQuery("#target-content").load("pagination_usedbikes.php?page=" + pageNumber);
-        }
-    });
-});
-</script>

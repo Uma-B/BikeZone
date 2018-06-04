@@ -31,8 +31,12 @@ if($value != null){
 
 //$splitQuery = explode("LIMIT", $filter);
 $filterQuery = "(".$filter.") ORDER BY Prize $value";  
+$splitQuery = explode("LIMIT", $filter);
+ $split = $splitQuery[0] ." ORDER BY Prize $value LIMIT ". $splitQuery[1];
+ $count=$splitQuery[0]." ORDER BY Prize $value";  
 //echo "filter query in sort page: ".$filterQuery;
 }
+$rs_result = $conn->query($count);
 $result = $conn->query($filterQuery);
 ?>
      
@@ -45,7 +49,7 @@ $result = $conn->query($filterQuery);
                                     <a  class="nav-link" href="ajax/ee.html" data-url="ajax/33.html" role="tab"
                                                       data-toggle="tab"><?php echo $uri?> ads <span class="badge badge-secondary">
                                                           <?php
-                                                $res=mysqli_num_rows($result);
+                                                $res=mysqli_num_rows($rs_result);
                                              echo  $res; ?>
                                                       </span></a>
                                 </li>

@@ -210,24 +210,11 @@ $_SESSION['fetchToSort']=$sql;
                                     <li><a href="used_bikes.php"><strong>Used Bikes Ads</strong> <span
                                             class="count"><?php
 
-                                            $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes Where BikeCategory='Used Bikes') + (SELECT COUNT(*) FROM dealerbikes Where BikeCategory='Used Bikes') as count");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['count'];
+                                            $count=mysql_query($filterQuery);
+                                                $res=mysql_num_rows($count);
+                                             echo  $res;
                                              ?></span></a></li>
-                                   <!--  <li><a href="BuisnessAds.php">Business <span
-                                            class="count"><?php
-
-                                            $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
-                                             ?></span></a></li>
-                                    <li><a href="PersonalAds.php">Personal <span
-                                            class="count"><?php
-
-                                            $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
-                                             ?></span></a></li> -->
+                                   
                                 </ul>
                             </div>
                             <!--/.list-filter-->
@@ -256,9 +243,17 @@ $_SESSION['fetchToSort']=$sql;
 
 
                 <!--/.page-side-bar-->
-                <div class="col-md-9 page-content col-thin-left">
-                    <div class="category-list">
-                        <div class="tab-box ">
+                  <div class="col-md-9 page-content col-thin-left" >
+                    <div id="target-content" ></div>
+
+<!-- city and price change values will print here -->
+
+                        <div id='myStyle'></div>
+                          <div id="masterdiv">
+                    <div class="category-list" >
+                        <!-- sorting values will print here -->
+
+                        <div class="tab-box  oldList">
 
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
@@ -335,26 +330,19 @@ $_SESSION['fetchToSort']=$sql;
                             <div class="tab-content">
                                
 
-
-<div>
-<div id="target-content" ></div>
-</div>
-<div>
-<div id='myStyle'>
-</div>
 </div>
 
 <?php  
 while ($row = mysql_fetch_assoc($rs_result)) {  
 ?>  
  
-<div id="masterdiv">
+<div>
 
 
-<div class="item-list oldList" id="masterdiv">
+<div class="item-list">
     <!-- <div class="cornerRibbons featuredAds" id="masterdiv">
     </div> -->
-    <div class="row" id="masterdiv">
+    <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
          <a href="used_bikes_view.php?filename=used_bikes&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
@@ -417,7 +405,9 @@ function myFunction() {
 </div>
 
 <?php } ?>
-
+</div>
+</div>
+</div>
 <div class="pagination-bar text-center">
      <nav aria-label="Page navigation " class="d-inline-b">
 
@@ -425,10 +415,10 @@ function myFunction() {
 
 <?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
  if($i == 1):?>
-            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_all_union.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_usedbikes.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
  <?php else:?>
 
- <li class="page-item" id="<?php echo $i;?>"><a href='pagination_all_union.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+ <li class="page-item" id="<?php echo $i;?>"><a href='pagination_usedbikes.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
 
  <?php endif;?> 
 <?php endfor;endif;?> 
@@ -440,9 +430,7 @@ function myFunction() {
 </nav>
 
 </div>
-</div>
-                            </div>
-                        </div>
+
                         <!--/.adds-wrapper-->
 
                        <div class="post-promo text-center">
@@ -521,9 +509,9 @@ function recp() {
 
 function sort_by(value){
   jQuery('.oldList div').html('');
-          //jQuery('#masterdiv div').hide();
+          jQuery('#masterdiv div').hide();
             //jQuery('#pagination').hide();
-  $('#target-content').load('fetch_sort_union.php?value=' + encodeURIComponent(value));
+  $('#target-content').load('fetch_sorting_usedbikes.php?value=' + encodeURIComponent(value));
 }
 </script>
 <link rel="stylesheet" href="style.css">
@@ -541,7 +529,7 @@ $('.pagination').pagination({
         onPageClick : function(pageNumber) {
             jQuery('#masterdiv div').hide();
             jQuery("#target-content").html('loading...');
-            jQuery("#target-content").load("pagination_all_union.php?page=" + pageNumber);
+            jQuery("#target-content").load("pagination_usedbikes.php?page=" + pageNumber);
         }
     });
 });

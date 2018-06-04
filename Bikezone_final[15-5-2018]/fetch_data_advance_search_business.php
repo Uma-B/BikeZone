@@ -86,21 +86,21 @@ $_SESSION['fetchToSort']=$filterQuery;
                                                           <?php
                                                 $count=mysqli_query($conn, "SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
                                                $res=mysqli_fetch_array($count);
-                                            echo  $res['count']; ?>
+                                            echo $res['count']; ?>
                                                       </span></a>
                                 </li>
-                                <li class=" active nav-item"><a  href="Advance_Business_Search.php" class= "nav-link" role="tab">Business Ads
+                                <li class="active nav-item"><a  href="Advance_Business_Search.php" class= "nav-link" role="tab">Business Ads
                                     <span class="badge badge-secondary">
                                       <?php 
-                                                $result = $conn->query($sql); 
-                                               $res=mysqli_num_rows($result);
-                                            echo  $res;
+                                            $result = $conn->query($sql); 
+                                            $res=mysqli_num_rows($result);
+                                            echo $res;
                                       ?></span></a></li>
                                 <li class="nav-item"><a  href="Advance_Personal_Search.php" class= "nav-link" role="tab">Personal
                                     <span class="badge badge-secondary"><?php
                                       $count=mysqli_query($conn, "SELECT COUNT(*) FROM usedbikes Where Status='UnBlock'");
                                                $res=mysqli_fetch_array($count);
-                                            echo  $res['COUNT(*)']; 
+                                            echo $res['COUNT(*)']; 
                                     ?></span></a></li>
                             </ul>
  <div class="tab-filter">

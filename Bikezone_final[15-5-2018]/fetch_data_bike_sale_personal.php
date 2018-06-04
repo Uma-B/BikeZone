@@ -1,6 +1,6 @@
-
 <?php
 session_start();
+
 $servername = "localhost";
       $username = "root";
       $password = "";
@@ -27,7 +27,11 @@ $priceMax = $_GET['maxPrice'];
 
 //echo $Category;
 //echo $City;
-$filter1="select
+
+
+
+
+$filter="select
   usedbikes.UsedBikeId as UsedBikeId,
   usedbikes.BikeCategory as BikeCategory,
   usedbikes.UsedBikeImage1 as UsedBikeImage1,
@@ -40,42 +44,23 @@ $filter1="select
   usedbikes.ContactNumber as ContactNumber,
   usedbikes.Prize as Prize
 from
-  usedbikes WHERE Status='UnBlock' and BikeCategory='Used Bikes' and";
-
-
-
-$filter2="select
-  dealerbikes.DealerBikeId as UsedBikeId,
-  dealerbikes.BikeCategory as BikeCategory,
-  dealerbikes.DealerBikeImage1 as UsedBikeImage1,
-  dealerbikes.Brand as Brand,
-  dealerbikes.Model as Model,
-  dealerbikes.KilometreDriven as KilometreDriven,
-  dealerbikes.Location as Location,
-  dealerbikes.DealerId as UserId,
-  dealerbikes.UserName as UserName,
-  dealerbikes.ContactNumber as ContactNumber,
-  dealerbikes.Prize as Prize
-from
-  dealerbikes WHERE Status='UnBlock' and BikeCategory='Used Bikes' and";
+  usedbikes  WHERE Status='UnBlock' and";
 
 if($City != ""){
-  $filter1=$filter1. " usedbikes.City LIKE '$City' AND";
-  $filter2=$filter2. " dealerbikes.City LIKE '$City' AND";
+  $filter=$filter. " usedbikes.City LIKE '$City' AND";
+  //$filter=$filter. " dealerbikes.City LIKE '$City' AND";
 }
 if($priceMin != "" && $priceMax != ""){
-    $filter2 = $filter2." dealerbikes.Prize IN (SELECT Prize from dealerbikes WHERE Prize BETWEEN $priceMin AND $priceMax)";
-     $filter1 = $filter1." usedbikes.Prize IN (SELECT Prize from usedbikes WHERE Prize BETWEEN $priceMin AND $priceMax)";
+   // $filter = $filter." dealerbikes.Prize IN (SELECT Prize from dealerbikes WHERE Prize BETWEEN $priceMin AND $priceMax)";
+     $filter = $filter." usedbikes.Prize IN (SELECT Prize from usedbikes WHERE Prize BETWEEN $priceMin AND $priceMax)";
 }
 
 
-$split = explode(" ", $filter1);
+$split = explode(" ", $filter);
 if($split[count($split)-1] == "AND"){
-     $filter1 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter1);
-    $filter2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter2);
+     //$filter = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter);
+    $filter = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter);
 }
-
-$filter=$filter1. "UNION ". $filter2;
 
 $limit = 10; 
 $sql = $filter; 
@@ -103,33 +88,49 @@ $_SESSION['fetchToSort']=$filterQuery;
 
 /*  $filterQuery= $sub." LIMIT $start_from, $limit ";*/
 ?>
-<div class="tab-content">
-
-<div id="masterdiv">
+ <div id="masterdiv">
  <div class="category-list" id="masterdiv">
 <div class="tab-box  oldList">
 
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
-                                <li class="active nav-item">
-                                    <a  class="nav-link" href="ajax/ee.html" data-url="ajax/33.html" role="tab"
-                                                      data-toggle="tab">Used Bikes Ads <span class="badge badge-secondary">
-                                                          
-                                                          <?php
-
-                                            $count=mysqli_query($conn,$sql);
-                                                $num_rows = mysqli_num_rows($count);
-                                             echo  $num_rows; ?>
-                                                      </span></a>
+                                <li class="nav-item">
+                                   <a  href="bike_sale_all.php" class= "nav-link" role="tab" >All Ads  
+                                    <span class="badge badge-secondary">
+                                    <?php
+                                            $count=mysqli_query($conn,"SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
+                                                $res=mysqli_fetch_array($count);
+                                             echo  $res['count'];
+                                    ?>
+                                                 
+                                    </span>
+                                    </a>
                                 </li>
-                               <!--  <li class="nav-item"><a class="nav-link"  href="ajax/33.html" data-url="ajax/33.html" role="tab" data-toggle="tab">Business
-                                    <span class="badge badge-secondary">22,805</span></a></li>
-                                <li class="nav-item"><a class="nav-link"  href="ajax/33.html" data-url="ajax/33.html" role="tab" data-toggle="tab">Personal
-                                    <span class="badge badge-secondary">18,705</span></a></li> -->
-                            </ul>
 
-
-                            <div class="tab-filter">
+                                <li class="nav-item ">
+                                    <a  href="bike_sale_buisness.php" class= "nav-link" role="tab" >Business Ads 
+                                    <span class="badge badge-secondary">
+                                    <?php
+                                            $count=mysqli_query($conn,"SELECT COUNT(*) FROM dealerbikes as count Where Status='UnBlock'");
+                                                $res=mysqli_fetch_array($count);
+                                             echo  $res['COUNT(*)'];
+                                    ?>
+                                                 
+                                    </span>
+                                    </a>
+                                </li>
+                               <li class="active nav-item ">
+                                 <a href="bike_sale_personal.php" class="nav-link" role="tab">Personal
+                                    <span class="badge badge-secondary">
+                             <?php
+                                         $res=mysqli_num_rows($rs_result);
+                                            echo  $res;
+                                    ?>
+                                                 
+                                    </span>
+                                    </a>
+                                </li>  </ul>
+ <div class="tab-filter">
                                 <select class="selectpicker select-sort-by" data-style="btn-select" data-width="auto" onchange="sort_by(this.value)">
                                     <option value="-1">Sort by </option>
                                     <option value="ASC">Price: Low to High</option>
@@ -138,7 +139,6 @@ $_SESSION['fetchToSort']=$filterQuery;
                             </div>
                         </div>
 <?php
-
       $result = $conn->query($filterQuery);
 
       if ($result->num_rows > 0) {
@@ -146,7 +146,7 @@ $_SESSION['fetchToSort']=$filterQuery;
     while($row = $result->fetch_assoc()) {
  ?>
 
-
+<br>
 <div>
 
 
@@ -226,10 +226,10 @@ function myFunction() {
 
 <?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
  if($i == 1):?>
-            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_usedbikes.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_bike_sale_personal.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
  <?php else:?>
 
- <li class="page-item" id="<?php echo $i;?>"><a href='pagination_usedbikes.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+ <li class="page-item" id="<?php echo $i;?>"><a href='pagination_bike_sale_personal.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
 
  <?php endif;?> 
 <?php endfor;endif;?> 
@@ -247,7 +247,7 @@ $('.pagination').pagination({
         onPageClick : function(pageNumber) {
             jQuery('#masterdiv div').hide();
             jQuery("#target-content").html('loading...');
-            jQuery("#target-content").load("pagination_usedbikes.php?page=" + pageNumber);
+            jQuery("#target-content").load("pagination_bike_sale_personal.php?page=" + pageNumber);
         }
     });
 });

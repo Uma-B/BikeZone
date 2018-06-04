@@ -87,7 +87,7 @@ if (isset($_GET["page"])) {
 }  
 
 $start_from = ($page-1) * $limit;
-$_SESSION['Pagination']=$filter;
+$_SESSION['fetchToPagination']=$filter;
 $filterQuery=$filter." LIMIT $start_from, $limit";
 $_SESSION['fetchToSort']=$filterQuery;
 //$_SESSION['fetchToPagination']=$filterQuery;

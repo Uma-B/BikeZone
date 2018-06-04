@@ -1,60 +1,73 @@
-<!DOCTYPE html>
-<html>
-<head>
+<?php
 
-<body>
-
-	<?php
-    session_start();
-include('db_connection.php');
-
-$url=$_SERVER['HTTP_REFERER'];
-      $path_parts = pathinfo($url);
-     $uri=$path_parts['filename'];
+session_start();
 
 $limit = 10;  
 if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };  
-$start_from = ($page-1) * $limit;
+$start_from = ($page-1) * $limit; 
+
+$url=$_SERVER['HTTP_REFERER'];
+      $path_parts = pathinfo($url);
+     $uri=$path_parts['filename']; 
 
 
-if(isset($_SESSION['fetchToPagination'])){
-  $sql1=$_SESSION['fetchToPagination'];
+if(isset($_SESSION['fetchToSort'])) {
+ $filter = $_SESSION['fetchToSort'];
 }
 
-$sql2="LIMIT $start_from, $limit";
 
+$servername = "localhost";
+      $username = "root";
+      $password = "";
+      $dbname = "bikezone";
+      $conn = new mysqli($servername, $username, $password, $dbname);
+      // Check connection
 
-$sql=$sql1." ".$sql2;
-$rs_result = mysql_query ($sql);
+      if ($conn->connect_error) {
+          die("Connection failed: " . $conn->connect_error);
+      } 
 
-$_SESSION['fetchToSort']=$sql;
-?>
- <div class="category-list" id="masterdiv">
+$value= $_GET['value'];
+
+if($value != null){
+
+$filterQuery = "(".$filter.") ORDER BY Prize $value";  
+
+$splitQuery = explode("LIMIT", $filter);
+ $split = $splitQuery[0] ." ORDER BY Prize $value LIMIT ". $splitQuery[1];
+ $count=$splitQuery[0]." ORDER BY Prize $value";  
+//echo "filter query in sort page: ".$filterQuery;
+}
+$rs_result = $conn->query($count);
+$result = $conn->query($filterQuery);
+      ?>
+     <div class="category-list" id="masterdiv" >
 <div class="tab-box  oldList">
 
                             <!-- Nav tabs -->
-                           <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
+                            <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
                                 <li class="nav-item">
-                                                                   <a  href="Advance_Search_Find.php" class= "nav-link" role="tab" >
+                                  <a  href="bike_sale_all.php" class= "nav-link" role="tab" >
 
                                     All Ads 
                                     <span class="badge badge-secondary">
                                     <?php
-                                            $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
-                                                $res=mysql_fetch_array($count);
+
+                                          $count=mysqli_query($conn,"SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
+                                                $res=mysqli_fetch_array($count);
                                              echo  $res['count'];
-                                    ?>
+                                             ?>
                                                  
                                     </span>
                                     </a>
                                 </li>
 
                                 <li class=" active nav-item ">
-                                    <a  href="Advance_Business_Search.php" class= "nav-link" role="tab" >Business Ads 
+                                    <a  href="bike_sale_buisness.php" class= "nav-link" role="tab" >Business Ads 
                                     <span class="badge badge-secondary">
                                     <?php
-                                                $result=mysql_query($sql1);
-                                                 $res=mysql_num_rows($result);
+                                               //$result=mysql_query($filterQuery2);
+                                           $res=mysqli_num_rows($rs_result);
                                             echo  $res;
                                     ?>
                                                  
@@ -62,11 +75,11 @@ $_SESSION['fetchToSort']=$sql;
                                     </a>
                                 </li>
                                <li class="nav-item ">
-                                 <a href="Advance_Personal_Search.php" class="nav-link" role="tab">Personal
+                                 <a href="bike_sale_personal.php" class="nav-link" role="tab">Personal
                                     <span class="badge badge-secondary">
                              <?php
-                                            $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count Where Status='UnBlock'");
-                                                $res=mysql_fetch_array($count);
+                                              $count=mysqli_query($conn,"SELECT COUNT(*) FROM usedbikes as count Where Status='UnBlock'");
+                                                $res=mysqli_fetch_array($count);
                                              echo  $res['COUNT(*)'];
                                     ?>
                                                  
@@ -95,16 +108,19 @@ $_SESSION['fetchToSort']=$sql;
                         <div class="menu-overly-mask"></div>
                         <div class="adds-wrapper">
                             <div class="tab-content">
+
 <?php
-while ($row = mysql_fetch_assoc($rs_result)) {  
-?>  
-      
+      if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+ ?>
 
 
-<div>
-<div class="item-list">
-    
-    <div class="row">
+<div >
+
+
+<div class="item-list" >
+   
+    <div class="row" >
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
          <a href="used_bikes_view.php?filename=<?php echo $uri;?>&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
@@ -117,14 +133,13 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
         </a>
         </div>
     </div>
-    
+    <!--/.photobox-->
     <div class="col-sm-7 add-desc-box">
         <div class="ads-details">
             <h5 class="add-title"><a href="used_bikes_view.php?filename=<?php echo $uri;?>&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
                 <?php echo $row['Brand'].'-'.$row['Model'] ;  ?></a></h5>
             <span class="info-row"> 
                 <span class="add-type business-ads tooltipHere" data-toggle="tooltip" data-placement="right" title="" data-original-title="Business Ads">B </span> 
-
                 <span class="date"><i> </i>KM's Driven (<?php echo $row['KilometreDriven']. ') - <i class="fa fa-map-marker"></i>'.$row['Location']  ?></span> 
               <br><br> 
               <span class="category">Seller Name : <?php echo $row['UserName']  ?></span>
@@ -134,14 +149,15 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
                   
               </i><?php echo $row['ContactNumber'] ?></span> </span></div>
     </div>
-
+    <!--/.add-desc-box-->
     <div class="col-md-3 text-right  price-box">
         <h2 class="item-price">RS:-<?php echo $row['Prize']  ?></h2>
-         <?php
+       <?php
+
         if (isset($_SESSION['usr_id'])) {
           $id=$_SESSION['usr_id'];
           ?>
-          <a href="favourite.php?filename=<?php echo $uri;?>&UserId=<?php echo $row['UserId']; ?> &UsedBikeId=<?php echo $row['UsedBikeId']; ?> &Brand=<?php echo $row['Brand'];?> &Category=<?php echo $row['BikeCategory'];?> &Price=<?php echo $row['Prize'];?> &ContactNumber=<?php echo $row['ContactNumber'];?> &Fav_Userid=<?php echo $id;?>" class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
+          <a href="favourite.php?filename=<?php echo $uri;?>&UserId=<?php echo $row['UserId']; ?> &UsedBikeId=<?php echo $row['UsedBikeId']; ?> &Brand=<?php echo $row['Brand'];?> &Category=<?php echo $row['BikeCategory'];?> &Price=<?php echo $row['Prize'];?> &ContactNumber=<?php echo $row['ContactNumber'];?> &Fav_Userid=<?php echo $id;?>" class="btn btn-danger btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>Featured Ads</span>
         </a>
         <?php
         }
@@ -161,27 +177,15 @@ function myFunction() {
         ?>
          
         </div>
- 
+    <!--/.add-desc-box-->
 </div>
 </div>
-</div>
+<?php
+}
+}
 
-
-
-
-<?php  
-};  
 ?>
 </div>
 </div>
-</div>  
-</body>
-<script type="text/javascript">
-  function sort_by(value){
-     jQuery('.oldList div').html('');
-  jQuery('#masterdiv div').hide();
-  //jQuery('#pagination').hide();
-  $('#target-content').load('fetch_sorting_advance_search_business.php?value=' + encodeURIComponent(value));
-}
-</script>
-</html>
+</div>
+</div>

@@ -89,7 +89,7 @@ $_SESSION['fetchToSort']=$filterQuery;
                                                           
                                                           <?php
 
-                                            $count=mysqli_query($conn,$filterQuery);
+                                            $count=mysqli_query($conn,$filter);
                                                 $num_rows = mysqli_num_rows($count);
                                              echo  $num_rows; ?>
                                                       </span></a>

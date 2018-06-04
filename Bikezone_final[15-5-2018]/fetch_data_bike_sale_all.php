@@ -40,7 +40,7 @@ $filter1="select
   usedbikes.ContactNumber as ContactNumber,
   usedbikes.Prize as Prize
 from
-  usedbikes WHERE Status='UnBlock' and BikeCategory='Used Bikes' and";
+  usedbikes WHERE Status='UnBlock' and";
 
 
 
@@ -57,7 +57,7 @@ $filter2="select
   dealerbikes.ContactNumber as ContactNumber,
   dealerbikes.Prize as Prize
 from
-  dealerbikes WHERE Status='UnBlock' and BikeCategory='Used Bikes' and";
+  dealerbikes WHERE Status='UnBlock' and";
 
 if($City != ""){
   $filter1=$filter1. " usedbikes.City LIKE '$City' AND";
@@ -103,32 +103,34 @@ $_SESSION['fetchToSort']=$filterQuery;
 
 /*  $filterQuery= $sub." LIMIT $start_from, $limit ";*/
 ?>
-<div class="tab-content">
-
-<div id="masterdiv">
+ <div id="masterdiv">
  <div class="category-list" id="masterdiv">
 <div class="tab-box  oldList">
 
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
-                                <li class="active nav-item">
-                                    <a  class="nav-link" href="ajax/ee.html" data-url="ajax/33.html" role="tab"
-                                                      data-toggle="tab">Used Bikes Ads <span class="badge badge-secondary">
-                                                          
+                                <li class=" active nav-item">
+                                    <a  href="bike_sale_all.php" class= "nav-link" role="tab">All Ads <span class="badge badge-secondary">
                                                           <?php
-
-                                            $count=mysqli_query($conn,$sql);
-                                                $num_rows = mysqli_num_rows($count);
-                                             echo  $num_rows; ?>
+                                               $result = $conn->query($sql); 
+                                               $res=mysqli_num_rows($result);
+                                            echo  $res; ?>
                                                       </span></a>
                                 </li>
-                               <!--  <li class="nav-item"><a class="nav-link"  href="ajax/33.html" data-url="ajax/33.html" role="tab" data-toggle="tab">Business
-                                    <span class="badge badge-secondary">22,805</span></a></li>
-                                <li class="nav-item"><a class="nav-link"  href="ajax/33.html" data-url="ajax/33.html" role="tab" data-toggle="tab">Personal
-                                    <span class="badge badge-secondary">18,705</span></a></li> -->
+                                <li class="nav-item"><a  href="bike_sale_buisness.php" class= "nav-link" role="tab">Business Ads
+                                    <span class="badge badge-secondary">
+                                      <?php 
+                                          $count=mysqli_query($conn, "SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock'");
+                                               $res=mysqli_fetch_array($count);
+                                            echo  $res['COUNT(*)'];  
+                                      ?></span></a></li>
+                                <li class=" nav-item"><a  href="bike_sale_personal.php" class= "nav-link" role="tab">Personal
+                                    <span class="badge badge-secondary"><?php
+                                      $count=mysqli_query($conn, "SELECT COUNT(*) FROM usedbikes Where Status='UnBlock'");
+                                               $res=mysqli_fetch_array($count);
+                                            echo  $res['COUNT(*)']; 
+                                    ?></span></a></li>
                             </ul>
-
-
                             <div class="tab-filter">
                                 <select class="selectpicker select-sort-by" data-style="btn-select" data-width="auto" onchange="sort_by(this.value)">
                                     <option value="-1">Sort by </option>
@@ -137,6 +139,7 @@ $_SESSION['fetchToSort']=$filterQuery;
                                 </select>
                             </div>
                         </div>
+                      </div>
 <?php
 
       $result = $conn->query($filterQuery);
@@ -146,7 +149,7 @@ $_SESSION['fetchToSort']=$filterQuery;
     while($row = $result->fetch_assoc()) {
  ?>
 
-
+<br/>
 <div>
 
 
@@ -219,6 +222,7 @@ function myFunction() {
 ?>
 </div>
 </div>
+
 <div class="pagination-bar text-center">
      <nav aria-label="Page navigation " class="d-inline-b">
 
@@ -226,16 +230,15 @@ function myFunction() {
 
 <?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
  if($i == 1):?>
-            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_usedbikes.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_bike_sale_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
  <?php else:?>
 
- <li class="page-item" id="<?php echo $i;?>"><a href='pagination_usedbikes.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+ <li class="page-item" id="<?php echo $i;?>"><a href='pagination_bike_sale_all.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
 
  <?php endif;?> 
 <?php endfor;endif;?> 
 </ul>
 </nav>
-</div>
 </div>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -247,7 +250,7 @@ $('.pagination').pagination({
         onPageClick : function(pageNumber) {
             jQuery('#masterdiv div').hide();
             jQuery("#target-content").html('loading...');
-            jQuery("#target-content").load("pagination_usedbikes.php?page=" + pageNumber);
+            jQuery("#target-content").load("pagination_bike_sale_all.php?page=" + pageNumber);
         }
     });
 });

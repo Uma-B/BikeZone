@@ -222,6 +222,7 @@ function myFunction() {
 ?>
 </div>
 </div>
+
 <div class="pagination-bar text-center">
      <nav aria-label="Page navigation " class="d-inline-b">
 
@@ -238,7 +239,7 @@ function myFunction() {
 <?php endfor;endif;?> 
 </ul>
 </nav>
-
+</div>
 <script type="text/javascript">
 $(document).ready(function(){
 $('.pagination').pagination({

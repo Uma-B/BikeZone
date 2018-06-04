@@ -35,7 +35,7 @@ $_SESSION['fetchToSort']=$sql;
                             <!-- Nav tabs -->
                            <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
                                 <li class="nav-item">
-                                                                   <a  href="Advance_Search_Find.php" class= "nav-link" role="tab" >
+                                   <a  href="Advance_Search_Find.php" class= "nav-link" role="tab" >
 
                                     All Ads 
                                     <span class="badge badge-secondary">
@@ -65,7 +65,8 @@ $_SESSION['fetchToSort']=$sql;
                                  <a href="Advance_Personal_Search.php" class="nav-link" role="tab">Personal
                                     <span class="badge badge-secondary">
                              <?php
-                                          $res=mysql_num_rows($rs_result);
+                              $result=mysql_query($sql1);
+                                          $res=mysql_num_rows($result);
                                             echo  $res;
                                     ?>
                                                  
@@ -180,7 +181,7 @@ function myFunction() {
      jQuery('.oldList div').html('');
   jQuery('#masterdiv div').hide();
   //jQuery('#pagination').hide();
-  $('#target-content').load('fetch_sorting_advance_personal.php?value=' + encodeURIComponent(value));
+  $('#target-content').load('fetch_sorting_advance_search_personal.php?value=' + encodeURIComponent(value));
 }
 </script>
 </html>

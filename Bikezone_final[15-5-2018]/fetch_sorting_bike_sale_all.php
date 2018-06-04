@@ -1,10 +1,18 @@
 <?php
 
-
 session_start();
 
-if(isset($_SESSION['fetchToSort'])  ){
-  $filter=$_SESSION['fetchToSort'];
+$limit = 10;  
+if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };  
+$start_from = ($page-1) * $limit; 
+
+$url=$_SERVER['HTTP_REFERER'];
+      $path_parts = pathinfo($url);
+     $uri=$path_parts['filename']; 
+
+
+if(isset($_SESSION['fetchToSort'])) {
+ $filter = $_SESSION['fetchToSort'];
 }
 
 
@@ -19,50 +27,62 @@ $servername = "localhost";
           die("Connection failed: " . $conn->connect_error);
       } 
 
-$url=$_SERVER['HTTP_REFERER'];
-      $path_parts = pathinfo($url);
-     $uri=$path_parts['filename'];
-
-
 $value= $_GET['value'];
-
 
 if($value != null){
 
-//$splitQuery = explode("LIMIT", $filter);
-$filterQuery = "(".$filter.") ORDER BY Prize $value";  
+$splitQuery = explode("LIMIT", $filter);
+ $filterQuery = $splitQuery[0] ." ORDER BY Prize $value LIMIT ". $splitQuery[1];
+ $count=$splitQuery[0]." ORDER BY Prize $value";  
 //echo "filter query in sort page: ".$filterQuery;
 }
+$rs_result = $conn->query($count);
 $result = $conn->query($filterQuery);
-?>
-     
- <div class="category-list" id="masterdiv" >
-<div class="tab-box oldList">
+      ?>
+     <div class="category-list" id="masterdiv" >
+<div class="tab-box  oldList">
 
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
-                                <li class=" nav-item">
-                                    <a  href="Advance_Search_Find.php" class= "nav-link" role="tab">All Ads <span class="badge badge-secondary">
-                                                          <?php
-                                                $count=mysqli_query($conn, "SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
-                                               $res=mysqli_fetch_array($count);
-                                            echo  $res['count']; ?>
-                                                      </span></a>
-                                </li>
-                                <li class=" active nav-item"><a  href="Advance_Business_Search.php" class= "nav-link" role="tab">Business Ads
+                                <li class="active nav-item">
+                                    <a  class="nav-link" href="ajax/ee.html" data-url="ajax/33.html" role="tab" data-toggle="tab">All Ads 
                                     <span class="badge badge-secondary">
-                                      <?php 
-                                      $result=mysqli_query($conn,$filter);
-                                       $res=mysqli_num_rows($result);
-                                            echo  $res;
-                                      ?></span></a></li>
-                                <li class="nav-item"><a  href="Advance_Personal_Search.php" class= "nav-link" role="tab">Personal
-                                    <span class="badge badge-secondary"><?php
-                                      $count=mysqli_query($conn, "SELECT COUNT(*) FROM usedbikes Where Status='UnBlock'");
-                                               $res=mysqli_fetch_array($count);
-                                            echo  $res['COUNT(*)']; 
-                                    ?></span></a></li>
-                            </ul>
+                                    <?php
+                                    //echo $filter;
+                                            //$result = $conn->query($count);
+                                            $res=mysqli_num_rows($rs_result);
+                                             echo  $res;
+                                             ?>          
+                                    </span>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item ">
+                                    <a  href="bike_sale_buisness.php" class= "nav-link" role="tab" >Business Ads 
+                                    <span class="badge badge-secondary">
+                                          <?php
+
+                                            $count=mysqli_query($conn,"SELECT COUNT(*) FROM dealerbikes as count Where Status='UnBlock'");
+                                                 $res=mysqli_fetch_array($count);
+                                             echo  $res['COUNT(*)'];
+                                             ?>
+                                                 
+                                    </span>
+                                    </a>
+                                </li>
+                               <li class="nav-item ">
+                                 <a href="bike_sale_personal.php" class="nav-link" role="tab">Personal
+                                    <span class="badge badge-secondary">
+                             <?php
+
+                                             $count=mysqli_query($conn,"SELECT COUNT(*) FROM usedbikes as count Where Status='UnBlock'");
+                                                 $res=mysqli_fetch_array($count);
+                                             echo  $res['COUNT(*)'];
+                                             ?>
+                                                 
+                                    </span>
+                                    </a>
+                                </li>  </ul>
 
 
                             <div class="tab-filter">

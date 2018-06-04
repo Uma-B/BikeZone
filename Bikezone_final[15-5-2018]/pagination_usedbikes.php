@@ -157,7 +157,7 @@ function myFunction() {
      jQuery('.oldList div').html('');
   jQuery('#masterdiv div').hide();
   //jQuery('#pagination').hide();
-  $('#target-content').load('fetch_sorting.php?value=' + encodeURIComponent(value));
+  $('#target-content').load('fetch_sorting_usedbikes.php?value=' + encodeURIComponent(value));
 }
 </script>
 </html>
