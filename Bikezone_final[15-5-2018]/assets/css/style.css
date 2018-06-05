@@ -16,6 +16,8 @@ html {
 body {
   margin: 0; }
 
+
+
 article,
 aside,
 footer,
@@ -379,6 +381,8 @@ h1, h2, h3, h4, h5, h6,
   font-weight: 500;
   line-height: 1.1;
   color: inherit; }
+
+
 
 h1, .h1 {
   font-size: 2.5rem; }
@@ -3088,7 +3092,7 @@ nav.slider-nav a {
     font-size: 12px; }
 
   .nav-tabs .badge {
-    display: none; }
+    display: block; }
 
   .select-sort-by .selecter-options {
     font-size: 11px !important; } }

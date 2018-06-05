@@ -38,7 +38,7 @@ $_SESSION['fetchToSort']=$sql;
                                                                    <a  href="Advance_Search_Find.php" class= "nav-link" role="tab" >
 
                                     All Ads 
-                                    <span class="badge badge-secondary">
+                                    <span class="badge badge-secondary" style="display:inline-block">
                                     <?php
                                             $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
                                                 $res=mysql_fetch_array($count);
@@ -51,7 +51,7 @@ $_SESSION['fetchToSort']=$sql;
 
                                 <li class=" active nav-item ">
                                     <a  href="Advance_Business_Search.php" class= "nav-link" role="tab" >Business Ads 
-                                    <span class="badge badge-secondary">
+                                    <span class="badge badge-secondary" style="display:inline-block">
                                     <?php
                                                 $result=mysql_query($sql1);
                                                  $res=mysql_num_rows($result);
@@ -63,7 +63,7 @@ $_SESSION['fetchToSort']=$sql;
                                 </li>
                                <li class="nav-item ">
                                  <a href="Advance_Personal_Search.php" class="nav-link" role="tab">Personal
-                                    <span class="badge badge-secondary">
+                                    <span class="badge badge-secondary" style="display:inline-block">
                              <?php
                                             $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count Where Status='UnBlock'");
                                                 $res=mysql_fetch_array($count);

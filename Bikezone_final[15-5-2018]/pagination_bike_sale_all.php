@@ -36,7 +36,7 @@ $_SESSION['fetchToSort']=$sql;
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
                                 <li class="active nav-item">
                                     <a  class="nav-link" href="ajax/ee.html" data-url="ajax/33.html" role="tab" data-toggle="tab">All Ads 
-                                    <span class="badge badge-secondary">
+                                    <span class="badge badge-secondary" style="display:inline-block">
                                     <?php
                                             $result=mysql_query($sql1);
                                            $res=mysql_num_rows($result);
@@ -48,7 +48,7 @@ $_SESSION['fetchToSort']=$sql;
 
                                 <li class="nav-item ">
                                     <a  href="bike_sale_buisness.php" class= "nav-link" role="tab" >Business Ads 
-                                    <span class="badge badge-secondary">
+                                    <span class="badge badge-secondary" style="display:inline-block">
                                           <?php
 
                                             $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count Where Status='UnBlock'");
@@ -61,7 +61,7 @@ $_SESSION['fetchToSort']=$sql;
                                 </li>
                                <li class="nav-item ">
                                  <a href="bike_sale_personal.php" class="nav-link" role="tab">Personal
-                                    <span class="badge badge-secondary">
+                                    <span class="badge badge-secondary" style="display:inline-block">
                              <?php
 
                                             $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count Where Status='UnBlock'");

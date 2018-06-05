@@ -106,7 +106,7 @@ session_start();
  <div id="wrapper">
 
          <?php
-          //include "header.php";
+          include "header.php";
          ?>
     <!-- /.header -->
     <body>

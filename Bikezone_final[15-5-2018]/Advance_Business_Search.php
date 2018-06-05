@@ -250,7 +250,7 @@ $_SESSION['fetchToPagination']=$sql1;
 
                                     All Ads 
 
-                                    <span class="badge badge-secondary">
+                                    <span class="badge badge-secondary" style="display:inline-block;">
                                     <?php
                                             $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
                                                 $res=mysql_fetch_array($count);
@@ -263,7 +263,7 @@ $_SESSION['fetchToPagination']=$sql1;
 
                                 <li class=" active nav-item ">
                                     <a  href="Advance_Business_Search.php" class= "nav-link" role="tab">Business Ads
-                                    <span class="badge badge-secondary">
+                                    <span class="badge badge-secondary" style="display:inline-block;">
                                     <?php
                                             $result=mysql_query($filterQuery2);
                                              $res=mysql_num_rows($result);
@@ -275,7 +275,7 @@ $_SESSION['fetchToPagination']=$sql1;
                                 </li>
                                <li class="nav-item ">
                                  <a href="Advance_Personal_Search.php" class="nav-link" role="tab">Personal
-                                    <span class="badge badge-secondary">
+                                    <span class="badge badge-secondary" style="display:inline-block;">
                              <?php
                                             $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count Where Status='UnBlock'");
                                                 $res=mysql_fetch_array($count);

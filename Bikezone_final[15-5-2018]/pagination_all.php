@@ -36,7 +36,7 @@ $_SESSION['fetchToSort']=$sql;
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
                                 <li class="active nav-item">
                                     <a  class="nav-link" href="ajax/ee.html" data-url="ajax/33.html" role="tab"
-                                                      data-toggle="tab"><?php echo $uri?> ads <span class="badge badge-secondary">
+                                                      data-toggle="tab"><?php echo $uri?> ads <span class="badge badge-secondary" style="display:inline-block">
                                                           
                                                           <?php
                                                           $result=mysql_query($sql1);
@@ -45,9 +45,9 @@ $_SESSION['fetchToSort']=$sql;
                                                       </span></a>
                                 </li>
                                <!--  <li class="nav-item"><a class="nav-link"  href="ajax/33.html" data-url="ajax/33.html" role="tab" data-toggle="tab">Business
-                                    <span class="badge badge-secondary">22,805</span></a></li>
+                                    <span class="badge badge-secondary" style="display:inline-block">22,805</span></a></li>
                                 <li class="nav-item"><a class="nav-link"  href="ajax/33.html" data-url="ajax/33.html" role="tab" data-toggle="tab">Personal
-                                    <span class="badge badge-secondary">18,705</span></a></li> -->
+                                    <span class="badge badge-secondary" style="display:inline-block">18,705</span></a></li> -->
                             </ul>
 
 

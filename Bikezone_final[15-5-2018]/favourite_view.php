@@ -1,8 +1,79 @@
 <?php
 session_start();
       include "db_connection.php";
-$userId=$_SESSION['usr_id'];
-$sql=mysql_query("Select Fav_UserId,UserId,UsedBikeId,BikeCategory,Brand,MobileNumber,Price from favourite Where favourite.Fav_UserId=$userId");                      
+
+$userid=$_SESSION['usr_id'];
+
+ $favouriteQuery="select
+  usedbikes.UserId as UserId,
+  usedbikes.UsedBikeId as UsedBikeId,
+  usedbikes.BikeCategory as BikeCategory,
+  usedbikes.UsedBikeImage1 as UsedBikeImage1,
+  usedbikes.Brand as Brand,
+  usedbikes.Model as Model,
+  usedbikes.KilometreDriven as KilometreDriven,
+  usedbikes.Location as Location,
+  usedbikes.UserId as UserId,
+  usedbikes.UserName as UserName,
+  usedbikes.ContactNumber as ContactNumber,
+  usedbikes.Prize as Prize
+from
+  usedbikes
+where
+  usedbikes.UserId in (
+    SELECT
+      userid
+    FROM
+      `favourite`
+    where
+      favourite.Fav_UserId = $userid
+  )
+  and usedbikes.UsedBikeId in (
+    SELECT
+      usedbikeid
+    FROM
+      `favourite`
+    where
+      favourite.Fav_UserId = $userid
+  )
+UNION
+select
+  dealerbikes.DealerId as UserId,
+  dealerbikes.DealerBikeId as UsedBikeId,
+  dealerbikes.BikeCategory as BikeCategory,
+  dealerbikes.DealerBikeImage1 as UsedBikeImage1,
+  dealerbikes.Brand as Brand,
+  dealerbikes.Model as Model,
+  dealerbikes.KilometreDriven as KilometreDriven,
+  dealerbikes.Location as Location,
+  dealerbikes.DealerId as UserId,
+  dealerbikes.UserName as UserName,
+  dealerbikes.ContactNumber as ContactNumber,
+  dealerbikes.Prize as Prize
+from
+  dealerbikes
+where
+  dealerbikes.DealerId in (
+    SELECT
+      userid
+    FROM
+      `favourite`
+    where
+      favourite.Fav_UserId = $userid
+  )
+  and dealerbikes.DealerBikeId in (
+    SELECT
+      usedbikeid
+    FROM
+      `favourite`
+    where
+      favourite.Fav_UserId = $userid
+  )
+";
+    $sqlFav=mysql_query($favouriteQuery);
+
+    $_SESSION['favourite']=$favouriteQuery;
+//$sql=mysql_query("Select Fav_UserId,UserId,UsedBikeId,BikeCategory,Brand,MobileNumber,Price from favourite Where favourite.Fav_UserId=$userId");                      
 ?>
 
 <!DOCTYPE html>
@@ -52,10 +123,147 @@ $sql=mysql_query("Select Fav_UserId,UserId,UsedBikeId,BikeCategory,Brand,MobileN
 </head>
 <body>
 
-<div id="wrapper">
+         <div class="header">
+        <nav class="navbar fixed-top navbar-site navbar-light bg-light navbar-expand-md"
+             role="navigation">
+            <div class="container">
 
-         <?php
-          include "header.php";
+            <div class="navbar-identity">
+
+
+                <a href="index.php" class="navbar-brand logo logo-title">
+                <span class="logo-icon"><!-- <i class="icon icon-search-1 ln-shadow-logo "></i> -->
+                </span>BIKE<span>ZONE </span> </a>
+
+
+                <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggler pull-right"
+                        type="button">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 30 30" width="30" height="30" focusable="false"><title>Menu</title><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M4 7h22M4 15h22M4 23h22"/></svg>
+
+
+                </button>
+            </div>
+
+
+
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-left">
+                      <li><a href="" class="glyphicon glyphicon-home"></a></li>
+                      <li><a href="bike_sale_all.php">Bike for sale</a></li>
+                      <li><a href="">Insurance</a></li>
+                      <li><a href="">Service</a></li>
+                      <li><a href="">Help</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav ml-auto navbar-right">
+                        <!-- <li class="nav-item"><a href="category.html" class="nav-link"><i class="icon-th-thumb"></i> All Ads</a>
+                        </li> -->
+                        <!-- <li class="dropdown no-arrow nav-item"><a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+
+                            <span>User Name</span> <i class="icon-user fa"></i> <i class=" icon-down-open-big fa"></i></a>   
+                            <ul
+                                    class="dropdown-menu user-menu dropdown-menu-right">
+    
+                            </ul>
+                        </li> -->
+                         <?php if (isset($_SESSION['usr_name'])) { ?>
+                         <li class="dropdown no-arrow nav-item"><a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+
+                            <span>Signed in as <?php echo $_SESSION['usr_name']; ?></span> <i class="icon-user fa"></i> <i class=" icon-down-open-big fa"></i></a>
+                            <ul
+                                    class="dropdown-menu user-menu dropdown-menu-right">
+                                    <li class="dropdown-item"><a href="favourite_view.php"><i class=" icon-money "></i>Featured Ads</a>
+                                </li>
+                                <li class="dropdown-item"><a href="logout.php"><i class=" icon-logout "></i> Log out </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                        <div class="dropdown">
+                            <?php
+
+                                if (isset($_SESSION['dealer_type'])) {
+                                    ?>
+
+                                    &nbsp;&nbsp;&nbsp; &nbsp;<a href="dealer_post.php" class="dropbutton " style="height: 45px; width: 120px;" >Sell your Bike</a>
+                                    <?php
+                                }
+                                else{
+                                    ?>
+                                    &nbsp;&nbsp;&nbsp; &nbsp;<a href="customer_post.php" class="dropbutton " style="height: 45px; width: 120px;" >Sell your Bike</a>
+                                    <?php
+                                }
+                            ?>
+                                
+  
+ 
+</div><!-- <div class="btn-group">
+  <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" style="height: 45px; width: 120px;">
+    Sell your bike
+  </button>
+  <div class="dropdown-menu">
+    <a class="dropdown-item" href="customer_post.php">Customer</a>
+    <a class="dropdown-item" href="dealer_post.php">Dealer</a>
+    
+  </div>
+</div> --></li>
+                <?php } else { ?>
+                <li>
+                    <!-- <div class="btn-group">
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" style="height: 45px; width: 120px;">
+    Login
+  </button>
+  <div class="dropdown-menu">
+    <a class="dropdown-item" href="UserLogin.php">User</a>
+    <a class="dropdown-item" href="CompanyLogin.php">Company</a>
+    
+  </div>
+</div>  </li>
+                <li><div class="btn-group">
+  <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" style=" height: 45px; width: 120px; margin-left: 20px;">
+    Register
+  </button>
+  <div class="dropdown-menu">
+    <a class="dropdown-item" href="UserRegistration.php">User</a>
+    <a class="dropdown-item" href="delear.php">Company</a>
+    
+  </div>
+</div></li> -->
+ <div class="dropdown">
+  &nbsp;&nbsp;&nbsp; &nbsp;<button class="dropbtn" style="height: 45px; width: 120px;" >Login
+</button>
+ <div class="dropdown-content">
+    <a class="dropdown-item" href="UserLogin.php">User</a>
+   <a class="dropdown-item" href="CompanyLogin.php">Company</a>
+   </div>
+</div><!-- <div class="btn-group">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" style="height: 45px; width: 120px;">
+ </button>
+ <div class="dropdown-menu">
+   
+ </div>
+</div> -->  </li>
+               <li>
+
+<div class="dropdown">
+ <button class="dropbtn" style=" height: 45px; width: 120px; margin-left: 20px;">
+   Register</button>
+ <div class="dropdown-content">
+  <a class="dropdown-item" href="UserRegistration.php">User</a>
+   <a class="dropdown-item" href="delear.php">Company</a>
+   
+   </div>
+</div>
+
+      </li> 
+                <?php } ?>    
+                    </ul>
+                </div>
+                <!--/.nav-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+    </div>
          ?>
     <!-- /.header -->
 
@@ -94,7 +302,7 @@ $sql=mysql_query("Select Fav_UserId,UserId,UsedBikeId,BikeCategory,Brand,MobileN
                                         ?>
                                         <li>                                        
                                         <div margin:0px auto; margin-top:30px;" >
-                                                <select id="category"  style="width:80%;" onchange="recp()" class="chosen form-control ">
+                                                <select id="category"  style="width:80%;" onchange="category(this.value)" class="chosen form-control ">
                                             <option value="-1"> Select Category </option>
                                             <option value="Used Bikes"> Used Bikes</option>
                               <option value="New Bikes"> New Bikes</option>
@@ -212,11 +420,11 @@ $sql=mysql_query("Select Fav_UserId,UserId,UsedBikeId,BikeCategory,Brand,MobileN
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
                                 <li class="active nav-item">
                                     <a  class="nav-link" href="favourite_view.php" data-url="ajax/33.html" role="tab" data-toggle="tab">Favourite Ads 
-                                    <span class="badge badge-secondary">
+                                    <span class="badge badge-secondary" style="display:inline-block;">
                                     <?php
-                                            //$count=mysql_query($);
-                                            $num_rows=mysql_num_rows($sql);
-                                             echo $num_rows;
+                                             $res=mysql_query($favouriteQuery);
+                                            $num=mysql_num_rows($res);
+                                            echo $num;
                                     ?>
                                                  
                                     </span>
@@ -339,63 +547,16 @@ $sql=mysql_query("Select Fav_UserId,UserId,UsedBikeId,BikeCategory,Brand,MobileN
 <?php
 
 
-while ($res=mysql_fetch_array($sql)) {
+// while ($res=mysql_fetch_array($sql)) {
 
-   $userId=$res['UserId'];
-  $bikeId=$res['UsedBikeId'];
-  $BikeCategory=$res['BikeCategory'];
-  $Brand=$res['Brand'];
-  $ContactNumber=$res['MobileNumber'];
-  $Price=$res['Price'];
+//    $userId=$res['UserId'];
+//   $bikeId=$res['UsedBikeId'];
+//   $BikeCategory=$res['BikeCategory'];
+//   $Brand=$res['Brand'];
+//   $ContactNumber=$res['MobileNumber'];
+//   $Price=$res['Price'];
 
-  $favouriteQuery="select
-  usedbikes.UsedBikeId as UsedBikeId,
-  usedbikes.BikeCategory as BikeCategory,
-  usedbikes.UsedBikeImage1 as UsedBikeImage1,
-  usedbikes.Brand as Brand,
-  usedbikes.Model as Model,
-  usedbikes.KilometreDriven as KilometreDriven,
-  usedbikes.Location as Location,
-  usedbikes.UserId as UserId,
-  usedbikes.UserName as UserName,
-  usedbikes.ContactNumber as ContactNumber,
-  usedbikes.Prize as Prize
-from
-  usedbikes
-where 
-usedbikes.UsedBikeId=$bikeId AND
-usedbikes.BikeCategory='$BikeCategory' AND
-usedbikes.Brand= '$Brand' AND
-usedbikes.ContactNumber = '$ContactNumber' AND 
-usedbikes.Prize=$Price AND
-usedbikes.UserId=$userId
-UNION
-select
-  dealerbikes.DealerBikeId as UsedBikeId,
-  dealerbikes.BikeCategory as BikeCategory,
-  dealerbikes.DealerBikeImage1 as UsedBikeImage1,
-  dealerbikes.Brand as Brand,
-  dealerbikes.Model as Model,
-  dealerbikes.KilometreDriven as KilometreDriven,
-  dealerbikes.Location as Location,
-  dealerbikes.DealerId as UserId,
-  dealerbikes.UserName as UserName,
-  dealerbikes.ContactNumber as ContactNumber,
-  dealerbikes.Prize as Prize
-from
-  dealerbikes
-where 
-dealerbikes.DealerBikeId=$bikeId AND
-dealerbikes.BikeCategory='$BikeCategory' AND
-dealerbikes.Brand= '$Brand' AND
-dealerbikes.ContactNumber = '$ContactNumber' AND 
-dealerbikes.Prize=$Price AND
-dealerbikes.DealerId=$userId";
-    $sqlFav=mysql_query($favouriteQuery);
-
-    $_SESSION['favourite']=$favouriteQuery;
-?>
-<?php
+ 
 //echo "\n Filter Query $favouriteQuery";
 //$sql=mysql_query($filterQuery);
  
@@ -461,8 +622,10 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
 </div> -->
 </div>
 </div>
-<?php }
-} ?>
+<?php 
+}
+//} 
+?>
 
                             </div>
                         </div>
@@ -534,6 +697,22 @@ include 'footer.php';
 
 <script src="choosen.js"></script>
   <script type="text/javascript">
+  // city
+  function category(category){
+
+    if (category=="Used Bikes") {
+       // document.write(category);
+         window.location.replace('used_bikes.php');
+    }
+    else if(category=="New Bikes"){
+        //document.write(category);
+        window.location.replace('new_bikes.php');
+  }
+  else {
+    //document.write(category);
+    window.location.replace('scooter.php');
+  }
+}
   // city
 function recp() {
 

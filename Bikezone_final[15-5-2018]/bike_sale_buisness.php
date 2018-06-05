@@ -4,9 +4,22 @@ include "db_connection.php";
 
 
 GLOBAL $Bike_sale2;
-if(isset($_SESSION['Bike_sale2'])) {
-$filterQuery1 = $_SESSION['Bike_sale2'];
-}
+
+$filterQuery1 = "select
+  dealerbikes.DealerBikeId as UsedBikeId,
+  dealerbikes.BikeCategory as BikeCategory,
+  dealerbikes.DealerBikeImage1 as UsedBikeImage1,
+  dealerbikes.Brand as Brand,
+  dealerbikes.Model as Model,
+  dealerbikes.KilometreDriven as KilometreDriven,
+  dealerbikes.Location as Location,
+  dealerbikes.DealerId as UserId,
+  dealerbikes.UserName as UserName,
+  dealerbikes.ContactNumber as ContactNumber,
+  dealerbikes.Prize as Prize
+from
+  dealerbikes Where Status='UnBlock'";
+
 $limit = 10; 
 $sql = $filterQuery1; 
 /*For No Of Rows Selected*/
@@ -247,7 +260,7 @@ $_SESSION['fetchToPagination']=$sql1;
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
                                 <li class="nav-item">
                                     <a  href="bike_sale_all.php" class= "nav-link" role="tab" >All Ads  
-                                    <span class="badge badge-secondary">
+                                    <span class="badge badge-secondary" style="display:inline-block;">
                                     <?php
                                             $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
                                                 $res=mysql_fetch_array($count);
@@ -260,7 +273,7 @@ $_SESSION['fetchToPagination']=$sql1;
 
                                 <li class="active nav-item ">
                                     <a  href="bike_sale_buisness.php" class= "nav-link" role="tab" >Business Ads 
-                                    <span class="badge badge-secondary">
+                                    <span class="badge badge-secondary" style="display:inline-block;">
                                     <?php
                                             $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count Where Status='UnBlock'");
                                                 $res=mysql_fetch_array($count);
@@ -272,7 +285,7 @@ $_SESSION['fetchToPagination']=$sql1;
                                 </li>
                                <li class="nav-item ">
                                  <a href="bike_sale_personal.php" class="nav-link" role="tab">Personal
-                                    <span class="badge badge-secondary">
+                                    <span class="badge badge-secondary" style="display:inline-block;">
                              <?php
                                             $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count Where Status='UnBlock'");
                                                 $res=mysql_fetch_array($count);

@@ -3,41 +3,9 @@
 
 session_start();
 
-$filter="select
- usedbikes.UserId as UserId,
-  usedbikes.UsedBikeId as UsedBikeId,
-  usedbikes.BikeCategory as BikeCategory,
-  usedbikes.UsedBikeImage1 as UsedBikeImage1,
-  usedbikes.Brand as Brand,
-  usedbikes.Model as Model,
-  usedbikes.KilometreDriven as KilometreDriven,
-  usedbikes.Location as Location,
-  usedbikes.UserId as UserId,
-  usedbikes.UserName as UserName,
-  usedbikes.ContactNumber as ContactNumber,
-  usedbikes.Prize as Prize
-from
-  usedbikes where usedbikes.UserId in (SELECT userid FROM `favourite` where favourite.Fav_UserId = 10) and  usedbikes.UsedBikeId in (SELECT usedbikeid FROM `favourite` where favourite.Fav_UserId = 10)
-  UNION
-  select
-  dealerbikes.DealerId as UserId,
- dealerbikes.DealerBikeId as UsedBikeId,
-  dealerbikes.BikeCategory as BikeCategory,
-  dealerbikes.DealerBikeImage1 as UsedBikeImage1,
-  dealerbikes.Brand as Brand,
-  dealerbikes.Model as Model,
-  dealerbikes.KilometreDriven as KilometreDriven,
-  dealerbikes.Location as Location,
-  dealerbikes.DealerId as UserId,
-  dealerbikes.UserName as UserName,
-  dealerbikes.ContactNumber as ContactNumber,
-  dealerbikes.Prize as Prize
-from
-  dealerbikes where dealerbikes.DealerId in (SELECT userid FROM `favourite` where favourite.Fav_UserId = 10) and  dealerbikes.DealerId in (SELECT usedbikeid FROM `favourite` where favourite.Fav_UserId = 10)";
-// if(isset($_SESSION['favourite'])){
-//   $filter=$_SESSION['favourite'];
-// }
-
+if(isset($_SESSION['favourite'])){
+  $filter=$_SESSION['favourite'];
+}
 
 $servername = "localhost";
       $username = "root";
@@ -77,16 +45,16 @@ $result = $conn->query($filterQuery);
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
                                 <li class="active nav-item">
                                     <a  class="nav-link" href="ajax/ee.html" data-url="ajax/33.html" role="tab"
-                                                      data-toggle="tab">Favourite Ads <span class="badge badge-secondary">
+                                                      data-toggle="tab">Favourite Ads <span class="badge badge-secondary" style="display:inline-block">
                                                           <?php
                                                 $res=mysqli_num_rows($result);
                                              echo  $res; ?>
                                                       </span></a>
                                 </li>
                                <!--  <li class="nav-item"><a class="nav-link"  href="ajax/33.html" data-url="ajax/33.html" role="tab" data-toggle="tab">Business
-                                    <span class="badge badge-secondary">22,805</span></a></li>
+                                    <span class="badge badge-secondary" style="display:inline-block">22,805</span></a></li>
                                 <li class="nav-item"><a class="nav-link"  href="ajax/33.html" data-url="ajax/33.html" role="tab" data-toggle="tab">Personal
-                                    <span class="badge badge-secondary">18,705</span></a></li> -->
+                                    <span class="badge badge-secondary" style="display:inline-block">18,705</span></a></li> -->
                             </ul>
 
 

@@ -19,6 +19,7 @@ if (isset($_POST['login'])) {
         $_SESSION['usr_mailid'] = $row['EmailID'];
         $_SESSION['usr_name'] = $row['DealerName'];
         $_SESSION['usr_location'] = $row['Location'];
+        $_SESSION['dealer_type'] = $row['DealerType'];
         header("Location: index.php");
     } else {
      ?>

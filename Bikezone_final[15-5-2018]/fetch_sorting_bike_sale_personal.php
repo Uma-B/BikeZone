@@ -50,7 +50,7 @@ $result = $conn->query($filterQuery);
                                   <a  href="bike_sale_all.php" class= "nav-link" role="tab" >
 
                                     All Ads 
-                                    <span class="badge badge-secondary">
+                                    <span class="badge badge-secondary" style="display:inline-block">
                                     <?php
 
                                           $count=mysqli_query($conn,"SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
@@ -64,7 +64,7 @@ $result = $conn->query($filterQuery);
 
                                 <li class=" nav-item ">
                                     <a  href="bike_sale_buisness.php" class= "nav-link" role="tab" >Business Ads 
-                                    <span class="badge badge-secondary">
+                                    <span class="badge badge-secondary" style="display:inline-block">
                                     <?php
                                          $count=mysqli_query($conn,"SELECT COUNT(*) FROM dealerbikes as count Where Status='UnBlock'");
                                                 $res=mysqli_fetch_array($count);
@@ -76,7 +76,7 @@ $result = $conn->query($filterQuery);
                                 </li>
                                <li class=" active nav-item ">
                                  <a href="bike_sale_personal.php" class="nav-link" role="tab">Personal
-                                    <span class="badge badge-secondary">
+                                    <span class="badge badge-secondary" style="display:inline-block">
                              <?php
                                  //$result=mysql_query($filterQuery2);
                                            $res=mysqli_num_rows($rs_result);

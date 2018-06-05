@@ -82,7 +82,7 @@ $_SESSION['fetchToSort']=$filterQuery;
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
                                 <li class=" nav-item">
-                                    <a  href="Advance_Search_Find.php" class= "nav-link" role="tab">All Ads <span class="badge badge-secondary">
+                                    <a  href="Advance_Search_Find.php" class= "nav-link" role="tab">All Ads <span class="badge badge-secondary" style="display:inline-block;">
                                                           <?php
                                                 $count=mysqli_query($conn, "SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
                                                $res=mysqli_fetch_array($count);
@@ -90,14 +90,14 @@ $_SESSION['fetchToSort']=$filterQuery;
                                                       </span></a>
                                 </li>
                                 <li class="active nav-item"><a  href="Advance_Business_Search.php" class= "nav-link" role="tab">Business Ads
-                                    <span class="badge badge-secondary">
+                                    <span class="badge badge-secondary" style="display:inline-block;">
                                       <?php 
                                             $result = $conn->query($sql); 
                                             $res=mysqli_num_rows($result);
                                             echo $res;
                                       ?></span></a></li>
                                 <li class="nav-item"><a  href="Advance_Personal_Search.php" class= "nav-link" role="tab">Personal
-                                    <span class="badge badge-secondary"><?php
+                                    <span class="badge badge-secondary" style="display:inline-block;"><?php
                                       $count=mysqli_query($conn, "SELECT COUNT(*) FROM usedbikes Where Status='UnBlock'");
                                                $res=mysqli_fetch_array($count);
                                             echo $res['COUNT(*)']; 

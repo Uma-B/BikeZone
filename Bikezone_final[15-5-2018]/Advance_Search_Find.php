@@ -462,7 +462,7 @@ $rs_result = mysql_query ($sql);
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
                                 <li class="active nav-item">
                                     <a  class="nav-link" href="Advance_Search_Find.php" data-url="ajax/33.html" role="tab" data-toggle="tab">All Ads 
-                                    <span class="badge badge-secondary">
+                                    <span class="badge badge-secondary" style="display:inline-block;">
                                     <?php
                                            $result=mysql_query($filterQuery);
                                            $res=mysql_num_rows($result);
@@ -475,7 +475,7 @@ $rs_result = mysql_query ($sql);
 
                                 <li class="nav-item ">
                                     <a  href="Advance_Business_Search.php" class= "nav-link" role="tab" >Business Ads 
-                                    <span class="badge badge-secondary">
+                                    <span class="badge badge-secondary" style="display:inline-block;">
                                     <?php
                                             $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count Where Status='UnBlock'");
                                                 $res=mysql_fetch_array($count);
@@ -487,7 +487,7 @@ $rs_result = mysql_query ($sql);
                                 </li>
                                <li class="nav-item ">
                                  <a href="Advance_Personal_Search.php" class="nav-link" role="tab">Personal
-                                    <span class="badge badge-secondary">
+                                    <span class="badge badge-secondary" style="display:inline-block;">
                              <?php
                                             $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count Where Status='UnBlock'");
                                                 $res=mysql_fetch_array($count);

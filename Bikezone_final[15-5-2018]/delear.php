@@ -280,7 +280,7 @@ function validateForm() {
 
                                         <div class="col-sm-8">
                                             <select name="DealerType"                                                     class="form-control1">
-                                                <option value="1">Select</option>
+                                                <option value="">Select</option>
                                                 <option value="Retailer">Retailer</option>
                                                 <option value="Insurance">Insurance</option>
                                                 <option value="Services">Services</option>

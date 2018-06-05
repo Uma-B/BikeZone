@@ -398,7 +398,7 @@ $rs_result = mysql_query ($sql);
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
                                 <li class="active nav-item">
                                     <a  href="index_find.php" class= "nav-link" role="tab" >All Ads 
-                                    <span class="badge badge-secondary">
+                                    <span class="badge badge-secondary" style="display:inline-block">
                                     <?php
                                             $result=mysql_query($filterQuery);
                                            $res=mysql_num_rows($result);
@@ -410,7 +410,7 @@ $rs_result = mysql_query ($sql);
 
                                 <li class="nav-item ">
                                     <a  href="BusinessAds.php" class= "nav-link" role="tab" >Business Ads 
-                                    <span class="badge badge-secondary">
+                                    <span class="badge badge-secondary" style="display:inline-block">
                                           <?php
 
                                             $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count Where Status='UnBlock'");
@@ -423,7 +423,7 @@ $rs_result = mysql_query ($sql);
                                 </li>
                                <li class="nav-item ">
                                  <a href="PersonalAds.php" class="nav-link" role="tab">Personal
-                                    <span class="badge badge-secondary">
+                                    <span class="badge badge-secondary" style="display:inline-block">
                              <?php
 
                                             $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count Where Status='UnBlock'");
@@ -437,10 +437,10 @@ $rs_result = mysql_query ($sql);
 
                                 <!-- <a href="BusinessAds.php"><button>Business Ads</button></a> -->
                                 <!-- <li class="nav-item"><a class="nav-link"  href="BusinessAds.php" role="tab" data-toggle="tab">Business
-                                    <span class="badge badge-secondary">22,805</span></a></li> -->
+                                    <span class="badge badge-secondary" style="display:inline-block">22,805</span></a></li> -->
 <!--                                  <a href="PersonalAds.php"><button>Personal</button></a>
  -->                                <!-- <li class="nav-item"><a class="nav-link"  href="ajax/33.html" data-url="ajax/33.html" role="tab" data-toggle="tab">Personal
-                                    <span class="badge badge-secondary">18,705</span></a></li> -->
+                                    <span class="badge badge-secondary" style="display:inline-block">18,705</span></a></li> -->
                           
 
 

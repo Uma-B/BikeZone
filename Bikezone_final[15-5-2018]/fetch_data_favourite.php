@@ -24,11 +24,12 @@ $Category =html_entity_decode($_GET['category'],null,'UTF-8');
 $City = html_entity_decode($_GET['city'],null,'UTF-8');
 $priceMin = $_GET['minPrice'];
 $priceMax = $_GET['maxPrice'];
+$userid=$_SESSION['usr_id'];
 
 //echo $Category;
 //echo $City;
 $filter1="select
- usedbikes.UserId as UserId,
+  usedbikes.UserId as UserId,
   usedbikes.UsedBikeId as UsedBikeId,
   usedbikes.BikeCategory as BikeCategory,
   usedbikes.UsedBikeImage1 as UsedBikeImage1,
@@ -41,13 +42,30 @@ $filter1="select
   usedbikes.ContactNumber as ContactNumber,
   usedbikes.Prize as Prize
 from
-  usedbikes where usedbikes.UserId in (SELECT userid FROM `favourite` where favourite.Fav_UserId = 10) and  usedbikes.UsedBikeId in (SELECT usedbikeid FROM `favourite` where favourite.Fav_UserId = 10) and";
+  usedbikes
+where
+  usedbikes.UserId in (
+    SELECT
+      userid
+    FROM
+      `favourite`
+    where
+      favourite.Fav_UserId = $userid
+  )
+  and usedbikes.UsedBikeId in (
+    SELECT
+      usedbikeid
+    FROM
+      `favourite`
+    where
+      favourite.Fav_UserId = $userid
+  ) and";
 
 
 
 $filter2="select
   dealerbikes.DealerId as UserId,
- dealerbikes.DealerBikeId as UsedBikeId,
+  dealerbikes.DealerBikeId as UsedBikeId,
   dealerbikes.BikeCategory as BikeCategory,
   dealerbikes.DealerBikeImage1 as UsedBikeImage1,
   dealerbikes.Brand as Brand,
@@ -59,7 +77,24 @@ $filter2="select
   dealerbikes.ContactNumber as ContactNumber,
   dealerbikes.Prize as Prize
 from
-  dealerbikes where dealerbikes.DealerId in (SELECT userid FROM `favourite` where favourite.Fav_UserId = 10) and  dealerbikes.DealerId in (SELECT usedbikeid FROM `favourite` where favourite.Fav_UserId = 10) and";
+  dealerbikes
+where
+  dealerbikes.DealerId in (
+    SELECT
+      userid
+    FROM
+      `favourite`
+    where
+      favourite.Fav_UserId = $userid
+  )
+  and dealerbikes.DealerBikeId in (
+    SELECT
+      usedbikeid
+    FROM
+      `favourite`
+    where
+      favourite.Fav_UserId = $userid
+  ) and";
 
 if($City != ""){
   $filter1=$filter1. " usedbikes.City LIKE '$City' AND";
@@ -84,27 +119,27 @@ $_SESSION['favourite']=$filter;
 //   $filter=$_SESSION['favourite'];
 // }
 $limit = 10; 
-$sql = $filter; 
+$filterQuery = $filter; 
 /*For No Of Rows Selected*/
-$result = $conn->query($sql);
-$rowcount = mysqli_num_rows($result);
-/*----------------------*/
-$rs_result = $conn->query($sql);  
-$row = $rs_result->fetch_assoc();  
-$total_records = $rowcount;
-$total_pages = ceil($total_records / $limit);
+// $result = $conn->query($sql);
+// $rowcount = mysqli_num_rows($result);
+// /*----------------------*/
+// $rs_result = $conn->query($sql);  
+// $row = $rs_result->fetch_assoc();  
+// $total_records = $rowcount;
+// $total_pages = ceil($total_records / $limit);
 
  
-if (isset($_GET["page"])) {
- $page  = $_GET["page"]; 
-} else { 
-  $page=1; 
-}  
-
-$start_from = ($page-1) * $limit;
-$_SESSION['fetchToPagination']=$filter;
-$filterQuery=$filter." LIMIT $start_from, $limit";
-$_SESSION['fetchToSort']=$filterQuery;
+// if (isset($_GET["page"])) {
+//  $page  = $_GET["page"]; 
+// } else { 
+//   $page=1; 
+// }  
+// $filterQuery=$sql;
+//$start_from = ($page-1) * $limit;
+//$_SESSION['fetchToPagination']=$filter;
+//$filterQuery=$filter." LIMIT $start_from, $limit";
+//$_SESSION['fetchToSort']=$filterQuery;
 //$_SESSION['fetchToPagination']=$filterQuery;
 
 /*  $filterQuery= $sub." LIMIT $start_from, $limit ";*/
@@ -119,11 +154,11 @@ $_SESSION['fetchToSort']=$filterQuery;
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
                                 <li class="active nav-item">
                                     <a  class="nav-link" href="ajax/ee.html" data-url="ajax/33.html" role="tab"
-                                                      data-toggle="tab">Favourite Ads <span class="badge badge-secondary">
+                                                      data-toggle="tab">Favourite Ads <span class="badge badge-secondary" style="display:inline-block;">
                                                           
                                                           <?php
 
-                                            $count=mysqli_query($conn,$sql);
+                                            $count=mysqli_query($conn,$filterQuery);
                                                 $num_rows = mysqli_num_rows($count);
                                              echo  $num_rows; ?>
                                                       </span></a>

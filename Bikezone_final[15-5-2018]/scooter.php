@@ -236,7 +236,7 @@ $_SESSION['fetchToPagination']=$sql1;
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
                                 <li class="active nav-item">
                                     <a  class="nav-link" href="ajax/ee.html" data-url="ajax/33.html" role="tab"
-                                                      data-toggle="tab">Scooter Ads <span class="badge badge-secondary">
+                                                      data-toggle="tab">Scooter Ads <span class="badge badge-secondary" style="display:inline-block;">
                                                           
                                                           <?php
 
