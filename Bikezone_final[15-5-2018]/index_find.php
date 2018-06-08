@@ -76,7 +76,7 @@ UNION
 select
   dealerbikes.DealerBikeId as UsedBikeId,
   dealerbikes.BikeCategory as BikeCategory,
-  dealerbikes.DealerBikeImage1 as BikeImage1,
+  dealerbikes.DealerBikeImage1 as UsedBikeImage1,
   dealerbikes.Brand as Brand,
   dealerbikes.Model as Model,
   dealerbikes.KilometreDriven as KilometreDriven,
@@ -88,7 +88,7 @@ select
 from
   dealerbikes
 where
-usedbikes.Status LIKE 'UnBlock'
+dealerbikes.Status LIKE 'UnBlock'
   OR dealerbikes.BikeCategory LIKE '$Keyword'
   OR dealerbikes.Brand LIKE '$Keyword'
   OR dealerbikes.Model LIKE '$Keyword'
@@ -402,8 +402,8 @@ $rs_result = mysql_query ($sql);
                                     <?php
                                             $result=mysql_query($filterQuery);
                                            $res=mysql_num_rows($result);
-                                            echo  $res;
-                                             ?>          
+                                            echo $res;
+                                             ?>
                                     </span>
                                     </a>
                                 </li>
@@ -412,10 +412,9 @@ $rs_result = mysql_query ($sql);
                                     <a  href="BusinessAds.php" class= "nav-link" role="tab" >Business Ads 
                                     <span class="badge badge-secondary" style="display:inline-block">
                                           <?php
-
-                                            $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count Where Status='UnBlock'");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
+                                          $result=mysql_query($filterQuery2);
+                                           $res=mysql_num_rows($result);
+                                            echo $res;
                                              ?>
                                                  
                                     </span>
@@ -426,9 +425,9 @@ $rs_result = mysql_query ($sql);
                                     <span class="badge badge-secondary" style="display:inline-block">
                              <?php
 
-                                            $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count Where Status='UnBlock'");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
+                                            $result=mysql_query($filterQuery1);
+                                           $res=mysql_num_rows($result);
+                                            echo $res;
                                              ?>
                                                  
                                     </span>
@@ -474,7 +473,7 @@ $rs_result = mysql_query ($sql);
 
 
                         <!-- Mobile Filter bar by nidhi and uma-->
-                        <!-- <div class="mobile-filter-bar col-xl-12  ">
+                        <div class="mobile-filter-bar col-xl-12  ">
                             <ul class="list-unstyled list-inline no-margin no-padding">
                                 <li class="filter-toggle">
                                     <a class="">
@@ -498,7 +497,7 @@ $rs_result = mysql_query ($sql);
 
                                 </li>
                             </ul>
-                        </div> -->
+                        </div>
                         <div class="menu-overly-mask"></div>
                         <!-- Mobile Filter bar End-->
 

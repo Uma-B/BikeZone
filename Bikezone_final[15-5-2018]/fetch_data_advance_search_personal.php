@@ -31,7 +31,7 @@ $priceMax = $_GET['maxPrice'];
 
 
 
-$filter="select
+$filter1="select
 usedbikes.UsedBikeId as UsedBikeId,
 usedbikes.BikeCategory as BikeCategory,
 usedbikes.UsedBikeImage1 as UsedBikeImage1,
@@ -50,26 +50,29 @@ usedbikes.Stroke as Stroke,
 usedbikes.Location as Location,
 usedbikes.PostalCode as PostalCode
 from
-usedbikes WHERE Status='UnBlock' and";
+usedbikes WHERE Status='UnBlock' AND";
 
-if($City != ""){
-  $filter=$filter. " usedbikes.City LIKE '$City' AND";
-  //$filter=$filter. " dealerbikes.City LIKE '$City' AND";
+$filter2="select dealerbikes.DealerBikeId as UsedBikeId, dealerbikes.BikeCategory as BikeCategory, dealerbikes.DealerBikeImage1 as UsedBikeImage1, dealerbikes.Brand as Brand, dealerbikes.Model as Model, dealerbikes.DealerId as UserId, dealerbikes.Username as UserName, dealerbikes.ContactNumber as ContactNumber, dealerbikes.Prize as Prize, dealerbikes.Year as Year, dealerbikes.Transmission as Transmission, dealerbikes.FuelType as FuelType, dealerbikes.EngineSize as EngineSize, dealerbikes.KilometreDriven as KilometreDriven, dealerbikes.Stroke as Stroke, dealerbikes.Location as Location, dealerbikes.PostalCode as PostalCode from dealerbikes WHERE Status='UnBlock' AND";
+
+if($City != "0"){
+  $filter1=$filter1. " usedbikes.City LIKE '$City' AND";
+  $filter2=$filter2. " dealerbikes.City LIKE '$City' AND";
 }
 if($priceMin != "" && $priceMax != ""){
-    //$filter = $filter." dealerbikes.Prize IN (SELECT Prize from dealerbikes WHERE Prize BETWEEN $priceMin AND $priceMax)";
-     $filter = $filter." usedbikes.Prize IN (SELECT Prize from usedbikes WHERE Prize BETWEEN $priceMin AND $priceMax)";
+    $filter1 = $filter1." dealerbikes.Prize IN (SELECT Prize from dealerbikes WHERE Prize BETWEEN $priceMin AND $priceMax)";
+     $filter2 = $filter2." usedbikes.Prize IN (SELECT Prize from usedbikes WHERE Prize BETWEEN $priceMin AND $priceMax)";
 }
 
 
-$split = explode(" ", $filter);
+$split = explode(" ", $filter1);
 if($split[count($split)-1] == "AND"){
-     $filter = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter);
-    //$filter2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter2);
+     $filter1 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter1);
+    $filter2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter2);
 }
+$filter= $filter1. "UNION " .$filter2;
 
 $limit = 10; 
-$sql = $filter; 
+$sql = $filter1; 
 /*For No Of Rows Selected*/
 $result = $conn->query($sql);
 $rowcount = mysqli_num_rows($result);
@@ -87,8 +90,11 @@ if (isset($_GET["page"])) {
 }  
 
 $start_from = ($page-1) * $limit;
-$_SESSION['fetchToPagination']=$filter;
-$filterQuery=$filter." LIMIT $start_from, $limit";
+$_SESSION['fetchToPagination']=$filter1;
+$_SESSION['Advance_Search2']=$filter2;
+$_SESSION['Advance_Search1']=$filter1;
+$_SESSION['Advance_Search']=$filter;
+$filterQuery=$filter1." LIMIT $start_from, $limit";
 $_SESSION['fetchToSort']=$filterQuery;
 //$_SESSION['fetchToPagination']=$filterQuery;
 
@@ -104,22 +110,22 @@ $_SESSION['fetchToSort']=$filterQuery;
                                 <li class=" nav-item">
                                     <a  href="Advance_Search_Find.php" class= "nav-link" role="tab">All Ads <span class="badge badge-secondary" style="display:inline-block;">
                                                           <?php
-                                                $count=mysqli_query($conn, "SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
-                                               $res=mysqli_fetch_array($count);
-                                            echo  $res['count']; ?>
+                                                $result = $conn->query($filter); 
+                                               $res=mysqli_num_rows($result);
+                                            echo  $res; ?>
                                                       </span></a>
                                 </li>
                                 <li class=" nav-item"><a  href="Advance_Business_Search.php" class= "nav-link" role="tab">Business Ads
                                     <span class="badge badge-secondary" style="display:inline-block;">
                                       <?php 
-                                        $count=mysqli_query($conn, "SELECT COUNT(*) FROM usedbikes Where Status='UnBlock'");
-                                               $res=mysqli_fetch_array($count);
-                                            echo  $res['COUNT(*)'];
+                                        $result = $conn->query($filter2); 
+                                               $res=mysqli_num_rows($result);
+                                            echo  $res;
                                                
                                       ?></span></a></li>
                                 <li class=" active nav-item"><a  href="Advance_Personal_Search.php" class= "nav-link" role="tab">Personal
                                     <span class="badge badge-secondary" style="display:inline-block;"><?php
-                                      $result = $conn->query($sql); 
+                                      $result = $conn->query($filter1); 
                                                $res=mysqli_num_rows($result);
                                             echo  $res;
                                     ?></span></a></li>

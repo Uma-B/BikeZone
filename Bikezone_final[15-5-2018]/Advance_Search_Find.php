@@ -1,9 +1,18 @@
 <?php
+
+
 session_start();
 
 include "db_connection.php";
 
 GLOBAL $Advance_Search, $Advance_Search1, $Advance_Search2;
+
+if (isset($_SESSION['Advance_Search'])) {
+    $filterQuery=$_SESSION['Advance_Search'];
+    $filterQuery1=$_SESSION['Advance_Search1'];
+    $filterQuery2=$_SESSION['Advance_Search2'];
+  }
+  else{
 
  if(isset($_SESSION['BikeCategory'])) {
 
@@ -45,7 +54,7 @@ usedbikes.Location as Location,
 usedbikes.PostalCode as PostalCode
 from
 usedbikes
-where
+where Status= 'UnBlock' and
 ";
 
 $filterQuery2 = "select
@@ -68,7 +77,7 @@ dealerbikes.Prize as Prize,
   dealerbikes.PostalCode as PostalCode 
 from
   dealerbikes
-where
+where Status= 'UnBlock' and
 ";
 
 if($Keyword != null){
@@ -93,7 +102,8 @@ usedbikes.PostalCode as PostalCode
 from
 usedbikes
 where
-  usedbikes.BikeCategory LIKE '$Keyword'
+  usedbikes.Status LIKE 'UnBlock'
+  OR usedbikes.BikeCategory LIKE '$Keyword'
   OR usedbikes.Brand LIKE '$Keyword'
   OR usedbikes.Model LIKE '$Keyword'
   OR usedbikes.Prize LIKE '$Keyword'
@@ -130,7 +140,8 @@ select
 from
   dealerbikes
 where
-  dealerbikes.BikeCategory LIKE '$Keyword'
+dealerbikes.Status LIKE 'UnBlock'
+  OR dealerbikes.BikeCategory LIKE '$Keyword'
   OR dealerbikes.Brand LIKE '$Keyword'
   OR dealerbikes.Model LIKE '$Keyword'
   OR dealerbikes.Prize LIKE '$Keyword'
@@ -215,16 +226,21 @@ if($split[count($split)-1] == "AND"){
     $filterQuery1 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filterQuery1);
     $filterQuery2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filterQuery2);
 }
-$_SESSION['Advance_Search1'] = $filterQuery1." and Status= 'UnBlock'";
-$_SESSION['Advance_Search2'] = $filterQuery2." and Status= 'UnBlock'";
+
+
+$_SESSION['Advance_Search1'] = $filterQuery1;
+$_SESSION['Advance_Search2'] = $filterQuery2;
 
 $filterQuery = $filterQuery1." UNION ".$filterQuery2;
 }
 
 $_SESSION['Advance_Search'] = $filterQuery;
 
+// $filterQuery2 = $_SESSION['Advance_Search2'];
+// $filterQuery1=$_SESSION['Advance_Search1'];
+// $filterQuery=$_SESSION['Advance_Search'];
 
-
+}
 $limit = 10; 
 $sql = $filterQuery; 
 /*For No Of Rows Selected*/
@@ -357,7 +373,7 @@ $rs_result = mysql_query ($sql);
                                         ?>
                                         <div margin:0px auto; margin-top:30px;" >
                                                 <select id="city" class="chosen form-control" style="width:80%;" onchange="recp()">
-                                                <option value="-1"> Select City </option>
+                                                <option value="0"> Select City </option>
                                                 <?php
                                         $query ="SELECT City FROM usedbikes UNION SELECT City FROM dealerbikes Group by City  ";
                                         $result= mysql_query($query);
@@ -477,9 +493,9 @@ $rs_result = mysql_query ($sql);
                                     <a  href="Advance_Business_Search.php" class= "nav-link" role="tab" >Business Ads 
                                     <span class="badge badge-secondary" style="display:inline-block;">
                                     <?php
-                                            $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count Where Status='UnBlock'");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
+                                            $result=mysql_query($filterQuery2);
+                                           $res=mysql_num_rows($result);
+                                            echo  $res;
                                     ?>
                                                  
                                     </span>
@@ -489,9 +505,9 @@ $rs_result = mysql_query ($sql);
                                  <a href="Advance_Personal_Search.php" class="nav-link" role="tab">Personal
                                     <span class="badge badge-secondary" style="display:inline-block;">
                              <?php
-                                            $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count Where Status='UnBlock'");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
+                                            $result=mysql_query($filterQuery1);
+                                           $res=mysql_num_rows($result);
+                                            echo  $res;
                                     ?>
                                                  
                                     </span>
@@ -744,7 +760,9 @@ function myFunction() {
 <!-- dropdown -->
 <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script> -->
 <script src="choosen.js"></script>
-
+<script>
+  
+</script>
 
 
 <script type="text/javascript">

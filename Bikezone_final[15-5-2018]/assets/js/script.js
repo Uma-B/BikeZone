@@ -11,6 +11,8 @@
 
 $(document).ready(function () {
 
+
+
     var isMobile = function () {
         return /(iphone|ipod|ipad|android|blackberry|windows ce|palm|symbian)/i.test(navigator.userAgent);
     };
@@ -91,7 +93,7 @@ $(document).ready(function () {
      ====================================*/
 
 
-    $("#ajaxTabs li > a").click(function () {
+    /*$("#ajaxTabs li > a").click(function () {
 
         $("#allAds").empty().append("<div id='loading text-center'> <br> <img class='center-block' src='images/loading.gif' alt='Loading' /> <br> </div>");
         $("#ajaxTabs li").removeClass('active');
@@ -103,7 +105,7 @@ $(document).ready(function () {
             }
         });
         return false;
-    });
+    });*/
 
     urls = $('#ajaxTabs li:first-child a').attr("href");
     //alert(urls);
@@ -270,8 +272,8 @@ $(document).ready(function () {
             })
 
         } else {
-            $('#bd-docs-nav').collapse('show');
-            catCollapse.collapse('show');
+             /* $('#bd-docs-nav').collapse('show');
+             catCollapse.collapse('show'); */
         }
 
     });

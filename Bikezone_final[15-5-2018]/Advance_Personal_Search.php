@@ -5,10 +5,12 @@ include "db_connection.php";
 
 GLOBAL $Advance_Search1;
 if(isset($_SESSION['Advance_Search1'])) {
-$filterQuery2 = $_SESSION['Advance_Search1'];
+$filterQuery2 = $_SESSION['Advance_Search2'];
+$filterQuery1=$_SESSION['Advance_Search1'];
+$filterQuery=$_SESSION['Advance_Search'];
 }
 $limit = 10; 
-$sql = $filterQuery2; 
+$sql = $filterQuery1; 
 /*For No Of Rows Selected*/
 $result=mysql_query($sql);
 $rowcount = mysql_num_rows($result);
@@ -26,7 +28,7 @@ if (isset($_GET["page"])) {
 }  
 
 $start_from = ($page-1) * $limit;    
-$sql1 =  $filterQuery2;
+$sql1 =  $filterQuery1;
 $sql2="LIMIT $start_from, $limit";
 $sql=$sql1." ".$sql2;
  $rs_result = mysql_query ($sql);     
@@ -139,7 +141,7 @@ $_SESSION['fetchToPagination']=$sql1;
                                         ?>
                                         <div margin:0px auto; margin-top:30px;" >
                                                 <select id="city" class="chosen form-control" style="width:80%;" onchange="recp()">
-                                                <option value="-1"> Select City </option>
+                                                <option value="0"> Select City </option>
                                                 <?php
                                         $query ="SELECT City FROM usedbikes Group by City  ";
                                         $result= mysql_query($query);
@@ -251,22 +253,21 @@ $_SESSION['fetchToPagination']=$sql1;
                                     All Ads 
                                     <span class="badge badge-secondary" style="display:inline-block;">
                                     <?php
-                                           $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['count'];
-                                    ?>
-                                                 
+                                           $count=mysql_query($filterQuery);
+                                            $res=mysql_num_rows($count);
+                                            echo  $res;
+                                    ?>                                               
                                     </span>
                                     </a>
                                 </li>
 
-                                <li class="nav-item ">
+                                <li class="nav-item">
                                     <a  href="Advance_Business_Search.php" class= "nav-link" role="tab" >Business Ads 
                                     <span class="badge badge-secondary" style="display:inline-block;">
                                     <?php
-                                              $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count Where Status='UnBlock'");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
+                                              $count=mysql_query($filterQuery2);
+                                            $res=mysql_num_rows($count);
+                                            echo  $res;
                                     ?>
                                                  
                                     </span>
@@ -276,7 +277,7 @@ $_SESSION['fetchToPagination']=$sql1;
                                  <a href="Advance_Personal_Search.php" class="nav-link" role="tab">Personal
                                     <span class="badge badge-secondary" style="display:inline-block;">
                              <?php
-                                            $count=mysql_query($filterQuery2);
+                                            $count=mysql_query($filterQuery1);
                                             $res=mysql_num_rows($count);
                                             echo  $res;
                                     ?>

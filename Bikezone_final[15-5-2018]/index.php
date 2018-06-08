@@ -98,7 +98,6 @@ else{
        <div class="dropdown-content">
     <p style="position:right"><a href="UserLogin.php">User Sign Up </a> 
          <a href="CompanyLogin.php">Dealer Sign Up</a></p>
-
   </div>
 </div> 
 <div class="dropdown">

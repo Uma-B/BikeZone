@@ -2,11 +2,14 @@
 session_start();
 include "db_connection.php";
 
-
 GLOBAL $Advance_Search1;
 if(isset($_SESSION['Advance_Search2'])) {
 $filterQuery2 = $_SESSION['Advance_Search2'];
+$filterQuery1=$_SESSION['Advance_Search1'];
+$filterQuery=$_SESSION['Advance_Search'];
+
 }
+
 $limit = 10; 
 $sql = $filterQuery2; 
 /*For No Of Rows Selected*/
@@ -139,7 +142,7 @@ $_SESSION['fetchToPagination']=$sql1;
                                         ?>
                                         <div margin:0px auto; margin-top:30px;" >
                                                 <select id="city" class="chosen form-control" style="width:80%;" onchange="recp()">
-                                                <option value="-1"> Select City </option>
+                                                <option value="0"> Select City </option>
                                                 <?php
                                         $query ="SELECT City FROM dealerbikes Group by City  ";
                                         $result= mysql_query($query);
@@ -252,9 +255,9 @@ $_SESSION['fetchToPagination']=$sql1;
 
                                     <span class="badge badge-secondary" style="display:inline-block;">
                                     <?php
-                                            $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['count'];
+                                            $result=mysql_query($filterQuery);
+                                           $res=mysql_num_rows($result);
+                                            echo  $res;
                                     ?>
                                                  
                                     </span>
@@ -277,9 +280,9 @@ $_SESSION['fetchToPagination']=$sql1;
                                  <a href="Advance_Personal_Search.php" class="nav-link" role="tab">Personal
                                     <span class="badge badge-secondary" style="display:inline-block;">
                              <?php
-                                            $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count Where Status='UnBlock'");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
+                                            $result=mysql_query($filterQuery1);
+                                           $res=mysql_num_rows($result);
+                                            echo  $res;
                                     ?>
                                                  
                                     </span>

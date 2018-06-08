@@ -13,6 +13,8 @@ $url=$_SERVER['HTTP_REFERER'];
 
 if(isset($_SESSION['fetchToSort'])) {
  $filter = $_SESSION['fetchToSort'];
+ $filter2=$_SESSION['Advance_Search2'];
+    $filter1=$_SESSION['Advance_Search1'];
 }
 
 
@@ -62,9 +64,9 @@ $result = $conn->query($filterQuery);
                                     <span class="badge badge-secondary" style="display:inline-block">
                                           <?php
 
-                                            $count=mysqli_query($conn,"SELECT COUNT(*) FROM dealerbikes as count Where Status='UnBlock'");
-                                                 $res=mysqli_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
+                                           $rs_result = $conn->query($filter2);
+                                            $res=mysqli_num_rows($rs_result);
+                                             echo  $res;
                                              ?>
                                                  
                                     </span>
@@ -75,9 +77,9 @@ $result = $conn->query($filterQuery);
                                     <span class="badge badge-secondary" style="display:inline-block">
                              <?php
 
-                                             $count=mysqli_query($conn,"SELECT COUNT(*) FROM usedbikes as count Where Status='UnBlock'");
-                                                 $res=mysqli_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
+                                             $rs_result = $conn->query($filter1);
+                                            $res=mysqli_num_rows($rs_result);
+                                             echo  $res;
                                              ?>
                                                  
                                     </span>

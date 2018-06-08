@@ -5,7 +5,11 @@ include "db_connection.php";
 
 GLOBAL $Bike_sale2;
 
-$filterQuery1 = "select
+if(isset($_SESSION['Bike_sale2'])){
+    $filterQuery2=$_SESSION['Bike_sale2'];
+}
+else{
+$filterQuery2 = "select
   dealerbikes.DealerBikeId as UsedBikeId,
   dealerbikes.BikeCategory as BikeCategory,
   dealerbikes.DealerBikeImage1 as UsedBikeImage1,
@@ -19,9 +23,9 @@ $filterQuery1 = "select
   dealerbikes.Prize as Prize
 from
   dealerbikes Where Status='UnBlock'";
-
+}
 $limit = 10; 
-$sql = $filterQuery1; 
+$sql = $filterQuery2; 
 /*For No Of Rows Selected*/
 $result=mysql_query($sql);
 $rowcount = mysql_num_rows($result);
@@ -39,7 +43,7 @@ if (isset($_GET["page"])) {
 }  
 
 $start_from = ($page-1) * $limit;    
-$sql1 =  $filterQuery1;
+$sql1 =  $filterQuery2;
 $sql2="LIMIT $start_from, $limit";
  $sql=$sql1." ".$sql2;
  $rs_result = mysql_query ($sql);     

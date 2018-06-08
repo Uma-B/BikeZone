@@ -41,7 +41,7 @@ $_SESSION['Bike_sale2'] = $filterQuery2;
 
 
 $filter = $filterQuery1." UNION ".$filterQuery2;
-//$_SESSION['bike_sale_all']=$filter;
+$_SESSION['bike_sale_all']=$filter;
 
 $limit = 10; 
 $sql = $filter; 
@@ -167,7 +167,7 @@ $rs_result = mysql_query ($sql);
                                         ?>
                                         <div margin:0px auto; margin-top:30px;" >
                                                 <select id="city" class="chosen form-control" style="width:80%;" onchange="recp()">
-                                                <option value="-1"> Select City </option>
+                                                <option value="0"> Select City </option>
                                                 <?php
                                         $query ="SELECT City FROM usedbikes UNION SELECT City FROM dealerbikes Group by City  ";
                                         $result= mysql_query($query);

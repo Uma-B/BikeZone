@@ -19,12 +19,14 @@ if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };
 $start_from = ($page-1) * $limit;
 
 if(isset($_SESSION['fetchToPagination'])){
-   $sql1=$_SESSION['fetchToPagination'];
+   $filter=$_SESSION['fetchToPagination'];
+   $filter2=$_SESSION['Bike_sale2'];
+    $filter1=$_SESSION['Bike_sale1'];
 }
 
- $sql2= "LIMIT $start_from, $limit";  
+ $limit= "LIMIT $start_from, $limit";  
   
- $sql=$sql1." ".$sql2;
+ $sql=$filter." ".$limit;
 $rs_result = mysql_query ($sql);
 
 $_SESSION['fetchToSort']=$sql;
@@ -38,7 +40,7 @@ $_SESSION['fetchToSort']=$sql;
                                     <a  class="nav-link" href="ajax/ee.html" data-url="ajax/33.html" role="tab" data-toggle="tab">All Ads 
                                     <span class="badge badge-secondary" style="display:inline-block">
                                     <?php
-                                            $result=mysql_query($sql1);
+                                            $result=mysql_query($filter);
                                            $res=mysql_num_rows($result);
                                             echo  $res;
                                              ?>          
@@ -51,9 +53,9 @@ $_SESSION['fetchToSort']=$sql;
                                     <span class="badge badge-secondary" style="display:inline-block">
                                           <?php
 
-                                            $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count Where Status='UnBlock'");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
+                                            $result=mysql_query($filter2);
+                                           $res=mysql_num_rows($result);
+                                            echo  $res;
                                              ?>
                                                  
                                     </span>
@@ -64,9 +66,9 @@ $_SESSION['fetchToSort']=$sql;
                                     <span class="badge badge-secondary" style="display:inline-block">
                              <?php
 
-                                            $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count Where Status='UnBlock'");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
+                                            $result=mysql_query($filter1);
+                                           $res=mysql_num_rows($result);
+                                            echo  $res;
                                              ?>
                                                  
                                     </span>
@@ -98,8 +100,7 @@ $_SESSION['fetchToSort']=$sql;
 while ($row = mysql_fetch_assoc($rs_result)) {  
 ?>  
 
-
-<div>
+<div id="masterdiv">
 <div class="item-list">
       <!-- <div class="cornerRibbons featuredAds" id="masterdiv">
     </div> -->
