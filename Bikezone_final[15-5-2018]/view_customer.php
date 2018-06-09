@@ -86,18 +86,18 @@
             <div class="navbar-identity">
 
 
-                <a href="index.html" class="navbar-brand logo logo-title">
+                <a href="Admin_home.php" class="navbar-brand logo logo-title">
                 <span class="logo-icon"><!-- <i class="icon icon-search-1 ln-shadow-logo "></i> -->
                 </span>BIKE<span>ZONE </span> </a>
 
 
-                <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggler pull-right"
+               <!--  <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggler pull-right"
                         type="button">
 
                     <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 30 30" width="30" height="30" focusable="false"><title>Menu</title><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M4 7h22M4 15h22M4 23h22"/></svg>
 
 
-                </button>
+                </button> -->
 
 
               
@@ -105,7 +105,7 @@
             </div>
 
 
-<a href="Admin_home.html">
+<a href="Admin_home.php">
 <button style="float: right;" type="button" class="btn btn-success">Back</button>
 </a>
                 <div class="navbar-collapse collapse">

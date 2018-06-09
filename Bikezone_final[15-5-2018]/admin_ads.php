@@ -106,13 +106,13 @@ session_start();
                 </span>BIKE<span>ZONE </span> </a>
 
 
-                <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggler pull-right"
+               <!--  <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggler pull-right"
                         type="button">
 
                     <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 30 30" width="30" height="30" focusable="false"><title>Menu</title><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M4 7h22M4 15h22M4 23h22"/></svg>
 
 
-                </button>
+                </button> -->
 
 
                
@@ -190,23 +190,25 @@ session_start();
                         
                                     <div class="form-group row">
                                         <label class="col-sm-3 col-form-label"></label>
-                                        <div class="col-lg-8">
-                                          <input type="submit" id="button1id" name="BtnSubmit" value="Submit" id="button1id" class="btn btn-success btn-lg"></div>
+
+                                        <div class="col-sm-8"> <div class="col-lg-8">
+                                         <!-- <p style="margin-left: 180px"> --> <input type="submit" id="button1id" name="BtnSubmit" value="Submit" id="button1id" class="btn btn-success btn-lg" ><!-- </p> --></div>
                                     </div>
+                                    
 
 
-                                </form>
-
+                              
+</div></div></form> 
                             </div>
                         </div>
                     </div>
                 </div>
-             </div></div>
+             </div>
 
 </div>
 
  <div class="main-container">
-        <div class="container">
+        <div class="container">  
             <div class="row">
                 <div class="col-md-12 page-content">
                     <div class="inner-box category-content">

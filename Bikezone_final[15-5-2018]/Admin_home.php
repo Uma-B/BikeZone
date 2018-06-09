@@ -32,13 +32,13 @@
                         </span>
                         BIKE<span>ZONE </span> 
                      </a>
-                     <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggler pull-right"
-                        type="button">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 30 30" width="30" height="30" focusable="false">
+                   <!--   <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggler pull-right"
+                        type="button"> -->
+                       <!--  <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 30 30" width="30" height="30" focusable="false">
                            <title>Menu</title>
                            <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M4 7h22M4 15h22M4 23h22"/>
                         </svg>
-                     </button>
+                     </button> -->
                   </div>
                   <div class="navbar-collapse collapse">
                   </div>
@@ -74,7 +74,8 @@
                            </div> -->
                         <!--/.listing-filter-->
                         <!-- Mobile Filter bar-->
-                        <div class="mobile-filter-bar col-xl-12  ">
+                        <!-- responsive for mobile filert uma nd nidhi -->
+                        <!-- <div class="mobile-filter-bar col-xl-12  ">
                            <ul class="list-unstyled list-inline no-margin no-padding">
                               <li class="filter-toggle">
                                  <a class="">
@@ -97,7 +98,7 @@
                                  </div>
                               </li>
                            </ul>
-                        </div>
+                        </div> -->
                         <div class="menu-overly-mask"></div>
                         <!-- Mobile Filter bar End-->
                         <div class="adds-wrapper">
@@ -105,6 +106,7 @@
                               <!--              <div class="tab-pane active" id="allAds"><div class="row">
                                  </div> -->
                               <!--/.item-list-->
+                              
                               <div class="item-list">
                                  <div class="row">
                                     <div class="col-md-2 no-padding photobox">
@@ -195,7 +197,9 @@
                </div>
             </div>
          </div>
-       
+         <?php
+         include "footer.php";
+         ?>
       </div>
       </div>
       </div>

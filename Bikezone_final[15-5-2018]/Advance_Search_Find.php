@@ -7,13 +7,6 @@ include "db_connection.php";
 
 GLOBAL $Advance_Search, $Advance_Search1, $Advance_Search2;
 
-if (isset($_SESSION['Advance_Search'])) {
-    $filterQuery=$_SESSION['Advance_Search'];
-    $filterQuery1=$_SESSION['Advance_Search1'];
-    $filterQuery2=$_SESSION['Advance_Search2'];
-  }
-  else{
-
  if(isset($_SESSION['BikeCategory'])) {
 
     $Keyword = $_SESSION['Keyword'];
@@ -232,7 +225,6 @@ $_SESSION['Advance_Search1'] = $filterQuery1;
 $_SESSION['Advance_Search2'] = $filterQuery2;
 
 $filterQuery = $filterQuery1." UNION ".$filterQuery2;
-}
 
 $_SESSION['Advance_Search'] = $filterQuery;
 

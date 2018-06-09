@@ -83,27 +83,29 @@ else{
        <a target="_blank" href="index.php">  All
        Pages</a></h3>
 
-     <div class="linkinner linkScroll scrollbar" style="height: 220px">
+     <div class="linkinner linkScroll scrollbar" style="height: 220px;width:100%">
        <!-- <a target="_blank" href="blogs.html"> Blog</a>
        <a target="_blank" href="blog-details.html"> Blog Details</a>
-        --><a target="_blank" href=""> about us</a>
-       <a target="_blank" href=""> account my ads</a>
-       <a target="_blank" href=""> ads details</a>
-
+        --><a target="_blank" href="" style="color:white"> about us</a>
+       <a target="_blank" href="" style="color:white"> My Account</a>
+<!--        <a target="_blank" href="" style="color:white"> ads details</a>
+ -->
        </a>
        <!-- <a target="_blank" href=""> Contact</a>
-        --><a target="_blank" href=""> Faq</a>
+        --><a target="_blank" href="" style="color:white"> Faq</a>
        <div class="dropdown">
-      <span> <a target="_blank" href=""> Sign Up</a></span>
+      <span> <a target="_blank" href="" style="color:white"> Sign Up</a></span>
        <div class="dropdown-content">
-    <p style="position:right"><a href="UserLogin.php">User Sign Up </a> 
+    <p style="position:right"><a href="UserLogin.php" style="color:#16A085;font-weight: bold;"
+>User Sign Up </a> 
          <a href="CompanyLogin.php">Dealer Sign Up</a></p>
+
   </div>
 </div> 
 <div class="dropdown">
-       <a target="_blank" href="">Sign In<span class="label label-success " style="font-size: 10px"></span></a>
+       <a target="_blank" href="" style="color:white">Sign In<span class="label label-success " style="font-size: 10px"></span></a>
          <div class="dropdown-content">
-    <p style="position:left"><a href="UserRegistration.php"> User &nbsp;&nbsp;Sign In</a></p>
+    <p style="position:left"><a href="UserRegistration.php" > User &nbsp;&nbsp;Sign In</a></p>
         <a href="delear.php">Dealer Sign In</a></p>
 
   </div></div>  
@@ -116,21 +118,32 @@ else{
     position: relative;
     display: inline-block;
 }
+.themeControll .linkinner a {
+     border-radius: 0;
+    clear: both;
+    color: #000;
+    display: block;
+  }
 
 .dropdown-content {
     display: none;
     position: absolute;
     background-color:   #CCFF0000;
-    min-width: 105px;
-    box-shadow:white;
-  position: right;
-    z-index: 1;
+    min-width: 110px;
+    box-shadow:#CCFF0000;
+     z-index: 1;
 }
 
 
 .dropdown:hover .dropdown-content {
     display: block;
     text-align:right;
+    background-color: #CCFF0000;
+    color:#000;
+        min-width: 110px;
+
+        
+
 }
 </style>
    <!--themeControll-->
@@ -145,7 +158,7 @@ else{
                   
                     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" name="form" onSubmit="return validateForm();">
                     <div class="row">
-                        <div class="col-xl-3 col-sm-3 search-col relative locationicon">
+                          <div class="col-xl-3 col-sm-3 search-col relative locationicon">
                             <!-- <i class="icon-location-2 icon-append"></i> -->
                             <input type="text" name="Keyword" id="autocomplete-ajax"
                                    class="form-control locinput input-rel searchtag-input has-icon"
