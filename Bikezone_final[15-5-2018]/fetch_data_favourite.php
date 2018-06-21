@@ -40,10 +40,11 @@ $filter1="select
   usedbikes.UserId as UserId,
   usedbikes.UserName as UserName,
   usedbikes.ContactNumber as ContactNumber,
-  usedbikes.Prize as Prize
+  usedbikes.Prize as Prize,
+  usedbikes.Amount as Amount
 from
   usedbikes
-where
+where Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock' AND
   usedbikes.UserId in (
     SELECT
       userid
@@ -75,10 +76,11 @@ $filter2="select
   dealerbikes.DealerId as UserId,
   dealerbikes.UserName as UserName,
   dealerbikes.ContactNumber as ContactNumber,
-  dealerbikes.Prize as Prize
+  dealerbikes.Prize as Prize,
+  dealerbikes.Amount as Amount
 from
   dealerbikes
-where
+where Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock' AND
   dealerbikes.DealerId in (
     SELECT
       userid
@@ -192,8 +194,16 @@ $filterQuery = $filter;
 
 
 <div class="item-list">
-    <!-- <div class="cornerRibbons featuredAds" id="masterdiv">
-    </div> -->
+   <?php
+      if($row['Amount']!=""){
+       
+  ?>
+    <div class="cornerRibbons featuredAds">
+        <a href=""> Dealer Ads</a>
+    </div>
+    <?php
+  }
+    ?>
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>

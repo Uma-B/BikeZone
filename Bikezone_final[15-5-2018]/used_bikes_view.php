@@ -11,9 +11,62 @@
             $BikeCategory = $_GET['category'];
              $fileName=$fileName . ".php";
             
-             $show=mysql_query("SELECT UsedBikeId, UserId, BikeCategory,Brand, Model, Year, KilometreDriven, Transmission, FuelType, Stroke, EngineSize, Description, Details, Prize, UsedBikeImage1, UsedBikeImage2, UsedBikeImage3, UsedBikeImage4, UserName, ContactNumber, State, City, Location, PostalCode, Status, Date FROM usedbikes  WHERE UsedBikeId='$usedbikeid' AND UserId='$userid' AND Brand = '$brand' AND BikeCategory='$BikeCategory' 
+             $show=mysql_query("select
+                usedbikes.UsedBikeId as UsedBikeId,
+                usedbikes.BikeCategory as BikeCategory,
+                usedbikes.UsedBikeImage1 as UsedBikeImage1,
+                usedbikes.UsedBikeImage2 as UsedBikeImage2,
+                usedbikes.UsedBikeImage3 as UsedBikeImage3,
+                usedbikes.Brand as Brand,
+                usedbikes.Model as Model,
+                usedbikes.UserId as UserId,
+                usedbikes.UserName as UserName,
+                usedbikes.ContactNumber as ContactNumber,
+                usedbikes.Prize as Prize,
+                usedbikes.Year as Year,
+                usedbikes.Transmission as Transmission,
+                usedbikes.FuelType as FuelType,
+                usedbikes.EngineSize as EngineSize,
+                usedbikes.KilometreDriven as KilometreDriven,
+                usedbikes.Stroke as Stroke,
+                usedbikes.Details as Details,
+                usedbikes.Description as Description,
+                usedbikes.City as City,
+                usedbikes.State as State,
+                usedbikes.Location as Location,
+                usedbikes.PostalCode as PostalCode,
+                usedbikes.Date as Date
+                from
+                usedbikes 
+                 WHERE UsedBikeId='$usedbikeid' AND UserId='$userid' AND Brand = '$brand' AND BikeCategory='$BikeCategory' 
                 UNION 
-                SELECT DealerBikeId, DealerId, BikeCategory,Brand, Model, Year, Transmission, FuelType, Stroke, EngineSize, Description, Details, Prize, KilometreDriven, DealerBikeImage1, DealerBikeImage2, DealerBikeImage3, DealerBikeImage4, Username, ContactNumber, State, City, Location, PostalCode, Status, Date FROM dealerbikes  WHERE DealerBikeId='$usedbikeid' AND DealerId='$userid' AND Brand = '$brand' AND BikeCategory='$BikeCategory' ");
+                select
+                      dealerbikes.DealerBikeId as UsedBikeId,
+                      dealerbikes.BikeCategory as BikeCategory,
+                      dealerbikes.DealerBikeImage1 as UsedBikeImage1,
+                      dealerbikes.DealerBikeImage2 as UsedBikeImage2,
+                        dealerbikes.DealerBikeImage3 as UsedBikeImage3,
+                      dealerbikes.Brand as Brand,
+                      dealerbikes.Model as Model,
+                    dealerbikes.DealerId as UserId,
+                      dealerbikes.UserName as UserName,
+                    dealerbikes.ContactNumber as ContactNumber,
+                    dealerbikes.Prize as Prize,
+                      dealerbikes.Year as Year,
+                      dealerbikes.Transmission as Transmission,
+                      dealerbikes.FuelType as FuelType,
+                      dealerbikes.EngineSize as EngineSize,
+                      dealerbikes.KilometreDriven as KilometreDriven,
+                      dealerbikes.Stroke as Stroke,
+                      dealerbikes.Details as Details,
+                      dealerbikes.Description as Description,
+                      dealerbikes.City as City,
+                      dealerbikes.State as State,
+                      dealerbikes.Location as Location,
+                      dealerbikes.PostalCode as PostalCode,
+                        dealerbikes.Date as Date 
+                    from
+                      dealerbikes WHERE DealerBikeId='$usedbikeid' AND DealerId='$userid' AND Brand = '$brand' AND BikeCategory='$BikeCategory' ");
                  $res=mysql_fetch_array($show);
 
             //$_SESSION['cart'] = $items;
@@ -200,15 +253,14 @@
 
                                         </ul>
                                     </aside>
-                                    <div class="ads-action">
+                                   <!--  <div class="ads-action">
                                         <ul class="list-border">
-                                            <!-- <li><a href="#"> <i class=" fa fa-user"></i> More ads by User </a></li>
-                                            <li><a href="#"> <i class=" fa fa-heart"></i> Save ad </a></li> -->
+                                            
                                             <li><a href="#"> <i class="fa fa-share-alt"></i> Share ad </a></li>
                                             <li><a href="#reportAdvertiser" data-toggle="modal"> <i
                                                     class="fa icon-info-circled-alt"></i> Report abuse </a></li>
                                         </ul>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <div class="content-footer text-left"><a class="btn  btn-default" data-toggle="modal"
@@ -233,17 +285,14 @@
                                         <p>Location: <strong><?php echo $res['Location'];?></strong>
                                         </p>
                                         <p>Posted Date: <strong><?php 
-                                        $date=mysql_query("select DATE(Date) as date from usedbikes");
-                                        if($row=mysql_fetch_array($date)){
-                                            $cr_date=date_create($row['date']);
-                                            $for_date=date_format($cr_date,'d-m-Y');
-                                        }
+                                        $cr_date=date_create($res['Date']);
+                                        $for_date=date_format($cr_date,'d-m-Y');
                                         echo $for_date;
                                         ?></strong>
                                         </p>
                                     </div>
                                     <div class="user-ads-action"><a href="#contactAdvertiser" data-toggle="modal"
-                                                                    class="btn   btn-secondary btn-block"><i
+                                    class="btn   btn-secondary btn-block"><i
                                             class=" icon-mail-2"></i> Send a message </a>
                                         <a
                                                 class="btn  btn-info btn-block"><i class=" icon-phone-1"></i> +91 <?php echo $res['ContactNumber'];?></a>

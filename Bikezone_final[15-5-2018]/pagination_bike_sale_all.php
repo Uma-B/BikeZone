@@ -31,8 +31,9 @@ $rs_result = mysql_query ($sql);
 
 $_SESSION['fetchToSort']=$sql;
 ?>
-<div class="category-list" id="masterdiv">
-<div class="tab-box  oldList">
+  <div id="masterdiv">
+                    <div class="category-list" >
+      <div class="tab-box  oldList">
 
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
@@ -87,23 +88,80 @@ $_SESSION['fetchToSort']=$sql;
                         <div class="listing-filter">
                             <div class="pull-left col-xs-6">
                             </div>
-                            <div class="pull-right col-xs-6 text-right listing-view-action"><span
+ <div class="pull-right col-xs-6 text-right listing-view-action"><span
                                     class="list-view active"><!-- <i class="  icon-th"></i> --></span> <span
                                     class="compact-view"><!-- <i class=" icon-th-list  "></i> --></span> <span
                                     class="grid-view "><!-- <i class=" icon-th-large "></i> --></span></div>
                             <div style="clear:both"></div>
                         </div>
+                        <!--/.listing-filter-->
+
+
+                        <!-- Mobile Filter bar-->
+                        <div class="mobile-filter-bar col-xl-12  ">
+                            <ul class="list-unstyled list-inline no-margin no-padding">
+                                <li class="filter-toggle">
+                                    <a class="">
+                                        <i class="  icon-th-list"></i>
+                                        Filters
+                                    </a>
+                                </li>
+                                <li>
+
+
+                                    <div class="dropdown"> <a data-toggle="dropdown"></a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><a href="#" rel="nofollow">Relevance</a>
+                                            </li>
+                                            <li class="dropdown-item"><a href="#" rel="nofollow">Date</a>
+                                            </li>
+                                            <li class="dropdown-item"><a href="#" rel="nofollow">Company</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </li>
+                            </ul>
+                        </div>
                         <div class="menu-overly-mask"></div>
+                        <!-- Mobile Filter bar End-->
+
                         <div class="adds-wrapper">
                             <div class="tab-content">
+                                <div class="tab-pane active" id="allAds"><div class="row">
+
+
+                                    <br/>
+    <div class="col-md-2 no-padding photobox">
+        <!-- <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span> <a href="ads-details.html"><img class="thumbnail no-margin" src="images/category/sample_bike.jpg" alt="img"></a>
+        </div> -->
+    </div>
+    <!--/.photobox-->
+    <div class="col-sm-7 add-desc-box">
+       
+    </div>
+    <!--/.add-desc-box-->
+    <!--/.add-desc-box-->
+
+        </div>
+</div>
+</div>
 <?php  
 while ($row = mysql_fetch_assoc($rs_result)) {  
 ?>  
 
-<div id="masterdiv">
+<div>
 <div class="item-list">
-      <!-- <div class="cornerRibbons featuredAds" id="masterdiv">
-    </div> -->
+      <?php
+      if($row['Amount']!=""){
+       
+  ?>
+    <div class="cornerRibbons featuredAds">
+        <a href=""> Dealer Ads</a>
+    </div>
+    <?php
+  }
+    ?>
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
@@ -169,15 +227,15 @@ function myFunction() {
     <!--/.add-desc-box-->
 </div>
 </div>
-</div>
-</div>
-</div> <div>
 
-
+</div>
 <?php  
 };  
 ?>  
  
+</div>
+</div>
+</div>
 </body>
 <script type="text/javascript">
   function sort_by(value){

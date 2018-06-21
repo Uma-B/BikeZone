@@ -19,12 +19,14 @@ if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };
 $start_from = ($page-1) * $limit;
 
 if(isset($_SESSION['fetchToPagination'])){
-   $sql1=$_SESSION['fetchToPagination'];
+   $filter2=$_SESSION['fetchToPagination'];
+   $filter1=$_SESSION['Bike_sale1'];
+   $filter=$_SESSION['bike_sale_all'];
 }
 
- $sql2= "LIMIT $start_from, $limit";  
+ $limit= "LIMIT $start_from, $limit";  
   
- $sql=$sql1." ".$sql2;
+ $sql=$filter2." ".$limit;
 $rs_result = mysql_query ($sql);
 
 $_SESSION['fetchToSort']=$sql;
@@ -41,9 +43,9 @@ $_SESSION['fetchToSort']=$sql;
                                     <span class="badge badge-secondary" style="display:inline-block">
                                     <?php
 
-                                          $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['count'];
+                                          $result=mysql_query($filter);
+                                           $res=mysql_num_rows($result);
+                                            echo  $res;
                                              ?>
                                                  
                                     </span>
@@ -54,7 +56,7 @@ $_SESSION['fetchToSort']=$sql;
                                     <a  href="bike_sale_buisness.php" class= "nav-link" role="tab" >Business Ads 
                                     <span class="badge badge-secondary" style="display:inline-block">
                                     <?php
-                                               $result=mysql_query($sql1);
+                                               $result=mysql_query($filter2);
                                            $res=mysql_num_rows($result);
                                             echo  $res;
                                     ?>
@@ -66,9 +68,9 @@ $_SESSION['fetchToSort']=$sql;
                                  <a href="bike_sale_personal.php" class="nav-link" role="tab">Personal
                                     <span class="badge badge-secondary" style="display:inline-block">
                              <?php
-                                              $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count Where Status='UnBlock'");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
+                                              $result=mysql_query($filter1);
+                                           $res=mysql_num_rows($result);
+                                            echo  $res;
                                     ?>
                                                  
                                     </span>
@@ -103,8 +105,16 @@ while ($row = mysql_fetch_assoc($rs_result)) {
 
 <div>
 <div class="item-list">
-      <!-- <div class="cornerRibbons featuredAds" id="masterdiv">
-    </div> -->
+      <?php
+      if($row['Amount']!=""){
+       
+  ?>
+    <div class="cornerRibbons featuredAds">
+        <a href=""> Dealer Ads</a>
+    </div>
+    <?php
+  }
+    ?>
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>

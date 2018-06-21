@@ -118,6 +118,11 @@ function validateForm() {
         document.form1.MobileNumber.focus();
         return false;
     } 
+    if (c.length>20) {
+        alert("Phone number is invalid");
+        document.form1.PhoneNumber.focus();
+        return false;
+    } 
     var a = document.forms["form1"]["Password"].value;
     if (a.length<8) {
         alert("Password should not be less than 8 characters");
@@ -164,6 +169,11 @@ function validateForm() {
     if (c.length<10) {
         alert("Company Mobile number is invalid");
         document.form1.CompanyMobileNumber.focus();
+        return false;
+    } 
+    if (c.length>20) {
+        alert("Phone number is invalid");
+        document.form1.PhoneNumber.focus();
         return false;
     } 
     var x = document.forms["form1"]["State"].value;
@@ -225,7 +235,7 @@ function validateForm() {
 
                                         <div class="col-sm-8">
                                             <input id="text7" name="DealerName"
-                                                   placeholder="DealerName" class="form-control input-md"
+                                                   placeholder="Dealer Name" class="form-control input-md"
                                                     type="text">
                                         </div>
                                     </div>
@@ -257,7 +267,7 @@ function validateForm() {
 
                                         <div class="col-sm-8">
                                             <input id="Text8" name="Password"
-                                                   placeholder="password" type="password" class="form-control input-md"
+                                                   placeholder="Password" type="password" class="form-control input-md"
                                                     >
                                         </div>
                                     </div>
@@ -280,11 +290,11 @@ function validateForm() {
 
                                         <div class="col-sm-8">
                                             <select name="DealerType"                                                     class="form-control1">
-                                                <option value="">Select</option>
-                                                <option value="Retailer">Retailer</option>
-                                                <option value="Insurance">Insurance</option>
-                                                <option value="Services">Services</option>
-                                                <option value="Showroom">Showroom</option>
+                                                <option value="">&nbsp;&nbsp;Select Dealer Type</option>
+                                                <option value="Retailer">&nbsp;&nbsp;Retailer</option>
+                                                <option value="Insurance">&nbsp;&nbsp;Insurance</option>
+                                                <option value="Services">&nbsp;&nbsp;Services</option>
+                                                <option value="Showroom">&nbsp;&nbsp;Showroom</option>
                                             </select>
                                         </div>
                                     </div>
@@ -327,7 +337,7 @@ function validateForm() {
 
                                         <div class="col-sm-8">
                                             <select class="form-control" name="State">
-                                                <option value="1">--Select--</option>
+                                                <option value="1">Select State</option>
                                                 <option value="Andhra Pradesh">Andhra Pradesh</option>
                                                 <option value="Arunachal Pradesh">Arunachal Pradesh</option>
                                                 <option value="Assam">Assam</option>

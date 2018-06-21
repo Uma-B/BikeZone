@@ -12,7 +12,9 @@ $url=$_SERVER['HTTP_REFERER'];
 
 
 if(isset($_SESSION['fetchToSort'])) {
- $filter = $_SESSION['fetchToSort'];
+ $filter1 = $_SESSION['fetchToSort'];
+ $filter = $_SESSION['filterQuery'];
+ $filter2 = $_SESSION['filterQuery2'];
 }
 
 
@@ -31,14 +33,14 @@ $value= $_GET['value'];
 
 if($value != null){
 
-$filterQuery = "(".$filter.") ORDER BY Prize $value";  
+$filterQuery = "(".$filter1.") ORDER BY Prize $value";  
 
-$splitQuery = explode("LIMIT", $filter);
+$splitQuery = explode("LIMIT", $filter1);
  $split = $splitQuery[0] ." ORDER BY Prize $value LIMIT ". $splitQuery[1];
  $count=$splitQuery[0]." ORDER BY Prize $value";  
 //echo "filter query in sort page: ".$filterQuery;
 }
-$rs_result = $conn->query($count);
+$rs_res = $conn->query($count);
 $result = $conn->query($filterQuery);
       ?>
      <div class="category-list" id="masterdiv" >
@@ -53,9 +55,9 @@ $result = $conn->query($filterQuery);
                                     <span class="badge badge-secondary" style="display:inline-block">
                                     <?php
 
-                                          $count=mysqli_query($conn,"SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
-                                                $res=mysqli_fetch_array($count);
-                                             echo  $res['count'];
+                                          $rs_result=mysqli_query($conn,$filter);
+                                           $res=mysqli_num_rows($rs_result);
+                                            echo  $res;
                                              ?>
                                                  
                                     </span>
@@ -66,9 +68,9 @@ $result = $conn->query($filterQuery);
                                     <a  href="BusinessAds.php" class= "nav-link" role="tab" >Business Ads 
                                     <span class="badge badge-secondary" style="display:inline-block">
                                     <?php
-                                         $count=mysqli_query($conn,"SELECT COUNT(*) FROM dealerbikes as count Where Status='UnBlock'");
-                                                $res=mysqli_fetch_array($count);
-                                             echo  $res['COUNT(*)'];  
+                                         $rs_result=mysqli_query($conn,$filter2);
+                                           $res=mysqli_num_rows($rs_result);
+                                            echo  $res;  
                                     ?>
                                                  
                                     </span>
@@ -78,8 +80,8 @@ $result = $conn->query($filterQuery);
                                  <a href="PersonalAds.php" class="nav-link" role="tab">Personal
                                     <span class="badge badge-secondary" style="display:inline-block">
                              <?php
-                                 //$result=mysql_query($filterQuery2);
-                                           $res=mysqli_num_rows($rs_result);
+                                 
+                                           $res=mysqli_num_rows($rs_res);
                                             echo  $res;
                                               
                                     ?>
@@ -120,7 +122,16 @@ $result = $conn->query($filterQuery);
 
 
 <div class="item-list" >
-   
+   <?php
+      if($row['Amount']!=""){
+       
+  ?>
+    <div class="cornerRibbons featuredAds">
+        <a href=""> Dealer Ads</a>
+    </div>
+    <?php
+  }
+    ?>
     <div class="row" >
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>

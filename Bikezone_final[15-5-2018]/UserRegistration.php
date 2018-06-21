@@ -18,7 +18,7 @@ if(isset($_SESSION['usr_id'])) {
        $ConfirmPassword=$_POST['ConfirmPassword'];
        $Date=$_POST['Date'];
    
-       $insert=mysql_query("INSERT INTO userregistration (UserName,MailId,PhoneNumber,State,City,Location,PostalCode,Password,ConfirmPassword,Status,Date) VALUES ('$UserName','$MailId','$PhoneNumber','$State','$City','$Location','$PostalCode','$Password','$ConfirmPassword','$UnBlock','$Date')");
+       $insert=mysql_query("INSERT INTO userregistration (UserName,MailId,PhoneNumber,State,City,Location,PostalCode,Password,ConfirmPassword,Status,Date) VALUES ('$UserName','$MailId','$PhoneNumber','$State','$City','$Location','$PostalCode','$Password','$ConfirmPassword','UnBlock','$Date')");
    
    
        if($insert){
@@ -105,6 +105,11 @@ if(isset($_SESSION['usr_id'])) {
         document.form1.PhoneNumber.focus();
         return false;
     } 
+    if (c.length>20) {
+        alert("Phone number is invalid");
+        document.form1.PhoneNumber.focus();
+        return false;
+    } 
     var x = document.forms["form1"]["State"].value;
     if (x == "1") {
         alert("State must be select out");
@@ -173,7 +178,7 @@ $(document).ready(function(){
                role="navigation">
                <div class="container">
                   <div class="navbar-identity">
-                     <a href="index.html" class="navbar-brand logo logo-title">
+                     <a href="index.php" class="navbar-brand logo logo-title">
                         <span class="logo-icon">
                            <!-- <i class="icon icon-search-1 ln-shadow-logo "></i> -->
                         </span>

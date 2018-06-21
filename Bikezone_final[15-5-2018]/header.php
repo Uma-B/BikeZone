@@ -3,57 +3,60 @@
     <!--  -->
 <style>
 .dropbtn {
-   background-color: #d9534f;
-   color: white;
-   padding: 16px;
-   font-size: 16px;
-   border: none;
-   cursor: pointer;
+  background-color: #d9534f;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  width:100%;
 
 }
-.dropbutton {
-   background-color: #d9534f;
-   color: white;
-   padding: 12px;
-   font-size: 15px;
-   border: none;
-   cursor: pointer;
+
+ .dropbutton{
+  background-color: #d9534f;
+  color: white;
+  padding: 12px;
+  font-size: 15px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
 
 }
 
 .dropdown {
-   position: relative;
-   display: inline-block;
+  position: relative;
+  display: inline-block;
 }
 
 .dropdown-content {
-   display: none;
-   position: absolute;
-   background-color: #fff;
-   min-width: 160px;
-   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-   z-index: 1;
-   
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  
 }
 
 .dropdown-content a {
-   color: black;
-   padding: 12px 16px;
-   text-decoration: none;
-   display: block;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
 }
 
 .dropdown-content a:hover {background-color: #f1f1f1}
 
 .dropdown:hover .dropdown-content {
-   display: block;
+  display: block;
 }
 
 .dropdown:hover .dropbtn  {
-   background-color: #d9534f;
+  background-color: #d9534f;
 }
 </style>
-
 </head>
 <body>
 
@@ -66,7 +69,7 @@
             <div class="navbar-identity">
 
 
-    			<a href="index.php" class="navbar-brand logo logo-title">
+    			<a href="session_out.php" class="navbar-brand logo logo-title">
     			<span class="logo-icon"><!-- <i class="icon icon-search-1 ln-shadow-logo "></i> -->
     			</span>BIKE<span>ZONE </span> </a>
 
@@ -87,7 +90,35 @@
                       <li><a href="" class="glyphicon glyphicon-home"></a></li>
                       <li><a href="bike_sale_all.php">Bike for sale</a></li>
                       <li><a href="">Insurance</a></li>
-                      <li><a href="">Service</a></li>
+                       <li class="dropdown no-arrow nav-item"><a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">Service</a>
+                          <ul
+                              class="dropdown-menu user-menu dropdown-menu-right">
+                              <li class="dropdown-item"><a href="bike_sale_all.php"><i class="fa fa-search" aria-hidden="true"></i>Search</a>
+                              </li>
+                              <?php
+                                  if (isset($_SESSION['usr_id']) && isset($_SESSION['dealer_type'])) {
+                                    $id=$_SESSION['usr_id'];
+                                    ?>
+                              <li class="dropdown-item">
+                                <a href="service_post_ad.php"><i class="fa fa-upload" aria-hidden="true"></i> Post ad </a>
+                              </li>
+                              <?php
+                                }
+                                else {
+                                  ?>
+                                  <li class="dropdown-item">
+                                <a href onclick="myFunction1()"><i class="fa fa-upload" aria-hidden="true"></i> Post ad </a>
+                              </li>
+                              <script>
+                                  function myFunction1() {
+                                      alert("Please login as dealer before posting ads");
+                                  }
+                                </script>
+                                  <?php
+                                }
+                              ?>
+                            </ul>
+                      </li>
                       <li><a href="">Help</a></li>
     				</ul>
     				<ul class="nav navbar-nav ml-auto navbar-right">
@@ -165,11 +196,11 @@
   </div>
 </div></li> -->
  <div class="dropdown">
-  &nbsp;&nbsp;&nbsp; &nbsp;<button class="dropbtn" style="height: 45px; width: 120px;" >Login
+  &nbsp;&nbsp;&nbsp; &nbsp;<button class="dropbtn" style="width: 120px;" >Login
 </button>
  <div class="dropdown-content">
-    <a class="dropdown-item" href="UserLogin.php">User</a>
-   <a class="dropdown-item" href="CompanyLogin.php">Company</a>
+    <a class="dropdown-item" href="UserLogin.php" style="background-color: white;width: 170px;text-align: left">User</a>
+   <a class="dropdown-item" href="CompanyLogin.php" style="background-color: white;width: 170px;text-align: left">Dealer</a>
    </div>
 </div><!-- <div class="btn-group">
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" style="height: 45px; width: 120px;">
@@ -181,18 +212,18 @@
                <li>
 
 <div class="dropdown">
- <button class="dropbtn" style=" height: 45px; width: 120px; margin-left: 20px;">
+ <button class="dropbtn" style=" width: 120px; margin-left: 20px;">
    Register</button>
  <div class="dropdown-content">
-  <a class="dropdown-item" href="UserRegistration.php">User</a>
-   <a class="dropdown-item" href="delear.php">Company</a>
+  <a class="dropdown-item" href="UserRegistration.php" style="background-color: white;width: 170px;text-align: left">User</a>
+   <a class="dropdown-item" href="dealer.php" style="background-color: white;width: 170px;text-align: left">Dealer</a>
    
    </div>
 </div>
 
       </li> 
                 <?php } ?>    
-    				</ul>
+    				</ul> 
     			</div>
     			<!--/.nav-collapse -->
     		</div>

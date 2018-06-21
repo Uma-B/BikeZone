@@ -48,11 +48,12 @@ usedbikes.EngineSize as EngineSize,
 usedbikes.KilometreDriven as KilometreDriven,
 usedbikes.Stroke as Stroke,
 usedbikes.Location as Location,
-usedbikes.PostalCode as PostalCode
+usedbikes.PostalCode as PostalCode,
+usedbikes.Amount as Amount
 from
-usedbikes WHERE Status='UnBlock' AND";
+usedbikes WHERE Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock' AND";
 
-$filter2="select dealerbikes.DealerBikeId as UsedBikeId, dealerbikes.BikeCategory as BikeCategory, dealerbikes.DealerBikeImage1 as UsedBikeImage1, dealerbikes.Brand as Brand, dealerbikes.Model as Model, dealerbikes.DealerId as UserId, dealerbikes.Username as UserName, dealerbikes.ContactNumber as ContactNumber, dealerbikes.Prize as Prize, dealerbikes.Year as Year, dealerbikes.Transmission as Transmission, dealerbikes.FuelType as FuelType, dealerbikes.EngineSize as EngineSize, dealerbikes.KilometreDriven as KilometreDriven, dealerbikes.Stroke as Stroke, dealerbikes.Location as Location, dealerbikes.PostalCode as PostalCode from dealerbikes WHERE Status='UnBlock' AND";
+$filter2="select dealerbikes.DealerBikeId as UsedBikeId, dealerbikes.BikeCategory as BikeCategory, dealerbikes.DealerBikeImage1 as UsedBikeImage1, dealerbikes.Brand as Brand, dealerbikes.Model as Model, dealerbikes.DealerId as UserId, dealerbikes.Username as UserName, dealerbikes.ContactNumber as ContactNumber, dealerbikes.Prize as Prize, dealerbikes.Year as Year, dealerbikes.Transmission as Transmission, dealerbikes.FuelType as FuelType, dealerbikes.EngineSize as EngineSize, dealerbikes.KilometreDriven as KilometreDriven, dealerbikes.Stroke as Stroke, dealerbikes.Location as Location, dealerbikes.PostalCode as PostalCode, dealerbikes.Amount as Amount from dealerbikes WHERE Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock' AND";
 
 if($City != "0"){
   $filter1=$filter1. " usedbikes.City LIKE '$City' AND";
@@ -150,8 +151,16 @@ $_SESSION['fetchToSort']=$filterQuery;
 <br>
 <div>
 <div class="item-list">
-    <!-- <div class="cornerRibbons featuredAds" id="masterdiv">
-    </div> -->
+    <?php
+      if($row['Amount']!=""){
+       
+  ?>
+    <div class="cornerRibbons featuredAds">
+        <a href=""> Dealer Ads</a>
+    </div>
+    <?php
+  }
+    ?>
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>

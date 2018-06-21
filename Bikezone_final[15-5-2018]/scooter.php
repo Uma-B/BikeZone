@@ -3,7 +3,7 @@ session_start();
 include('db_connection.php'); 
 
 $limit = 10; 
-$sql = "SELECT COUNT(DealerBikeId) FROM dealerbikes WHERE BikeCategory = 'Scooters' and Status='UnBlock' ";  
+$sql = "SELECT COUNT(DealerBikeId) FROM dealerbikes WHERE BikeCategory = 'Scooters' AND Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock'";  
 $rs_result = mysql_query($sql);  
 $row = mysql_fetch_row($rs_result);  
 $total_records = $row[0];  
@@ -31,9 +31,10 @@ dealerbikes.Prize as Prize,
   dealerbikes.KilometreDriven as KilometreDriven,
   dealerbikes.Stroke as Stroke,
   dealerbikes.Location as Location,
-  dealerbikes.PostalCode as PostalCode 
+  dealerbikes.PostalCode as PostalCode,
+  dealerbikes.Amount as Amount 
 from
-  dealerbikes WHERE BikeCategory = 'Scooters' and Status='UnBlock'";
+  dealerbikes WHERE BikeCategory = 'Scooters' AND Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock'";
   $sql2="LIMIT $start_from, $limit";
  $sql=$sql1." ".$sql2;
 $rs_result = mysql_query ($sql);
@@ -137,7 +138,7 @@ $_SESSION['fetchToPagination']=$sql1;
                                         ?>
                                         <div margin:0px auto; margin-top:30px;" >
                                                 <select id="city" class="chosen form-control" style="width:80%;" onchange="recp()">
-                                                <option value="-1"> Select City </option>
+                                                <option value="0"> Select City </option>
                                                 <?php
                                         $query ="SELECT City FROM dealerbikes WHERE BikeCategory LIKE 'Scooters' Group by City";
                                         $result= mysql_query($query);
@@ -320,9 +321,16 @@ while ($row = mysql_fetch_assoc($rs_result)) {
 <div>
 
 <div class="item-list">
-    <!-- <div class="cornerRibbons featuredAds" > -->
-        <!--<a href=""> Featured Ads</a>
-    </div> -->
+    <?php
+      if($row['Amount']!=""){
+       
+  ?>
+    <div class="cornerRibbons featuredAds">
+        <a href=""> Dealer Ads</a>
+    </div>
+    <?php
+  }
+    ?>
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>

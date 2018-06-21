@@ -31,7 +31,8 @@ session_start();
        $PostalCode=$_POST['PostalCode'];
        $Date=$_POST['Date'];
 
-       $insert=mysqli_query($link, "INSERT INTO dealerbikes(DealerId,BikeCategory,Brand, Model, Year, Transmission, FuelType, Stroke, EngineSize, Description, Details,Amount,WebSiteLink,KilometreDriven,DealerBikeImage1,DealerBikeImage2,DealerBikeImage3,DealerBikeImage4,Prize, UserName, ContactNumber, State, City, Location, PostalCode, Status, Date ) values ($DealerId,'$BikeCategory','$Brand','$Model','$Year',$Transmission,'$FuelType','$Stroke','$EngineSize','$Description','$Details','$Prize','$WebSiteLink',$KilometreDriven,'{$DealerBikeImage1}','{$DealerBikeImage2}','{$DealerBikeImage3}','{$DealerBikeImage4}',$Amount ,'$UserName','$ContactNumber','$State','$City','$Location','$PostalCode','UnBlock','$Date')");
+       $sql="INSERT INTO dealerbikes(DealerId,BikeCategory,Brand, Model, Year, Transmission, FuelType, Stroke, EngineSize, Description, Details,Amount,WebSiteLink,KilometreDriven,DealerBikeImage1,DealerBikeImage2,DealerBikeImage3,DealerBikeImage4,Prize, UserName, ContactNumber, State, City, Location, PostalCode, Status, Date ) values ($DealerId,'$BikeCategory','$Brand','$Model','$Year','$Transmission','$FuelType','$Stroke','$EngineSize','$Description','$Details','$Prize','$WebSiteLink',$KilometreDriven,'{$DealerBikeImage1}','{$DealerBikeImage2}','{$DealerBikeImage3}','{$DealerBikeImage4}',$Amount ,'$UserName','$ContactNumber','$State','$City','$Location','$PostalCode','UnBlock','$Date')";
+       $insert=mysqli_query($link, $sql);
    
        if($insert){
            ?>
@@ -41,6 +42,7 @@ session_start();
    }
    else
    {
+    
     echo mysqli_error();
    }
    
@@ -72,6 +74,7 @@ session_start();
     <!-- bxSlider CSS file -->
     <link href="assets/plugins/bxslider/jquery.bxslider.css" rel="stylesheet"/>
 
+
     <!-- Just for debugging purposes. -->
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -88,7 +91,7 @@ session_start();
         {
              $.ajax({
              type: 'post',
-             url: 'fetch_data.php',
+             url: 'fetch_data_scooters.php',
              data: {
               get_option3:val
          },
@@ -100,6 +103,8 @@ session_start();
 
     </script>
     <script src="assets/js/pace.min.js"></script>
+
+
 
 </head>
 <body>
@@ -140,7 +145,7 @@ session_start();
                                                 <option value="1"> Select a category</option>
                                                   <option value="New Bikes"> New Bikes</option>
                                                 <option value="Used Bikes"> Used Bikes</option>
-                                                <option value="Scooter"> Scooter</option>
+                                                <option value="Scooters"> Scooter</option>
                                                 
                                                      </select>
                                         </div>
@@ -310,20 +315,24 @@ session_start();
                                         <div class="col-lg-8">
                                             <div class="mb10">
                                                 <input class="file" data-preview-file-type="text" name="image" id="image" accept="image/JPEG" type="file">
+                                                ADS_1 in view page (pixel 400*400)
                                             </div>
                                             <div class="mb10">
                                                 <input class="file" data-preview-file-type="text" name="image2" id="image2" accept="image/JPEG" type="file">
+                                                ADS_2 in view page (pixel 400*400)
                                             </div>
                                             <div class="mb10">
                                                 <input class="file" data-preview-file-type="text" name="image3" id="image3" accept="image/JPEG" type="file">
+                                                ADS_3 in view page (pixel 400*400)
                                             </div>
                                             <div class="mb10">
                                                 <input class="file" data-preview-file-type="text" name="image4"  id="image4" accept="image/JPEG" type="file">
+                                                ADS_4 in view page (pixel 400*400)
                                             </div>
                                            
-                                            <p  class="form-text text-muted">
+                                            <!-- <p  class="form-text text-muted">
                                                 Add up to 3 photos. Use a real image of your product, not catalogs
-                                            </p>
+                                            </p> -->
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -673,7 +682,8 @@ include 'footer.php';
 <!-- /.modal -->
 
 <!-- Le javascript
-================================================== -->
+==================================================
+ -->
 
 <!-- Placed at the end of the document so the pages load faster -->
 
@@ -683,12 +693,11 @@ include 'footer.php';
 
 <!-- include custom script for site  -->
 <script src="assets/js/script.js"></script>
-
-
 <!-- include jquery file upload plugin  -->
 <script src="assets/js/fileinput.min.js" type="text/javascript"></script>
+
 <script>
-    // initialize with defaults
+    initialize with defaults
     $("#input-upload-img1").fileinput();
     $("#input-upload-img2").fileinput();
     $("#input-upload-img3").fileinput();
@@ -703,143 +712,154 @@ include 'footer.php';
         document.form1.BikeCategory.focus();
         return false;
     } 
-    // var x = document.forms["form1"]["Brand"].value;
-    // if (x == "1") {
-    //     alert("Brand must be select out");
-    //     document.form1.Brand.focus();
-    //     return false;
-    // } 
-    // var x = document.forms["form1"]["Model"].value;
-    // if (x == "1") {
-    //     alert("Model must be select out");
-    //     document.form1.Model.focus();
-    //     return false;
-    // } 
-    // var x = document.forms["form1"]["Year"].value;
-    // if (x == "") {
-    //     alert("Year must be filled out");
-    //     document.form1.Year.focus();
-    //     return false;
-    // } 
-    // var x = document.forms["form1"]["KilometreDriven"].value;
-    // if (x == "") {
-    //     alert("Kilometre driven must be filled out");
-    //     document.form1.KilometreDriven.focus();
-    //     return false;
-    // }
-    // var c = document.forms["form1"]["Transmission"].value;
-    // if (c == "1") {
-    //     alert("Transmission must be select out");
-    //     document.form1.Transmission.focus();
-    //     return false;
-    // }   
-    // var b = document.forms["form1"]["FuelType"].value;
-    // if (b == "1") {
-    //     alert("Fuel type must be select out");
-    //     document.form1.FuelType.focus();
-    //     return false;
-    // } 
-    // var x = document.forms["form1"]["Stroke"].value;
-    // if (x == "1") {
-    //     alert("Stroke must be select out");
-    //     document.form1.Stroke.focus();
-    //     return false;
-    // }  
-    // var x = document.forms["form1"]["EngineSize"].value;
-    // if (x == "") {
-    //     alert("Engine size must be filled out");
-    //     document.form1.EngineSize.focus();
-    //     return false;
-    // } 
-    // var c = document.forms["form1"]["Description"].value;
-    // if (c == "") {
-    //     alert("Description must be filled out");
-    //     document.form1.Description.focus();
-    //     return false;
-    // } 
-    // var c = document.forms["form1"]["ContactNumber"].value;
-    // if (c == "") {
-    //     alert("Contact number must be filled out");
-    //     document.form1.ContactNumber.focus();
-    //     return false;
-    // } 
-    // if (c.length<10) {
-    //     alert("Contact number number is invalid");
-    //     document.form1.ContactNumber.focus();
-    //     return false;
-    // } 
-    // var x = document.forms["form1"]["UserName"].value;
-    // if (x == "") {
-    //     alert("UserName must be filled out");
-    //     document.form1.UserName.focus();
-    //     return false;
-    // }  
+    var x = document.forms["form1"]["Brand"].value;
+    if (x == "1") {
+        alert("Brand must be select out");
+        document.form1.Brand.focus();
+        return false;
+    } 
+    var x = document.forms["form1"]["Model"].value;
+    if (x == "1") {
+        alert("Model must be select out");
+        document.form1.Model.focus();
+        return false;
+    } 
+    var x = document.forms["form1"]["Year"].value;
+    if (x == "") {
+        alert("Year must be filled out");
+        document.form1.Year.focus();
+        return false;
+    } 
+    var x = document.forms["form1"]["KilometreDriven"].value;
+    if (x == "") {
+        alert("Kilometre driven must be filled out");
+        document.form1.KilometreDriven.focus();
+        return false;
+    }
+    var c = document.forms["form1"]["Transmission"].value;
+    if (c == "1") {
+        alert("Transmission must be select out");
+        document.form1.Transmission.focus();
+        return false;
+    }   
+    var b = document.forms["form1"]["FuelType"].value;
+    if (b == "1") {
+        alert("Fuel type must be select out");
+        document.form1.FuelType.focus();
+        return false;
+    } 
+    var x = document.forms["form1"]["Stroke"].value;
+    if (x == "1") {
+        alert("Stroke must be select out");
+        document.form1.Stroke.focus();
+        return false;
+    }  
+    var x = document.forms["form1"]["EngineSize"].value;
+    if (x == "") {
+        alert("Engine size must be filled out");
+        document.form1.EngineSize.focus();
+        return false;
+    } 
+    var c = document.forms["form1"]["Description"].value;
+    if (c == "") {
+        alert("Description must be filled out");
+        document.form1.Description.focus();
+        return false;
+    } 
+    var c = document.forms["form1"]["ContactNumber"].value;
+    if (c == "") {
+        alert("Contact number must be filled out");
+        document.form1.ContactNumber.focus();
+        return false;
+    } 
+    if (c.length<10) {
+        alert("Contact number number is invalid");
+        document.form1.ContactNumber.focus();
+        return false;
+    } 
+    if (c.length>20) {
+        alert("Phone number is invalid");
+        document.form1.PhoneNumber.focus();
+        return false;
+    } 
+    var x = document.forms["form1"]["UserName"].value;
+    if (x == "") {
+        alert("UserName must be filled out");
+        document.form1.UserName.focus();
+        return false;
+    }  
     
-    // var x = document.forms["form1"]["State"].value;
-    // if (x == "") {
-    //     alert("State must be filled out");
-    //     document.form1.State.focus();
-    //     return false;
-    // } 
-    // var x = document.forms["form1"]["City"].value;
-    // if (x == "1") {
-    //     alert("City must be filled out");
-    //     document.form1.City.focus();
-    //     return false;
-    // } 
-    // var x = document.forms["form1"]["Location"].value;
-    // if (x == "") {
-    //     alert("Location must be filled out");
-    //     document.form1.Location.focus();
-    //     return false;
-    // }  
-    // var x = document.forms["form1"]["PostalCode"].value;
-    // if (x == "") {
-    //     alert("Postal Code must be filled out");
-    //     document.form1.PostalCode.focus();
-    //     return false;
-    // }
-    // var x = document.forms["form1"]["Details"].value;
-    // if (x == "") {
-    //     alert("Details must be filled out");
-    //     document.form1.Details.focus();
-    //     return false;
-    // } 
-    // var x = document.forms["form1"]["Prize"].value;
-    // if (x == "") {
-    //     alert("Price must be filled out");
-    //     return false;
-    // } 
-    // var x = document.forms["form1"]["WebSiteLink"].value;
-    // if (x == "") {
-    //     alert("Website link must be filled out");
-    //     document.form1.WebSiteLink.focus();
-    //     return false;
-    // } 
-    // var x = document.forms["form1"]["image"].value;
-    // if (x == "") {
-    //     alert("first 3 images must be select out");
-    //     document.form1.image.focus();
-    //     return false;
-    // } 
-    // var x = document.forms["form1"]["image2"].value;
-    // if (x == "") {
-    //     alert("first 3 images must be select out");
-    //     document.form1.image2.focus();
-    //     return false;
-    // } 
-    // var x = document.forms["form1"]["image3"].value;
-    // if (x == "") {
-    //     alert("first 3 images must be select out");
-    //     document.form1.image3.focus();
-    //     return false;
-    // } 
-    // var x = document.forms["form1"]["Amount"].value;
-    // if (x == "") {
-    //     alert("Amount must be filled out");
-    //     document.form1.Amount.focus();
-    //     return false;
-    // }  
+    var x = document.forms["form1"]["State"].value;
+    if (x == "") {
+        alert("State must be filled out");
+        document.form1.State.focus();
+        return false;
+    } 
+    var x = document.forms["form1"]["City"].value;
+    if (x == "1") {
+        alert("City must be filled out");
+        document.form1.City.focus();
+        return false;
+    } 
+    var x = document.forms["form1"]["Location"].value;
+    if (x == "") {
+        alert("Location must be filled out");
+        document.form1.Location.focus();
+        return false;
+    }  
+    var x = document.forms["form1"]["PostalCode"].value;
+    if (x == "") {
+        alert("Postal Code must be filled out");
+        document.form1.PostalCode.focus();
+        return false;
+    }
+    var x = document.forms["form1"]["Details"].value;
+    if (x == "") {
+        alert("Details must be filled out");
+        document.form1.Details.focus();
+        return false;
+    } 
+    var x = document.forms["form1"]["Prize"].value;
+    if (x == "") {
+        alert("Price must be filled out");
+        return false;
+    } 
+    var x = document.forms["form1"]["WebSiteLink"].value;
+    if (x == "") {
+        alert("Website link must be filled out");
+        document.form1.WebSiteLink.focus();
+        return false;
+    } 
+    var x = document.forms["form1"]["image"].value;
+    if (x == "") {
+        alert("All images must be select out");
+        document.form1.image.focus();
+        return false;
+    } 
+    var x = document.forms["form1"]["image2"].value;
+    if (x == "") {
+        alert("All images must be select out");
+        document.form1.image2.focus();
+        return false;
+    } 
+    var x = document.forms["form1"]["image3"].value;
+    if (x == "") {
+        alert("All images must be select out");
+        document.form1.image3.focus();
+        return false;
+    } 
+    var x = document.forms["form1"]["image4"].value;
+    if (x == "") {
+        alert("All images must be select out");
+        document.form1.image4.focus();
+        return false;
+    } 
+    var x = document.forms["form1"]["Amount"].value;
+    if (x == "") {
+        alert("Amount must be filled out");
+        document.form1.Amount.focus();
+        return false;
+    }  
     return true;
     }   
 </script>

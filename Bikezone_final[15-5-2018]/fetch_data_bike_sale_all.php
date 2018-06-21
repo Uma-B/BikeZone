@@ -38,9 +38,10 @@ $filter1="select
   usedbikes.UserId as UserId,
   usedbikes.UserName as UserName,
   usedbikes.ContactNumber as ContactNumber,
-  usedbikes.Prize as Prize
+  usedbikes.Prize as Prize,
+  usedbikes.Amount as Amount
 from
-  usedbikes WHERE Status='UnBlock' AND";
+  usedbikes WHERE Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock' AND";
 
 
 
@@ -55,9 +56,10 @@ $filter2="select
   dealerbikes.DealerId as UserId,
   dealerbikes.UserName as UserName,
   dealerbikes.ContactNumber as ContactNumber,
-  dealerbikes.Prize as Prize
+  dealerbikes.Prize as Prize,
+  dealerbikes.Amount as Amount
 from
-  dealerbikes WHERE Status='UnBlock' AND";
+  dealerbikes WHERE Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock' AND";
 
 if($City != "0"){
   $filter1=$filter1. " usedbikes.City LIKE '$City' AND";
@@ -142,7 +144,76 @@ $_SESSION['fetchToSort']=$filterQuery;
                                 </select>
                             </div>
                         </div>
-                      </div>
+                        <!--/.tab-box-->
+
+                        <div class="listing-filter">
+                            <div class="pull-left col-xs-6">
+                               <!--  <div class="breadcrumb-list"><a href="#" class="current"> <span>All ads</span></a>
+                                    in
+
+                                    cityName will replace with selected location/area from location modal 
+                                    <span class="cityName"> New York </span> <a href="#selectRegion" id="dropdownMenu1"
+                                                                                data-toggle="modal"> <span
+                                            class="caret"></span> </a></div> -->
+                            </div>
+                            <div class="pull-right col-xs-6 text-right listing-view-action"><span
+                                    class="list-view active"><!-- <i class="  icon-th"></i> --></span> <span
+                                    class="compact-view"><!-- <i class=" icon-th-list  "></i> --></span> <span
+                                    class="grid-view "><!-- <i class=" icon-th-large "></i> --></span></div>
+                            <div style="clear:both"></div>
+                        </div>
+                        <!--/.listing-filter-->
+
+
+                        <!-- Mobile Filter bar-->
+                        <!-- <div class="mobile-filter-bar col-xl-12  ">
+                            <ul class="list-unstyled list-inline no-margin no-padding">
+                                <li class="filter-toggle">
+                                    <a class="">
+                                        <i class="  icon-th-list"></i>
+                                        Filters
+                                    </a>
+                                </li>
+                                <li>
+
+
+                                    <div class="dropdown"> <a data-toggle="dropdown"></a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><a href="#" rel="nofollow">Relevance</a>
+                                            </li>
+                                            <li class="dropdown-item"><a href="#" rel="nofollow">Date</a>
+                                            </li>
+                                            <li class="dropdown-item"><a href="#" rel="nofollow">Company</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </li>
+                            </ul>
+                        </div> -->
+                        <div class="menu-overly-mask"></div>
+                        <!-- Mobile Filter bar End-->
+
+                        <div class="adds-wrapper">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="allAds"><div class="row">
+
+
+                                    <br/>
+    <div class="col-md-2 no-padding photobox">
+        <!-- <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span> <a href="ads-details.html"><img class="thumbnail no-margin" src="images/category/sample_bike.jpg" alt="img"></a>
+        </div> -->
+    </div>
+    <!--/.photobox-->
+    <div class="col-sm-7 add-desc-box">
+       
+    </div>
+    <!--/.add-desc-box-->
+    <!--/.add-desc-box-->
+
+        </div>
+</div>
+</div>
 <?php
 
       $result = $conn->query($filterQuery);
@@ -157,8 +228,16 @@ $_SESSION['fetchToSort']=$filterQuery;
 
 
 <div class="item-list">
-    <!-- <div class="cornerRibbons featuredAds" id="masterdiv">
-    </div> -->
+    <?php
+      if($row['Amount']!=""){
+       
+  ?>
+    <div class="cornerRibbons featuredAds">
+        <a href=""> Dealer Ads</a>
+    </div>
+    <?php
+  }
+    ?>
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>

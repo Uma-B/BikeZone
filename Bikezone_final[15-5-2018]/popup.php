@@ -5,6 +5,13 @@ include "db_connection.php";
  
 GLOBAL $bike_sale_all,$Bike_sale1,$Bike_sale2;
 
+if(isset($_SESSION['bike_sale_all'])){
+  $filterQuery=$_SESSION['bike_sale_all'];
+  $filterQuery1=$_SESSION['Bike_sale1'];
+  $filterQuery2=$_SESSION['Bike_sale2'];
+}
+else {
+
 $filterQuery1 = "select
   usedbikes.UsedBikeId as UsedBikeId,
   usedbikes.BikeCategory as BikeCategory,
@@ -16,9 +23,10 @@ $filterQuery1 = "select
   usedbikes.UserId as UserId,
   usedbikes.UserName as UserName,
   usedbikes.ContactNumber as ContactNumber,
-  usedbikes.Prize as Prize
+  usedbikes.Prize as Prize,
+  usedbikes.Amount as Amount
 from
-  usedbikes Where Status='UnBlock'
+  usedbikes Where Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock'
 ";
 
 $filterQuery2 = "select
@@ -32,19 +40,20 @@ $filterQuery2 = "select
   dealerbikes.DealerId as UserId,
   dealerbikes.UserName as UserName,
   dealerbikes.ContactNumber as ContactNumber,
-  dealerbikes.Prize as Prize
+  dealerbikes.Prize as Prize,
+  dealerbikes.Amount as Amount
 from
-  dealerbikes Where Status='UnBlock'";
+  dealerbikes Where Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock'";
 
 $_SESSION['Bike_sale1'] = $filterQuery1;
 $_SESSION['Bike_sale2'] = $filterQuery2;
 
 
-$filter = $filterQuery1." UNION ".$filterQuery2;
-//$_SESSION['bike_sale_all']=$filter;
-
+$filterQuery = $filterQuery1." UNION ".$filterQuery2;
+$_SESSION['bike_sale_all']=$filterQuery;
+}
 $limit = 10; 
-$sql = $filter; 
+$sql = $filterQuery; 
 /*For No Of Rows Selected*/
 $result=mysql_query($sql);
 $rowcount = mysql_num_rows($result);
@@ -62,7 +71,7 @@ if (isset($_GET["page"])) {
 }  
 
 $start_from = ($page-1) * $limit;    
-$sql1 =  $filter;
+$sql1 =  $filterQuery;
 $sql2="LIMIT $start_from, $limit";
   $sql=$sql1." ".$sql2;
 
@@ -167,7 +176,7 @@ $rs_result = mysql_query ($sql);
                                         ?>
                                         <div margin:0px auto; margin-top:30px;" >
                                                 <select id="city" class="chosen form-control" style="width:80%;" onchange="recp()">
-                                                <option value="-1"> Select City </option>
+                                                <option value="0"> Select City </option>
                                                 <?php
                                         $query ="SELECT City FROM usedbikes UNION SELECT City FROM dealerbikes Group by City  ";
                                         $result= mysql_query($query);
@@ -234,21 +243,7 @@ $rs_result = mysql_query ($sql);
                                 </ul>
                             </div>
                             <!--/.list-filter-->
-                            <div class="locations-list  list-filter">
-                                <h5 class="list-title"><strong><a href="#">Condition</a></strong></h5>
-                                <ul class="browse-list list-unstyled long-list">
-                                    <li><a href="">New <span class="count"><?php
-
-                                            $count=mysql_query("SELECT UserId FROM usedbikes");
-                                                $num_rows=mysql_num_rows($count);
-                                             echo $num_rows+1;
-                                             ?></span></a>
-                                    </li>
-                                    <li><a href="">Used <span class="count">28,705</span></a>
-                                    </li>
-                                    <li><a href="">None </a></li>
-                                </ul>
-                            </div>
+                            
                             <!--/.list-filter-->
                             <div style="clear:both"></div>
 
@@ -272,11 +267,11 @@ $rs_result = mysql_query ($sql);
                             <ul class="nav nav-tabs add-tabs" id="ajaxTabs" role="tablist">
                                 <li class="active nav-item">
                                     <a  class="nav-link" href="bike_sale_all.php" data-url="ajax/33.html" role="tab" data-toggle="tab">All Ads 
-                                    <span class="badge badge-secondary" style="display:inline-block">
+                                    <span class="badge badge-secondary" style="display:inline-block;">
                                     <?php
-                                            $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['count'];
+                                            $result=mysql_query($filterQuery);
+                                           $res=mysql_num_rows($result);
+                                            echo $res;
                                     ?>
                                                  
                                     </span>
@@ -285,11 +280,11 @@ $rs_result = mysql_query ($sql);
 
                                 <li class="nav-item ">
                                     <a  href="bike_sale_buisness.php" class= "nav-link" role="tab" >Business Ads 
-                                    <span class="badge badge-secondary" style="display:inline-block">
+                                    <span class="badge badge-secondary" style="display:inline-block;">
                                     <?php
-                                             $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count Where Status='UnBlock'");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
+                                             $result=mysql_query($filterQuery2);
+                                           $res=mysql_num_rows($result);
+                                            echo $res;
                                     ?>
                                                  
                                     </span>
@@ -297,11 +292,11 @@ $rs_result = mysql_query ($sql);
                                 </li>
                                <li class="nav-item ">
                                  <a href="bike_sale_personal.php" class="nav-link" role="tab">Personal
-                                    <span class="badge badge-secondary" style="display:inline-block">
+                                    <span class="badge badge-secondary" style="display:inline-block;">
                              <?php
-                                           $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count Where Status='UnBlock'");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
+                                           $result=mysql_query($filterQuery1);
+                                           $res=mysql_num_rows($result);
+                                            echo $res;
                                     ?>
                                                  
                                     </span>
@@ -394,7 +389,16 @@ while($row=mysql_fetch_array($rs_result))
 <div>
 
 <div class="item-list">
-    
+    <?php
+      if($row['Amount']!=""){
+       
+  ?>
+    <div class="cornerRibbons featuredAds">
+        <a href=""> Dealer Ads</a>
+    </div>
+    <?php
+  }
+    ?>
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
@@ -617,6 +621,7 @@ $(".chosen").chosen();
 
         setTimeout(openColorBox, 000);
     </script>
+
 <link rel="stylesheet" href="style.css">
 
 </body>

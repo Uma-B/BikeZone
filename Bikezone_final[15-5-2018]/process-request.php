@@ -45,7 +45,7 @@ if(isset($_POST["country"])){
         ?>
         
         <select class="form-control" name="City">
-        <option value="1">--Select--</option>
+        <option value="1">Select City</option>
         <?php 
         foreach($countryArr[$country] as $value){
             echo "<option>". $value . "</option>";

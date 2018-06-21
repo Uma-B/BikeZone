@@ -407,9 +407,10 @@ progress {
   -webkit-appearance: none;
 }
 
-::-webkit-file-upload-button {
+::-webkit- {
   font: inherit;
   -webkit-appearance: button;
+  display: none;
 }
 
 output {

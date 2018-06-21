@@ -15,9 +15,10 @@ $filterQuery1 = "select
   usedbikes.UserId as UserId,
   usedbikes.UserName as UserName,
   usedbikes.ContactNumber as ContactNumber,
-  usedbikes.Prize as Prize
+  usedbikes.Prize as Prize,
+  usedbikes.Amount as Amount
 from
-  usedbikes Where BikeCategory = 'Used Bikes'  and Status='UnBlock'
+  usedbikes Where BikeCategory = 'Used Bikes' AND Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock'
 ";
 
 $filterQuery2 = "select
@@ -31,13 +32,12 @@ $filterQuery2 = "select
   dealerbikes.DealerId as UserId,
   dealerbikes.UserName as UserName,
   dealerbikes.ContactNumber as ContactNumber,
-  dealerbikes.Prize as Prize
+  dealerbikes.Prize as Prize,
+  dealerbikes.Amount as Amount
 from
-  dealerbikes Where BikeCategory = 'Used Bikes'  and Status='UnBlock'";
+  dealerbikes Where BikeCategory = 'Used Bikes' AND Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock'";
 
 $filterQuery = $filterQuery1." UNION ".$filterQuery2;
-
-
 
 $limit = 10; 
 $sql = $filterQuery; 
@@ -164,7 +164,7 @@ $_SESSION['fetchToSort']=$sql;
                                         ?>
                                         <div margin:0px auto; margin-top:30px;" >
                                                 <select id="city" class="chosen form-control" style="width:80%;" onchange="recp()">
-                                                <option value="-1"> Select City </option>
+                                                <option value="0"> Select City </option>
                                                 <?php
                                         $query ="SELECT City FROM usedbikes WHERE BikeCategory LIKE 'Used Bikes' UNION SELECT City FROM dealerbikes WHERE BikeCategory LIKE 'Used Bikes' Group by City  ";
                                         $result= mysql_query($query);
@@ -218,21 +218,7 @@ $_SESSION['fetchToSort']=$sql;
                                 </ul>
                             </div>
                             <!--/.list-filter-->
-                            <div class="locations-list  list-filter">
-                                <h5 class="list-title"><strong><a href="#">Condition</a></strong></h5>
-                                <ul class="browse-list list-unstyled long-list">
-                                    <li><a href="">New <span class="count"><?php
-
-                                            $count=mysql_query("SELECT UserId FROM usedbikes");
-                                                $num_rows=mysql_num_rows($count);
-                                             echo $num_rows;
-                                             ?></span></a>
-                                    </li>
-                                    <li><a href="">Used <span class="count">28,705</span></a>
-                                    </li>
-                                    <li><a href="">None </a></li>
-                                </ul>
-                            </div>
+                            
                             <!--/.list-filter-->
                             <div style="clear:both"></div>
                         </div>
@@ -340,8 +326,16 @@ while ($row = mysql_fetch_assoc($rs_result)) {
 
 
 <div class="item-list">
-    <!-- <div class="cornerRibbons featuredAds" id="masterdiv">
-    </div> -->
+   <?php
+      if($row['Amount']!=""){
+       
+  ?>
+    <div class="cornerRibbons featuredAds">
+        <a href=""> Dealer Ads</a>
+    </div>
+    <?php
+  }
+    ?>
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>

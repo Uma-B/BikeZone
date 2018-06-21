@@ -2,6 +2,7 @@
 session_start();
 include_once 'db_connection.php';
 
+
 if (isset($_POST['BtnSubmit'])){
        $Keyword=$_POST['Keyword'];
        $BikeCategory=$_POST['BikeCategory'];
@@ -12,11 +13,11 @@ if (isset($_POST['BtnSubmit'])){
        $Prize_Minimum=$_POST['Prize_Minimum'];
        $Prize_Maximum=$_POST['Prize_Maximum'];
 
-$_SESSION['Keyword'] = $Keyword;
+    $_SESSION['Keyword'] = $Keyword;
     $_SESSION['BikeCategory'] = $BikeCategory;
     $_SESSION['Brand'] = $Brand;
     $_SESSION['Model'] = $Model;
-     $_SESSION['State'] = $State;
+    $_SESSION['State'] = $State;
     $_SESSION['City'] = $City;
     $_SESSION['Prize_Minimum'] = $Prize_Minimum;
     $_SESSION['Prize_Maximum'] = $Prize_Maximum;
@@ -35,8 +36,6 @@ else{
         $Prize_Maximum="";
 }
 
-
- 
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -98,15 +97,15 @@ else{
        <div class="dropdown-content">
     <p style="position:right"><a href="UserLogin.php" style="color:#16A085;font-weight: bold;"
 >User Sign Up </a> 
-         <a href="CompanyLogin.php">Dealer Sign Up</a></p>
+         <a href="CompanyLogin.php" style="color:#16A085;font-weight: bold;">Dealer Sign Up</a></p>
 
   </div>
 </div> 
 <div class="dropdown">
        <a target="_blank" href="" style="color:white">Sign In<span class="label label-success " style="font-size: 10px"></span></a>
          <div class="dropdown-content">
-    <p style="position:left"><a href="UserRegistration.php" > User &nbsp;&nbsp;Sign In</a></p>
-        <a href="delear.php">Dealer Sign In</a></p>
+    <p style="position:left"><a href="UserRegistration.php" style="color:#16A085;font-weight: bold;"> User &nbsp;&nbsp;Sign In</a></p>
+        <a href="delear.php" style="color:#16A085;font-weight: bold;">Dealer Sign In</a></p>
 
   </div></div>  
      </div>
@@ -240,7 +239,7 @@ else{
                     </div>
         </form>
 
-        <div class="col-md-3 bottom-right">
+        <div class="col-md-3 bottom-right" style="font-weight: bold;font-size: 16px;">
             <a href="Advance_Search.php">Advanced Search</a>
         </div>
                 </div>
@@ -617,7 +616,8 @@ include 'footer.php';
 <!-- Placed at the end of the document so the pages load faster -->
 
 <script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script><script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
 <script src="assets/js/vendors.min.js"></script>
 
 <!-- include custom script for site  -->

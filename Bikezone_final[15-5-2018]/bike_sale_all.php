@@ -5,6 +5,25 @@ include "db_connection.php";
  
 GLOBAL $bike_sale_all,$Bike_sale1,$Bike_sale2;
 
+if (isset($_POST['BtnSubmit'])){
+       $State=$_POST['State'];
+       $City=$_POST['City'];
+       $PostalCode=$_POST['PostalCode'];
+
+    $_SESSION['State'] = $State;
+    $_SESSION['City'] = $City;
+    $_SESSION['PostalCode'] = $PostalCode;
+
+    header("Location: service_search.php");
+}
+
+if(isset($_SESSION['bike_sale_all'])){
+  $filterQuery=$_SESSION['bike_sale_all'];
+  $filterQuery1=$_SESSION['Bike_sale1'];
+  $filterQuery2=$_SESSION['Bike_sale2'];
+}
+else {
+
 $filterQuery1 = "select
   usedbikes.UsedBikeId as UsedBikeId,
   usedbikes.BikeCategory as BikeCategory,
@@ -16,9 +35,10 @@ $filterQuery1 = "select
   usedbikes.UserId as UserId,
   usedbikes.UserName as UserName,
   usedbikes.ContactNumber as ContactNumber,
-  usedbikes.Prize as Prize
+  usedbikes.Prize as Prize,
+  usedbikes.Amount as Amount
 from
-  usedbikes Where Status='UnBlock'
+  usedbikes Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock'
 ";
 
 $filterQuery2 = "select
@@ -32,19 +52,20 @@ $filterQuery2 = "select
   dealerbikes.DealerId as UserId,
   dealerbikes.UserName as UserName,
   dealerbikes.ContactNumber as ContactNumber,
-  dealerbikes.Prize as Prize
+  dealerbikes.Prize as Prize,
+  dealerbikes.Amount as Amount
 from
-  dealerbikes Where Status='UnBlock'";
+  dealerbikes Where Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock'";
 
 $_SESSION['Bike_sale1'] = $filterQuery1;
 $_SESSION['Bike_sale2'] = $filterQuery2;
 
 
-$filter = $filterQuery1." UNION ".$filterQuery2;
-$_SESSION['bike_sale_all']=$filter;
-
+$filterQuery = $filterQuery1." UNION ".$filterQuery2;
+$_SESSION['bike_sale_all']=$filterQuery;
+}
 $limit = 10; 
-$sql = $filter; 
+$sql = $filterQuery; 
 /*For No Of Rows Selected*/
 $result=mysql_query($sql);
 $rowcount = mysql_num_rows($result);
@@ -62,7 +83,7 @@ if (isset($_GET["page"])) {
 }  
 
 $start_from = ($page-1) * $limit;    
-$sql1 =  $filter;
+$sql1 =  $filterQuery;
 $sql2="LIMIT $start_from, $limit";
   $sql=$sql1." ".$sql2;
 
@@ -74,6 +95,12 @@ $rs_result = mysql_query ($sql);
 <html lang="en" dir="ltr">
 
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+<script src="dist/jquery.simplePagination.js"></script>    
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Fav and touch icons -->
@@ -85,8 +112,9 @@ $rs_result = mysql_query ($sql);
     <title>Bikezone.com</title>
     <!-- Bootstrap core CSS -->
     <link href="assets/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+
     <link href="assets/css/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
 
     <!-- styles needed for carousel slider -->
     <link href="assets/plugins/owl-carousel/owl.carousel.css" rel="stylesheet">
@@ -94,29 +122,51 @@ $rs_result = mysql_query ($sql);
 
     <!-- bxSlider CSS file -->
     <link href="assets/plugins/bxslider/jquery.bxslider.css" rel="stylesheet"/>
-    <script>
-        paceOptions = {
-            elements: true
-        };
-
-        
-
-    </script>
-    <script src="assets/js/pace.min.js"></script>
-
 
 </head>
 <body>
+  <div id="wrapper">
          <?php
             include "header.php";
          ?>
         <div class="search-row-wrapper">
             <div class="container ">
-                <form action="#" method="GET">
+                <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" name="form" onSubmit="return validateForm();">
                     <div class="row">
-
-
+                        <div class="col-xl-3 col-sm-3 search-col relative">
+                             <select id="autocomplete-ajax" class="form-control " name="State" onchange="fetch_selecting(this.value);">                            
+                              <option value="">Select State</option>
+                                  <?php
+                                 
+                                  $select=mysql_query("SELECT State FROM usedbikes UNION SELECT State FROM dealerbikes");
+                                  while($row=mysql_fetch_array($select))
+                                  {
+                                   echo "<option>".$row['State']."</option>";
+                                  }
+                                 ?>
+                             </select>
+                        </div>
                         
+                        <div class="col-xl-3 col-sm-3 search-col relative">
+                            <select id="new_select2" class="form-control " name="City">
+                            <option value="">Select City</option>                                
+                             </select>
+                        </div>
+                        <div class="col-xl-3 col-sm-3 search-col relative">
+                         <select id="autocomplete-ajax" class="form-control " name="PostalCode">                            
+                            <option value="">Select Postal code</option>
+                               <?php
+                                    $select=mysql_query("SELECT PostalCode FROM usedbikes UNION SELECT PostalCode FROM dealerbikes Group By PostalCode");
+                                    while($row=mysql_fetch_array($select))
+                                      {
+                                          echo "<option>".$row['PostalCode']."</option>";
+                                      }
+                                ?>
+                        </select>
+                    </div>
+                    <div class="col-xl-3 col-sm-3 search-col relative">
+                         <input class="btn btn-primary btn-search btn-block" class="icon-search" type="submit" name="BtnSubmit" value="Find" >
+                    </div>
                     </div>
                 </form>
             </div>
@@ -234,21 +284,7 @@ $rs_result = mysql_query ($sql);
                                 </ul>
                             </div>
                             <!--/.list-filter-->
-                            <div class="locations-list  list-filter">
-                                <h5 class="list-title"><strong><a href="#">Condition</a></strong></h5>
-                                <ul class="browse-list list-unstyled long-list">
-                                    <li><a href="">New <span class="count"><?php
-
-                                            $count=mysql_query("SELECT UserId FROM usedbikes");
-                                                $num_rows=mysql_num_rows($count);
-                                             echo $num_rows+1;
-                                             ?></span></a>
-                                    </li>
-                                    <li><a href="">Used <span class="count">28,705</span></a>
-                                    </li>
-                                    <li><a href="">None </a></li>
-                                </ul>
-                            </div>
+                            
                             <!--/.list-filter-->
                             <div style="clear:both"></div>
 
@@ -274,9 +310,9 @@ $rs_result = mysql_query ($sql);
                                     <a  class="nav-link" href="bike_sale_all.php" data-url="ajax/33.html" role="tab" data-toggle="tab">All Ads 
                                     <span class="badge badge-secondary" style="display:inline-block;">
                                     <?php
-                                            $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['count'];
+                                            $result=mysql_query($filterQuery);
+                                           $res=mysql_num_rows($result);
+                                            echo $res;
                                     ?>
                                                  
                                     </span>
@@ -287,9 +323,9 @@ $rs_result = mysql_query ($sql);
                                     <a  href="bike_sale_buisness.php" class= "nav-link" role="tab" >Business Ads 
                                     <span class="badge badge-secondary" style="display:inline-block;">
                                     <?php
-                                             $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count Where Status='UnBlock'");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
+                                             $result=mysql_query($filterQuery2);
+                                           $res=mysql_num_rows($result);
+                                            echo $res;
                                     ?>
                                                  
                                     </span>
@@ -299,9 +335,9 @@ $rs_result = mysql_query ($sql);
                                  <a href="bike_sale_personal.php" class="nav-link" role="tab">Personal
                                     <span class="badge badge-secondary" style="display:inline-block;">
                              <?php
-                                           $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count Where Status='UnBlock'");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
+                                           $result=mysql_query($filterQuery1);
+                                           $res=mysql_num_rows($result);
+                                            echo $res;
                                     ?>
                                                  
                                     </span>
@@ -338,7 +374,7 @@ $rs_result = mysql_query ($sql);
 
 
                         <!-- Mobile Filter bar-->
-                        <!-- <div class="mobile-filter-bar col-xl-12  ">
+                        <div class="mobile-filter-bar col-xl-12  ">
                             <ul class="list-unstyled list-inline no-margin no-padding">
                                 <li class="filter-toggle">
                                     <a class="">
@@ -362,7 +398,7 @@ $rs_result = mysql_query ($sql);
 
                                 </li>
                             </ul>
-                        </div> -->
+                        </div>
                         <div class="menu-overly-mask"></div>
                         <!-- Mobile Filter bar End-->
 
@@ -394,7 +430,16 @@ while($row=mysql_fetch_array($rs_result))
 <div>
 
 <div class="item-list">
-    
+    <?php
+      if($row['Amount']!=""){
+       
+  ?>
+    <div class="cornerRibbons featuredAds">
+        <a href=""> Dealer Ads</a>
+    </div>
+    <?php
+  }
+    ?>
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
@@ -521,27 +566,15 @@ include 'footer.php';
 
 
 <!-- Placed at the end of the document so the pages load faster -->
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-<script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.js"></script>
-<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
-<script src="dist/jquery.simplePagination.js"></script>
-
-
-<!-- Placed at the end of the document so the pages load faster -->
-
-
-<!-- <script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js></script> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 <script src="assets/js/vendors.min.js"></script>
-
-
-
-
-
+<!-- <script src="assets/js/script.js"></script> -->
 <script src="choosen.js"></script>
+
+<script type="text/javascript">
+$(".chosen").chosen();
+</script>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -605,11 +638,35 @@ function sort_by(value){
 //   $('#myStyle2').load('fetch_data.php?category=' + category);
 // }
 </script>
-<script type="text/javascript">
-$(".chosen").chosen();
-</script>
 <link rel="stylesheet" href="style.css">
+<script type="text/javascript">
+  function validateForm(){
+    var x1=document.forms['form']['State'].value;
+    var x2=document.forms['form']['City'].value;
+    var x3=document.forms['form']['PostalCode'].value;
 
+    if(x1=="" && x2=="" && x3==""){
+      alert('please select atlease one field');
+      return false;
+    }
+    return true;
+  }
+</script>
+<script>
+   function fetch_selecting(val){
+
+       $.ajax({
+       type: 'post',
+       url: 'fetch_data_scooters.php',
+       data: {
+        get_option2:val
+     },
+     success: function (response2) {
+        document.getElementById("new_select2").innerHTML=response2; 
+     }
+     });
+    }
+    </script>
 </body>
 
 </html>

@@ -136,10 +136,10 @@ $(document).ready(function(){
                            </a>
                            </li> -->
                         <li><a href="" class="glyphicon glyphicon-home"></a></li>
-                        <li><a href="category.html">Bike for sale</a></li>
+                        <!-- <li><a href="category.html">Bike for sale</a></li>
                         <li><a href="">Insurance</a></li>
                         <li><a href="">Service</a></li>
-                        <li><a href="">Help</a></li>
+                        <li><a href="">Help</a></li> -->
                      </ul>
                      <ul class="nav navbar-nav ml-auto navbar-right">
                         <!-- <li class="nav-item"><a href="category.html" class="nav-link"><i class="icon-th-thumb"></i> All Ads</a>
@@ -234,11 +234,11 @@ $(document).ready(function(){
                                  </div>
                   <center>
                    <div class="form-group">
-                       <input type="submit" name="login" value="Login" class="btn btn-primary" />
+                       <input type="submit" name="login" value="Login" class="btn btn-primary" /> &nbsp;&nbsp;OR &nbsp; 
+                      <a href="UserRegistration.php"class="btn btn-primary">New User? </a>
                    </div>
                       <a href="forget_user.php">Forgot Password?</a>
                    </center>
-              
            </form>
             </div>
                         </div>
@@ -275,9 +275,7 @@ $(document).ready(function(){
             <!-- /.container -->
          </div>
          <!-- /.main-container -->
-       <?php
- include 'footer.php'
-       ?>
+      
       <!-- /.wrapper -->
       <!-- Modal contactAdvertiser -->
       <div class="modal fade" id="contactAdvertiser" tabindex="-1" role="dialog">

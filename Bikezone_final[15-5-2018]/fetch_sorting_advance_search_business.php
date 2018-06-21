@@ -14,7 +14,7 @@ $url=$_SERVER['HTTP_REFERER'];
 if(isset($_SESSION['fetchToSort'])) {
  $filter2 = $_SESSION['fetchToSort'];
  $filter=$_SESSION['Advance_Search'];
-    $filter1=$_SESSION['Advance_Search1'];
+  $filter1=$_SESSION['Advance_Search1'];
 }
 
 
@@ -120,7 +120,16 @@ $result = $conn->query($filterQuery);
 
 
 <div class="item-list" >
-   
+   <?php
+      if($row['Amount']!=""){
+       
+  ?>
+    <div class="cornerRibbons featuredAds">
+        <a href=""> Dealer Ads</a>
+    </div>
+    <?php
+  }
+    ?>
     <div class="row" >
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>

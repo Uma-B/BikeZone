@@ -6,8 +6,8 @@ session_start();
 
    if (isset($_POST['BtnSubmit'])=='Submit'){
 
-      echo $name = $_POST['username'];
-       echo $phoneno = $_POST['number'];
+       $name = $_POST['username'];
+        $phoneno = $_POST['number'];
      
        $UsedBikeImage1=addslashes(file_get_contents($_FILES['image']['tmp_name'])); //will store the image to fp
        $UsedBikeImage2=addslashes(file_get_contents($_FILES['image2']['tmp_name'])); //will store the image to 
@@ -22,7 +22,7 @@ session_start();
        if($insert){
            ?>
 <script>alert('Ads insert Successfully..');</script>
-<script>window.open('Admin_home.html','_self')</script>;
+<script>window.open('Admin_home.php','_self')</script>;
 <?php
    }
    else
@@ -40,15 +40,15 @@ session_start();
 
     if (isset($_GET['Btn'])=='Submit'){
      
-       echo $B = $_GET["Br"];
-       echo $M = $_GET["Mo"];
+       $B = $_GET["Brand"];
+       $M = $_GET["Model"];
         $insert = mysql_query("INSERT INTO `bikemodel`(`Brand`, `Model`) VALUES ('$B','$M')");
    
    
        if($insert){
            ?>
 <script>alert('Ads models,brands Successfully..');</script>
-<script>window.open('Admin_home.html','_self')</script>;
+<script>window.open('Admin_home.php','_self')</script>;
 <?php
    }
    else
@@ -86,9 +86,65 @@ session_start();
 
     <!-- bxSlider CSS file -->
     <link href="assets/plugins/bxslider/jquery.bxslider.css" rel="stylesheet"/>
+<script type="text/javascript">
+         function validateForm() {
+    var x = document.forms["form1"]["username"].value;
+    if (x == "") {
+        alert("User name must be filled out");
+        document.form1.username.focus();
+        return false;
+    }  
+    var c = document.forms["form1"]["number"].value;
+    if (c == "") {
+        alert("Phone number must be filled out");
+        document.form1.number.focus();
+        return false;
+    } 
+    if (c.length<10) {
+        alert("Phone number is invalid");
+        document.form1.number.focus();
+        return false;
+    } 
+    var c = document.forms["form1"]["image"].value;
+    if (c == "") {
+        alert("All images must be select out");
+        document.form1.image.focus();
+        return false;
+    } 
+     var c = document.forms["form1"]["image2"].value;
+    if (c == "") {
+        alert("All images must be select out");
+        document.form1.image2.focus();
+        return false;
+    } 
+     var c = document.forms["form1"]["image3"].value;
+    if (c == "") {
+        alert("All images must be select out");
+        document.form1.image3.focus();
+        return false;
+    } 
+     
+    return true;
+  }
+      </script>
 
-
-
+<script type="text/javascript">
+         function validateForm2() {
+    var x = document.forms["form2"]["Brand"].value;
+    if (x == "") {
+        alert("Brand must be filled out");
+        document.form2.Brand.focus();
+        return false;
+    }  
+    var c = document.forms["form2"]["Model"].value;
+    if (c == "") {
+        alert("Model must be filled out");
+        document.form2.Model.focus();
+        return false;
+    }      
+    return true;
+  }
+      </script>
 </head>
 <body>
   <div id="wrapper">
@@ -148,7 +204,7 @@ session_start();
                         <div class="row">
                             <div class="col-sm-12">
 
-                                <form class="form-horizontal" enctype="multipart/form-data" action="" method="post">
+                                <form name="form1" class="form-horizontal" enctype="multipart/form-data" action="" method="post" onSubmit="return validateForm(this);">
                                   <div class="form-group row">
                                         <label  class="col-sm-3 col-form-label">Name</label>
                                         <div class="col-sm-8">
@@ -170,16 +226,16 @@ session_start();
                                             <div class="mb10">
                                                 <input class="file" data-preview-file-type="text" name="image" id="image" accept="image/JPEG" type="file" placeholder="Big Image">
                                               
-                                                BIG ADS in Main page (pixel 1920*1080)
+                                                BIG ADS in Main page (pixel 400*400)
                                         
                                             </div>
                                             <div class="mb10">
                                                 <input class="file" data-preview-file-type="text" name="image2" id="image2" accept="image/JPEG" type="file" placeholder="Image_1">
-                                                ADS_1 in Main page (pixel 500*300)
+                                                ADS_1 in Main page (pixel 400*400)
                                             </div>
                                             <div class="mb10">
                                                 <input class="file" data-preview-file-type="text" name="image3" id="image3" accept="image/JPEG" type="file">
-                                                ADS_1 in Main page (pixel 500*300)
+                                                ADS_1 in Main page (pixel 400*400)
                                             </div>
                                            
                                             
@@ -217,18 +273,18 @@ session_start();
                         <div class="row">
                             <div class="col-sm-12">
 
-                                <form class="form-horizontal" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
+                                <form class="form-horizontal" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get" name="form2" onSubmit="return validateForm2(this);">
                                      <div class="form-group row">
                                         <label  class="col-sm-3 col-form-label">Brand</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" name="Br" id="Text3" placeholder="honda">
+                                            <input type="text" class="form-control" name="Brand" id="Text3" placeholder="honda">
                                             
                                         </div>
                                     </div>
                                      <div class="form-group row">
                                         <label  class="col-sm-3 col-form-label">Model</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" name="Mo" id="Text4" placeholder="shine">
+                                            <input type="text" class="form-control" name="Model" id="Text4" placeholder="shine">
                                             
                                         </div>
                                     </div>
@@ -249,10 +305,6 @@ session_start();
              </div></div>
 
 </div>
-<?php
-include "footer.php";
-?>
-
 
 <script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script><script src="assets/bootstrap/js/bootstrap.min.js"></script>

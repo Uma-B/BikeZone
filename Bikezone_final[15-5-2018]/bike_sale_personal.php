@@ -6,6 +6,9 @@ include "db_connection.php";
 GLOBAL $Bike_sale1;
 if(isset($_SESSION['Bike_sale1'])) {
 $filterQuery1 = $_SESSION['Bike_sale1'];
+$filterQuery2 = $_SESSION['Bike_sale2'];
+$filterQuery = $_SESSION['bike_sale_all'];
+
 }
 $limit = 10; 
 $sql = $filterQuery1; 
@@ -28,7 +31,7 @@ if (isset($_GET["page"])) {
 $start_from = ($page-1) * $limit;    
 $sql1 =  $filterQuery1;
 $sql2="LIMIT $start_from, $limit";
-$sql=$sql1." ".$sql2;
+ $sql=$sql1." ".$sql2;
  $rs_result = mysql_query ($sql);     
 
 $_SESSION['fetchToSort']=$sql;
@@ -51,8 +54,7 @@ $_SESSION['fetchToPagination']=$sql1;
     <!-- Bootstrap core CSS -->
     <link href="assets/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-
+        <link rel="stylesheet" href="style.css">
     <!-- styles needed for carousel slider -->
     <link href="assets/plugins/owl-carousel/owl.carousel.css" rel="stylesheet">
     <link href="assets/plugins/owl-carousel/owl.theme.css" rel="stylesheet">
@@ -72,9 +74,6 @@ $_SESSION['fetchToPagination']=$sql1;
         paceOptions = {
             elements: true
         };
-
-        
-
     </script>
     <script src="assets/js/pace.min.js"></script>
 
@@ -82,7 +81,7 @@ $_SESSION['fetchToPagination']=$sql1;
 </head>
 <body>
          <?php
-            include "header.php";
+          include "header.php";
          ?>
     <!-- /.header -->
 
@@ -98,6 +97,7 @@ $_SESSION['fetchToPagination']=$sql1;
             </div>
         </div>
 
+  <!-- /.search-row -->
     <!-- /.search-row -->
     <div class="main-container">
         <div class="container">
@@ -143,7 +143,7 @@ $_SESSION['fetchToPagination']=$sql1;
                                         ?>
                                         <div margin:0px auto; margin-top:30px;" >
                                                 <select id="city" class="chosen form-control" style="width:80%;" onchange="recp()">
-                                                <option value="-1"> Select City </option>
+                                                <option value="0"> Select City </option>
                                                 <?php
                                         $query ="SELECT City FROM usedbikes Group by City  ";
                                         $result= mysql_query($query);
@@ -210,21 +210,7 @@ $_SESSION['fetchToPagination']=$sql1;
                                 </ul>
                             </div>
                             <!--/.list-filter-->
-                            <div class="locations-list  list-filter">
-                                <h5 class="list-title"><strong><a href="#">Condition</a></strong></h5>
-                                <ul class="browse-list list-unstyled long-list">
-                                    <li><a href="">New <span class="count"><?php
-
-                                            $count=mysql_query("SELECT UserId FROM usedbikes");
-                                                $num_rows=mysql_num_rows($count);
-                                             echo $num_rows+1;
-                                             ?></span></a>
-                                    </li>
-                                    <li><a href="">Used <span class="count">28,705</span></a>
-                                    </li>
-                                    <li><a href="">None </a></li>
-                                </ul>
-                            </div>
+                           
                             <!--/.list-filter-->
                             <div style="clear:both"></div>
 
@@ -252,9 +238,9 @@ $_SESSION['fetchToPagination']=$sql1;
                                     <a  href="bike_sale_all.php" class= "nav-link" role="tab" >All Ads  
                                     <span class="badge badge-secondary" style="display:inline-block;">
                                     <?php
-                                            $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['count'];
+                                            $result=mysql_query($filterQuery);
+                                           $res=mysql_num_rows($result);
+                                            echo  $res;
                                     ?>
                                                  
                                     </span>
@@ -265,9 +251,9 @@ $_SESSION['fetchToPagination']=$sql1;
                                     <a  href="bike_sale_buisness.php" class= "nav-link" role="tab" >Business Ads 
                                     <span class="badge badge-secondary" style="display:inline-block;">
                                     <?php
-                                            $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count Where Status='UnBlock'");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
+                                            $result=mysql_query($filterQuery2);
+                                           $res=mysql_num_rows($result);
+                                            echo  $res;
                                     ?>
                                                  
                                     </span>
@@ -276,10 +262,10 @@ $_SESSION['fetchToPagination']=$sql1;
                                <li class="active nav-item ">
                                  <a href="bike_sale_personal.php" class="nav-link" role="tab">Personal
                                     <span class="badge badge-secondary" style="display:inline-block;">
-                             <?php
-                                           $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count Where Status='UnBlock'");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
+                                    <?php
+                                           $result=mysql_query($filterQuery1);
+                                           $res=mysql_num_rows($result);
+                                            echo  $res;
                                     ?>                                                
                                     </span>
                                     </a>
@@ -369,16 +355,24 @@ $_SESSION['fetchToPagination']=$sql1;
 
 </div>
 
-
 <?php
 while($row=mysql_fetch_array($rs_result))
 {
+   
 ?>
-
 <div>
 
 <div class="item-list">
-    
+    <?php
+      if($row['Amount']!=""){
+       
+  ?>
+    <div class="cornerRibbons featuredAds">
+        <a href=""> Dealer Ads</a>
+    </div>
+    <?php
+  }
+    ?>
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
@@ -451,7 +445,8 @@ function myFunction() {
 <?php } ?>
 </div>
 </div>
-
+</div>
+</div>
 <div class="pagination-bar text-center">
   <nav aria-label="Page navigation " class="d-inline-b">
   <ul class="pagination" id="pagination" >
@@ -466,7 +461,8 @@ function myFunction() {
    <?php endfor;endif;?> 
  </ul>
 </nav>
-</div>                    
+</div> 
+
 
                     <div class="post-promo text-center">
                         <h2> Do you get any bike for sell ? </h2>
@@ -488,12 +484,15 @@ function myFunction() {
                   </div>
                     <!--/.post-promo-->
 
-                </div>
+                
                 <!--/.page-content-->
 
             </div>
         </div>
     </div>
+</div>
+
+
     <!-- /.main-container -->
 <?php include 'footer.php'; ?>
     <!-- /.footer -->
@@ -582,10 +581,7 @@ function sort_by(value){
           //jQuery('#pagination').hide();
   $('#target-content').load('fetch_sorting_bike_sale_personal.php?value=' + encodeURIComponent(value));
 }
-//category
-// function demo(category) {
-//   $('#myStyle2').load('fetch_data.php?category=' + category);
-// }
+
 </script>
 <script type="text/javascript">
 $(".chosen").chosen();

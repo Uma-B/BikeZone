@@ -187,6 +187,8 @@ $(document).ready(function(){
 <center>
                    <div class="form-group">
                        <input type="submit" name="login" value="Login" class="btn btn-primary" />
+                       &nbsp;&nbsp;OR &nbsp; 
+                      <a href="UserRegistration.php"class="btn btn-primary">New User? </a>
                    </div>
               <a href="forget_dealer.php">Forgot password?</a></center>
            </form>

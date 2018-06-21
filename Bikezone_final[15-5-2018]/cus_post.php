@@ -304,9 +304,7 @@ else
   </table></div>
 </form>
 </div>
-<?php 
-  include "footer.php";
-?>
+
 </div>
 
 

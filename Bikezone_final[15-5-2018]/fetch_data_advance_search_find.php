@@ -38,9 +38,10 @@ $filter1="select
   usedbikes.UserId as UserId,
   usedbikes.UserName as UserName,
   usedbikes.ContactNumber as ContactNumber,
-  usedbikes.Prize as Prize
+  usedbikes.Prize as Prize,
+  usedbikes.Amount as Amount
 from
-  usedbikes WHERE Status='UnBlock' AND";
+  usedbikes WHERE Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock' AND";
 
 
 
@@ -55,9 +56,10 @@ $filter2="select
   dealerbikes.DealerId as UserId,
   dealerbikes.UserName as UserName,
   dealerbikes.ContactNumber as ContactNumber,
-  dealerbikes.Prize as Prize
+  dealerbikes.Prize as Prize,
+  dealerbikes.Amount as Amount
 from
-  dealerbikes WHERE Status='UnBlock' AND";
+  dealerbikes WHERE Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock' AND";
 
 if($City != "0"){
   $filter1=$filter1. " usedbikes.City LIKE '$City' AND";
@@ -158,8 +160,16 @@ $_SESSION['fetchToSort']=$filterQuery;
 
 
 <div class="item-list">
-    <!-- <div class="cornerRibbons featuredAds" id="masterdiv">
-    </div> -->
+    <?php
+      if($row['Amount']!=""){
+       
+  ?>
+    <div class="cornerRibbons featuredAds">
+        <a href=""> Dealer Ads</a>
+    </div>
+    <?php
+  }
+    ?>
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>

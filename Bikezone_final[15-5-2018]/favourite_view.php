@@ -16,10 +16,11 @@ $userid=$_SESSION['usr_id'];
   usedbikes.UserId as UserId,
   usedbikes.UserName as UserName,
   usedbikes.ContactNumber as ContactNumber,
-  usedbikes.Prize as Prize
+  usedbikes.Prize as Prize,
+  usedbikes.Amount as Amount
 from
   usedbikes
-where
+where Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock' AND
   usedbikes.UserId in (
     SELECT
       userid
@@ -49,10 +50,11 @@ select
   dealerbikes.DealerId as UserId,
   dealerbikes.UserName as UserName,
   dealerbikes.ContactNumber as ContactNumber,
-  dealerbikes.Prize as Prize
+  dealerbikes.Prize as Prize,
+  dealerbikes.Amount as Amount
 from
   dealerbikes
-where
+where Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock' AND
   dealerbikes.DealerId in (
     SELECT
       userid
@@ -118,54 +120,105 @@ where
 
     </script>
     <script src="assets/js/pace.min.js"></script>
+<style>
+.dropbtn {
+  background-color: #d9534f;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  width:100%;
 
+}
+.dropbutton {
+  background-color: #d9534f;
+  color: white;
+  padding: 12px;
+  font-size: 15px;
+  border: none;
+  cursor: pointer;
+
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropbtn  {
+  background-color: #d9534f;
+}
+</style>
 
 </head>
 <body>
-
-         <div class="header">
-        <nav class="navbar fixed-top navbar-site navbar-light bg-light navbar-expand-md"
-             role="navigation">
-            <div class="container">
+<div class="header">
+      <nav class="navbar  fixed-top navbar-site navbar-light bg-light navbar-expand-md"
+         role="navigation">
+        <div class="container">
 
             <div class="navbar-identity">
 
 
-                <a href="index.php" class="navbar-brand logo logo-title">
-                <span class="logo-icon"><!-- <i class="icon icon-search-1 ln-shadow-logo "></i> -->
-                </span>BIKE<span>ZONE </span> </a>
+          <a href="index.php" class="navbar-brand logo logo-title">
+          <span class="logo-icon"><!-- <i class="icon icon-search-1 ln-shadow-logo "></i> -->
+          </span>BIKE<span>ZONE </span> </a>
+
+          <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggler pull-right"
+              type="button">
+
+            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 30 30" width="30" height="30" focusable="false"><title>Menu</title><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M4 7h22M4 15h22M4 23h22"/></svg>
 
 
-                <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggler pull-right"
-                        type="button">
-
-                    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 30 30" width="30" height="30" focusable="false"><title>Menu</title><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M4 7h22M4 15h22M4 23h22"/></svg>
-
-
-                </button>
+          </button>
             </div>
 
 
 
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav navbar-left">
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-left">
                       <li><a href="" class="glyphicon glyphicon-home"></a></li>
                       <li><a href="bike_sale_all.php">Bike for sale</a></li>
                       <li><a href="">Insurance</a></li>
                       <li><a href="">Service</a></li>
                       <li><a href="">Help</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav ml-auto navbar-right">
-                        <!-- <li class="nav-item"><a href="category.html" class="nav-link"><i class="icon-th-thumb"></i> All Ads</a>
-                        </li> -->
-                        <!-- <li class="dropdown no-arrow nav-item"><a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+            </ul>
+            <ul class="nav navbar-nav ml-auto navbar-right">
+              <!-- <li class="nav-item"><a href="category.html" class="nav-link"><i class="icon-th-thumb"></i> All Ads</a>
+              </li> -->
+              <!-- <li class="dropdown no-arrow nav-item"><a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
 
-                            <span>User Name</span> <i class="icon-user fa"></i> <i class=" icon-down-open-big fa"></i></a>   
-                            <ul
-                                    class="dropdown-menu user-menu dropdown-menu-right">
+                <span>User Name</span> <i class="icon-user fa"></i> <i class=" icon-down-open-big fa"></i></a>   
+                <ul
+                    class="dropdown-menu user-menu dropdown-menu-right">
     
-                            </ul>
-                        </li> -->
+                </ul>
+              </li> -->
                          <?php if (isset($_SESSION['usr_name'])) { ?>
                          <li class="dropdown no-arrow nav-item"><a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
 
@@ -230,11 +283,11 @@ where
   </div>
 </div></li> -->
  <div class="dropdown">
-  &nbsp;&nbsp;&nbsp; &nbsp;<button class="dropbtn" style="height: 45px; width: 120px;" >Login
+  &nbsp;&nbsp;&nbsp; &nbsp;<button class="dropbtn" style="width: 120px;" >Login
 </button>
  <div class="dropdown-content">
-    <a class="dropdown-item" href="UserLogin.php">User</a>
-   <a class="dropdown-item" href="CompanyLogin.php">Company</a>
+    <a class="dropdown-item" href="UserLogin.php" style="background-color: white;width: 170px;text-align: left">User</a>
+   <a class="dropdown-item" href="CompanyLogin.php" style="background-color: white;width: 170px;text-align: left">Dealer</a>
    </div>
 </div><!-- <div class="btn-group">
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" style="height: 45px; width: 120px;">
@@ -246,25 +299,25 @@ where
                <li>
 
 <div class="dropdown">
- <button class="dropbtn" style=" height: 45px; width: 120px; margin-left: 20px;">
+ <button class="dropbtn" style=" width: 120px; margin-left: 20px;">
    Register</button>
  <div class="dropdown-content">
-  <a class="dropdown-item" href="UserRegistration.php">User</a>
-   <a class="dropdown-item" href="delear.php">Company</a>
+  <a class="dropdown-item" href="UserRegistration.php" style="background-color: white;width: 170px;text-align: left">User</a>
+   <a class="dropdown-item" href="delear.php" style="background-color: white;width: 170px;text-align: left">Dealer</a>
    
    </div>
 </div>
 
       </li> 
                 <?php } ?>    
-                    </ul>
-                </div>
-                <!--/.nav-collapse -->
-            </div>
-            <!-- /.container-fluid -->
-        </nav>
+            </ul> 
+          </div>
+          <!--/.nav-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+      </nav>
     </div>
-         ?>
+        
     <!-- /.header -->
 
         <div class="search-row-wrapper">
@@ -574,7 +627,16 @@ while($row=mysql_fetch_array($sqlFav))
 
 
 <div class="item-list">
-
+<?php
+      if($row['Amount']!=""){
+       
+  ?>
+    <div class="cornerRibbons featuredAds">
+        <a href=""> Dealer Ads</a>
+    </div>
+    <?php
+  }
+    ?>
     
     <div class="row">
     <div class="col-md-2 no-padding photobox">

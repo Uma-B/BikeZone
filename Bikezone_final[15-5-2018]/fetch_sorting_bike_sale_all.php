@@ -104,9 +104,57 @@ $result = $conn->query($filterQuery);
                                     class="grid-view "><!-- <i class=" icon-th-large "></i> --></span></div>
                             <div style="clear:both"></div>
                         </div>
+                        <!--/.listing-filter-->
+
+
+                        <!-- Mobile Filter bar-->
+                        <!-- <div class="mobile-filter-bar col-xl-12  ">
+                            <ul class="list-unstyled list-inline no-margin no-padding">
+                                <li class="filter-toggle">
+                                    <a class="">
+                                        <i class="  icon-th-list"></i>
+                                        Filters
+                                    </a>
+                                </li>
+                                <li>
+
+
+                                    <div class="dropdown"> <a data-toggle="dropdown"></a>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><a href="#" rel="nofollow">Relevance</a>
+                                            </li>
+                                            <li class="dropdown-item"><a href="#" rel="nofollow">Date</a>
+                                            </li>
+                                            <li class="dropdown-item"><a href="#" rel="nofollow">Company</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </li>
+                            </ul>
+                        </div> -->
                         <div class="menu-overly-mask"></div>
+                        <!-- Mobile Filter bar End-->
+
                         <div class="adds-wrapper">
                             <div class="tab-content">
+                                <div class="tab-pane active" id="allAds"><div class="row">
+
+
+                                    <br/>
+    <div class="col-md-2 no-padding photobox">
+        
+    </div>
+   
+    <div class="col-sm-7 add-desc-box">
+       
+    </div>
+    <!--/.add-desc-box-->
+    <!--/.add-desc-box-->
+
+        </div>
+</div>
+</div>
 
 <?php
       if ($result->num_rows > 0) {
@@ -118,7 +166,16 @@ $result = $conn->query($filterQuery);
 
 
 <div class="item-list" >
-   
+   <?php
+      if($row['Amount']!=""){
+       
+  ?>
+    <div class="cornerRibbons featuredAds">
+        <a href=""> Dealer Ads</a>
+    </div>
+    <?php
+  }
+    ?>
     <div class="row" >
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>

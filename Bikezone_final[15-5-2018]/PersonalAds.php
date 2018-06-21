@@ -5,6 +5,8 @@ include "db_connection.php";
 GLOBAL $filterQuery1;
 if(isset($_SESSION['filterQuery1'])) {
 $filterQuery1 = $_SESSION['filterQuery1'];
+$filterQuery2=$_SESSION['filterQuery2'];
+$filterQuery=$_SESSION['filterQuery'];
 }
 $limit = 10; 
 $sql = $filterQuery1; 
@@ -137,7 +139,7 @@ $_SESSION['fetchToPagination']=$sql1;
                                         ?>
                                         <div margin:0px auto; margin-top:30px;" >
                                                 <select id="city" class="chosen form-control" style="width:80%;" onchange="recp()">
-                                                <option value="-1"> Select City </option>
+                                                <option value="0"> Select City </option>
                                                 <?php
                                         $query ="SELECT City FROM usedbikes Group by City  ";
                                         $result= mysql_query($query);
@@ -206,7 +208,7 @@ $_SESSION['fetchToPagination']=$sql1;
                                 </ul>
                             </div>
                             <!--/.list-filter-->
-                            <div class="locations-list  list-filter">
+                           <!--  <div class="locations-list  list-filter">
                                 <h5 class="list-title"><strong><a href="#">Condition</a></strong></h5>
                                 <ul class="browse-list list-unstyled long-list">
                                     <li><a href="">New <span class="count"><?php
@@ -220,7 +222,7 @@ $_SESSION['fetchToPagination']=$sql1;
                                     </li>
                                     <li><a href="">None </a></li>
                                 </ul>
-                            </div>
+                            </div> -->
                             <!--/.list-filter-->
                             <div style="clear:both"></div>
                         </div>
@@ -246,9 +248,9 @@ $_SESSION['fetchToPagination']=$sql1;
                                    <a  href="index_find.php" class= "nav-link" role="tab" >All Ads  
                                     <span class="badge badge-secondary" style="display:inline-block">
                                     <?php
-                                            $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['count'];
+                                             $result=mysql_query($filterQuery);
+                                           $res=mysql_num_rows($result);
+                                            echo  $res;
                                     ?>
                                                  
                                     </span>
@@ -259,9 +261,9 @@ $_SESSION['fetchToPagination']=$sql1;
                                     <a  href="BusinessAds.php" class= "nav-link" role="tab" >Business Ads 
                                     <span class="badge badge-secondary" style="display:inline-block">
                                     <?php
-                                            $count=mysql_query("SELECT COUNT(*) FROM dealerbikes as count Where Status='UnBlock'");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
+                                             $result=mysql_query($filterQuery2);
+                                           $res=mysql_num_rows($result);
+                                            echo  $res;
                                     ?>
                                                  
                                     </span>
@@ -271,9 +273,9 @@ $_SESSION['fetchToPagination']=$sql1;
                                  <a href="PersonalAds.php" class="nav-link" role="tab">Personal
                                     <span class="badge badge-secondary" style="display:inline-block">
                              <?php
-                                          $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count Where Status='UnBlock'");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
+                                           $result=mysql_query($filterQuery1);
+                                           $res=mysql_num_rows($result);
+                                            echo  $res;
                                     ?>
                                                  
                                     </span>
@@ -370,9 +372,16 @@ while($row=mysql_fetch_array($rs_result))
 <div>
 
 <div class="item-list">
-    <!-- <div class="cornerRibbons featuredAds" > -->
-        <!--<a href=""> Featured Ads</a>
-    </div> -->
+    <?php
+      if($row['Amount']!=""){
+       
+  ?>
+    <div class="cornerRibbons featuredAds">
+        <a href=""> Dealer Ads</a>
+    </div>
+    <?php
+  }
+    ?>
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>

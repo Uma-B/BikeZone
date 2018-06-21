@@ -6,7 +6,12 @@ session_start();
 include "db_connection.php";
 
 GLOBAL $Advance_Search, $Advance_Search1, $Advance_Search2;
-
+if(isset($_SESSION['Advance_Search'])){
+  $filterQuery=$_SESSION['Advance_Search'];
+  $filterQuery1=$_SESSION['Advance_Search1'];
+  $filterQuery2=$_SESSION['Advance_Search2'];
+}
+else {
  if(isset($_SESSION['BikeCategory'])) {
 
     $Keyword = $_SESSION['Keyword'];
@@ -44,10 +49,12 @@ usedbikes.EngineSize as EngineSize,
 usedbikes.KilometreDriven as KilometreDriven,
 usedbikes.Stroke as Stroke,
 usedbikes.Location as Location,
-usedbikes.PostalCode as PostalCode
+usedbikes.PostalCode as PostalCode,
+usedbikes.Amount as Amount
+
 from
 usedbikes
-where Status= 'UnBlock' and
+where Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock' AND
 ";
 
 $filterQuery2 = "select
@@ -67,10 +74,11 @@ dealerbikes.Prize as Prize,
   dealerbikes.KilometreDriven as KilometreDriven,
   dealerbikes.Stroke as Stroke,
   dealerbikes.Location as Location,
-  dealerbikes.PostalCode as PostalCode 
+  dealerbikes.PostalCode as PostalCode,
+  dealerbikes.Amount as Amount
 from
   dealerbikes
-where Status= 'UnBlock' and
+where Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock' AND
 ";
 
 if($Keyword != null){
@@ -91,7 +99,8 @@ usedbikes.EngineSize as EngineSize,
 usedbikes.KilometreDriven as KilometreDriven,
 usedbikes.Stroke as Stroke,
 usedbikes.Location as Location,
-usedbikes.PostalCode as PostalCode
+usedbikes.PostalCode as PostalCode,
+usedbikes.Amount as Amount
 from
 usedbikes
 where
@@ -129,7 +138,8 @@ select
   dealerbikes.KilometreDriven as KilometreDriven,
   dealerbikes.Stroke as Stroke,
   dealerbikes.Location as Location,
-  dealerbikes.PostalCode as PostalCode 
+  dealerbikes.PostalCode as PostalCode,
+  dealerbikes.Amount as Amount
 from
   dealerbikes
 where
@@ -232,6 +242,7 @@ $_SESSION['Advance_Search'] = $filterQuery;
 // $filterQuery1=$_SESSION['Advance_Search1'];
 // $filterQuery=$_SESSION['Advance_Search'];
 
+}
 }
 $limit = 10; 
 $sql = $filterQuery; 
@@ -432,21 +443,7 @@ $rs_result = mysql_query ($sql);
                                 </ul>
                             </div>
                             <!--/.list-filter-->
-                            <div class="locations-list  list-filter">
-                                <h5 class="list-title"><strong><a href="#">Condition</a></strong></h5>
-                                <ul class="browse-list list-unstyled long-list">
-                                    <li><a href="">New <span class="count"><?php
-
-                                            $count=mysql_query("SELECT UserId FROM usedbikes");
-                                                $num_rows=mysql_num_rows($count);
-                                             echo $num_rows+1;
-                                             ?></span></a>
-                                    </li>
-                                    <li><a href="">Used <span class="count">28,705</span></a>
-                                    </li>
-                                    <li><a href="">None </a></li>
-                                </ul>
-                            </div>
+                            
                             <!--/.list-filter-->
                             <div style="clear:both"></div>
 
@@ -603,7 +600,16 @@ while($row=mysql_fetch_array($rs_result))
 
 <div>
 <div class="item-list">
-    
+    <?php
+      if($row['Amount']!=""){
+       
+  ?>
+    <div class="cornerRibbons featuredAds">
+        <a href=""> Dealer Ads</a>
+    </div>
+    <?php
+  }
+    ?>
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>

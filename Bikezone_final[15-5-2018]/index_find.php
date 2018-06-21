@@ -3,7 +3,16 @@ session_start();
 
 include "db_connection.php";
 
+if(isset($_SESSION['BikeCategory'])==""){
+  Location("header:index.php");
+}
 
+if(isset($_SESSION['filterQuery'])){
+  $filterQuery=$_SESSION['filterQuery'];
+  $filterQuery1=$_SESSION['filterQuery1'];
+  $filterQuery2=$_SESSION['filterQuery2'];
+}
+else {
  if(isset($_SESSION['BikeCategory'])) {
 
     $Keyword = $_SESSION['Keyword'];
@@ -27,16 +36,17 @@ $filterQuery1 = "select
   usedbikes.UserId as UserId,
   usedbikes.UserName as UserName,
   usedbikes.ContactNumber as ContactNumber,
-  usedbikes.Prize as Prize
+  usedbikes.Prize as Prize,
+  usedbikes.Amount as Amount
 from
   usedbikes
-where Status='UnBlock' and
+where Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock' AND
 ";
 
 $filterQuery2 = "select
   dealerbikes.DealerBikeId as UsedBikeId,
   dealerbikes.BikeCategory as BikeCategory,
-  dealerbikes.DealerBikeImage1 as BikeImage1,
+  dealerbikes.DealerBikeImage1 as UsedBikeImage1,
   dealerbikes.Brand as Brand,
   dealerbikes.Model as Model,
   dealerbikes.KilometreDriven as KilometreDriven,
@@ -44,10 +54,11 @@ $filterQuery2 = "select
   dealerbikes.DealerId as UserId,
   dealerbikes.UserName as UserName,
   dealerbikes.ContactNumber as ContactNumber,
-  dealerbikes.Prize as Prize
+  dealerbikes.Prize as Prize,
+  dealerbikes.Amount as Amount
 from
   dealerbikes
-where Status='UnBlock' and
+where Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock' AND
 ";
 
 if($Keyword != null){
@@ -62,7 +73,8 @@ if($Keyword != null){
   usedbikes.UserId as UserId,
   usedbikes.UserName as UserName,
   usedbikes.ContactNumber as ContactNumber,
-  usedbikes.Prize as Prize
+  usedbikes.Prize as Prize,
+  usedbikes.Amount as Amount
 from
   usedbikes
 where
@@ -84,7 +96,8 @@ select
   dealerbikes.DealerId as UserId,
   dealerbikes.UserName as UserName,
   dealerbikes.ContactNumber as ContactNumber,
-  dealerbikes.Prize as Prize
+  dealerbikes.Prize as Prize,
+  dealerbikes.Amount as Amount
 from
   dealerbikes
 where
@@ -131,30 +144,14 @@ if($split[count($split)-1] == "AND"){
 }  
 
 $filterQuery = $filterQuery1." UNION ".$filterQuery2;
-
+}
 }
     
     $_SESSION['filterQuery'] = $filterQuery;
     $_SESSION['filterQuery1'] = $filterQuery1;
     $_SESSION['filterQuery2'] = $filterQuery2;
 
-    $_SESSION['Keyword'] = $Keyword;
-    $_SESSION['BikeCategory'] = $BikeCategory;
-    $_SESSION['Brand'] = $Brand;
-    $_SESSION['Model'] = $Model;
-    $_SESSION['State'] = $State;
-    $_SESSION['City'] = $City;
-    $_SESSION['Prize_Minimum'] = $Prize_Minimum;
-    $_SESSION['Prize_Maximum'] = $Prize_Maximum;
-    $_SESSION['Keyword'] = $_SESSION['Keyword'];
-    $_SESSION['BikeCategory'] = $_SESSION['BikeCategory'];
-    $_SESSION['Brand'] = $_SESSION['Brand'];
-    $_SESSION['Model'] = $_SESSION['Model'];
-    $_SESSION['State'] = $_SESSION['State'];
-    $_SESSION['City'] = $_SESSION['City'];
-    $_SESSION['Prize_Minimum'] = $_SESSION['Prize_Minimum'];
-    $_SESSION['Prize_Maximum'] = $_SESSION['Prize_Maximum'];
-
+    
 
 $limit = 10; 
 $sql = $filterQuery; 
@@ -294,7 +291,7 @@ $rs_result = mysql_query ($sql);
                                         ?>
                                         <div margin:0px auto; margin-top:30px;" >
                                                 <select id="city" class="chosen" style="width:80%;" onchange="recp()">
-                                                <option value="-1"> Select City </option>
+                                                <option value="0"> Select City </option>
                                                 <?php
                                         $query ="SELECT City FROM usedbikes UNION SELECT City FROM dealerbikes Group by City  ";
                                         $result= mysql_query($query);
@@ -361,7 +358,7 @@ $rs_result = mysql_query ($sql);
                                 </ul>
                             </div>
                             <!--/.list-filter-->
-                            <div class="locations-list  list-filter">
+                            <!-- <div class="locations-list  list-filter">
                                 <h5 class="list-title"><strong><a href="#">Condition</a></strong></h5>
                                 <ul class="browse-list list-unstyled long-list">
                                     <li><a href="">New <span class="count"><?php
@@ -376,7 +373,7 @@ $rs_result = mysql_query ($sql);
                                     <li><a href="">None </a></li>
                                 </ul>
                             </div>
-                            <!--/.list-filter-->
+ -->                            <!--/.list-filter-->
                             <div style="clear:both"></div>
 
                         </div>
@@ -537,13 +534,21 @@ while($row = mysql_fetch_assoc($rs_result))
 <div>
 
 <div class="item-list">
-    <!-- <div class="cornerRibbons featuredAds" > -->
-        <!--<a href=""> Featured Ads</a>
-    </div> -->
+  <?php
+      if($row['Amount']!=""){
+       
+  ?>
+    <div class="cornerRibbons featuredAds">
+        <a href=""> Dealer Ads</a>
+    </div>
+    <?php
+  }
+    ?>
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
          <a href="used_bikes_view.php?filename=index_find&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">
+
 
 <?php     
 

@@ -13,6 +13,8 @@ $url=$_SERVER['HTTP_REFERER'];
 
 if(isset($_SESSION['fetchToSort'])) {
  $filter = $_SESSION['fetchToSort'];
+ $filter1 = $_SESSION['filterQuery1'];
+ $filter2 = $_SESSION['filterQuery2'];
 }
 
 
@@ -49,7 +51,7 @@ $result = $conn->query($filterQuery);
                                     <span class="badge badge-secondary" style="display:inline-block">
                                     <?php
                                     //echo $filter;
-                                            //$result = $conn->query($count);
+                                            //$rs_result = $conn->query($filter);
                                             $res=mysqli_num_rows($rs_result);
                                              echo  $res;
                                              ?>          
@@ -62,9 +64,9 @@ $result = $conn->query($filterQuery);
                                     <span class="badge badge-secondary" style="display:inline-block">
                                           <?php
 
-                                            $count=mysqli_query($conn,"SELECT COUNT(*) FROM dealerbikes as count Where Status='UnBlock'");
-                                                 $res=mysqli_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
+                                            $rs_result = $conn->query($filter2);
+                                            $res=mysqli_num_rows($rs_result);
+                                             echo  $res;
                                              ?>
                                                  
                                     </span>
@@ -75,9 +77,9 @@ $result = $conn->query($filterQuery);
                                     <span class="badge badge-secondary" style="display:inline-block">
                              <?php
 
-                                             $count=mysqli_query($conn,"SELECT COUNT(*) FROM usedbikes as count Where Status='UnBlock'");
-                                                 $res=mysqli_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
+                                             $rs_result = $conn->query($filter1);
+                                            $res=mysqli_num_rows($rs_result);
+                                             echo  $res;
                                              ?>
                                                  
                                     </span>
@@ -116,7 +118,16 @@ $result = $conn->query($filterQuery);
 
 
 <div class="item-list" >
-   
+   <?php
+      if($row['Amount']!=""){
+       
+  ?>
+    <div class="cornerRibbons featuredAds">
+        <a href=""> Dealer Ads</a>
+    </div>
+    <?php
+  }
+    ?>
     <div class="row" >
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>

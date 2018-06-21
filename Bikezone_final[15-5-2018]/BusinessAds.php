@@ -3,142 +3,12 @@ session_start();
 include "db_connection.php";
 
 GLOBAL $filterQuery2;
-       if(isset($_SESSION['BikeCategory'])) {
-
-        $Keyword=$_SESSION['Keyword'];
-        $BikeCategory=$_SESSION['BikeCategory'];
-        $Brand=$_SESSION['Brand'];
-        $Model=$_SESSION['Model'];
-        $State=$_SESSION['State'];
-        $City=$_SESSION['City'];
-        $Prize_Minimum=$_SESSION['Prize_Minimum'];
-        $Prize_Maximum=$_SESSION['Prize_Maximum'];
-        
-
-       }
-
-
-// $filterQuery1 = "select
-//   usedbikes.UsedBikeId as UsedBikeId,
-//   usedbikes.BikeCategory as BikeCategory,
-//   usedbikes.UsedBikeImage1 as UsedBikeImage1,
-//   usedbikes.Brand as Brand,
-//   usedbikes.Model as Model,
-//   usedbikes.KilometreDriven as KilometreDriven,
-//   usedbikes.Location as Location,
-//   usedbikes.UserId as UserId,
-//   usedbikes.UserName as UserName,
-//   usedbikes.ContactNumber as ContactNumber,
-//   usedbikes.Prize as Prize
-// from
-//   usedbikes
-// where
-// ";
-
-$filterQuery2 = "select
-  dealerbikes.DealerBikeId as UsedBikeId,
-  dealerbikes.BikeCategory as BikeCategory,
-  dealerbikes.DealerBikeImage1 as UsedBikeImage1,
-  dealerbikes.Brand as Brand,
-  dealerbikes.Model as Model,
-  dealerbikes.KilometreDriven as KilometreDriven,
-  dealerbikes.Location as Location,
-  dealerbikes.DealerId as UserId,
-  dealerbikes.UserName as UserName,
-  dealerbikes.ContactNumber as ContactNumber,
-  dealerbikes.Prize as Prize
-from
-  dealerbikes
-where Status LIKE 'UnBlock' and
-";
-
-//keyword
-if($Keyword != null){
-
-     $filterQuery2 ="select
-  dealerbikes.DealerBikeId as UsedBikeId,
-  dealerbikes.BikeCategory as BikeCategory,
-  dealerbikes.DealerBikeImage1 as BikeImage1,
-  dealerbikes.Brand as Brand,
-  dealerbikes.Model as Model,
-  dealerbikes.KilometreDriven as KilometreDriven,
-  dealerbikes.Location as Location,
-  dealerbikes.DealerId as UserId,
-  dealerbikes.UserName as UserName,
-  dealerbikes.ContactNumber as ContactNumber,
-  dealerbikes.Prize as Prize
-from
-  dealerbikes
-where
-  dealerbikes.Status LIKE 'UnBlock'
-  OR dealerbikes.BikeCategory LIKE '$Keyword'
-  OR dealerbikes.Brand LIKE '$Keyword'
-  OR dealerbikes.Model LIKE '$Keyword'
-  OR dealerbikes.State LIKE '$Keyword'
-  OR dealerbikes.City LIKE '$Keyword'
-";
-
+if(isset($_SESSION['filterQuery2'])) {
+$filterQuery2 = $_SESSION['filterQuery2'];
+$filterQuery1=$_SESSION['filterQuery1'];
+$filterQuery=$_SESSION['filterQuery'];
 
 }
-else{
-
-if($BikeCategory != ""){
-    $filterQuery2 = $filterQuery2." dealerbikes.BikeCategory LIKE '$BikeCategory' AND";
-    // $filterQuery1 = $filterQuery1." usedbikes.BikeCategory LIKE '$BikeCategory' AND";
-}
-if($Brand != ""){
-     $filterQuery2 = $filterQuery2." dealerbikes.Brand LIKE '$Brand' AND";
-    // $filterQuery1 = $filterQuery1." usedbikes.Brand LIKE '$Brand' AND";
-}
-if($Model != ""){
-    $filterQuery2 = $filterQuery2." dealerbikes.Model LIKE '$Model' AND";
-    // $filterQuery1 = $filterQuery1." usedbikes.Model LIKE '$Model' AND";
-}
-// if($KilometreDriven != ""){
-//     $filterQuery2 = $filterQuery2." dealerbikes.KilometreDriven LIKE '$KilometreDriven' AND";
-//     $filterQuery1 = $filterQuery1." usedbikes.KilometreDriven LIKE '$KilometreDriven' AND";
-// }
-if($State != ""){
-    $filterQuery2 = $filterQuery2." dealerbikes.State LIKE '$State' AND";
-    // $filterQuery1 = $filterQuery1." usedbikes.State LIKE '$State' AND";
-}
-if($City != ""){
-    $filterQuery2 = $filterQuery2." dealerbikes.City LIKE '$City' AND";
-    // $filterQuery1 = $filterQuery1." usedbikes.City LIKE '$City' AND";
-}
-if($Prize_Minimum != "" && $Prize_Maximum != ""){
-    $filterQuery2 = $filterQuery2." dealerbikes.Prize IN (SELECT Prize from dealerbikes WHERE Prize BETWEEN $Prize_Minimum AND $Prize_Maximum)";
-    // $filterQuery1 = $filterQuery1." usedbikes.Prize IN (SELECT Prize from usedbikes WHERE Prize BETWEEN $Prize_Minimum AND $Prize_Maximum)";
-}
-/*trim($filterQuery1);
-trim($filterQuery2);*/
-$split = explode(" ", $filterQuery2);
-if($split[count($split)-1] == "AND"){
-    // $filterQuery1 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filterQuery1);
-    $filterQuery2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filterQuery2);
-}
-}
-
-$_SESSION['filterQuery2'] = $filterQuery2;
-
-
-    $_SESSION['Keyword'] = $Keyword;
-    $_SESSION['BikeCategory'] = $BikeCategory;
-    $_SESSION['Brand'] = $Brand;
-    $_SESSION['Model'] = $Model;
-     $_SESSION['State'] = $State;
-    $_SESSION['City'] = $City;
-    $_SESSION['Prize_Minimum'] = $Prize_Minimum;
-    $_SESSION['Prize_Maximum'] = $Prize_Maximum;
-
-    $_SESSION['Keyword'] = $_SESSION['Keyword'];
-    $_SESSION['BikeCategory'] = $_SESSION['BikeCategory'];
-    $_SESSION['Brand'] = $_SESSION['Brand'];
-    $_SESSION['Model'] = $_SESSION['Model'];
-     $_SESSION['State'] = $_SESSION['State'];
-    $_SESSION['City'] = $_SESSION['City'];
-    $_SESSION['Prize_Minimum'] = $_SESSION['Prize_Minimum'];
-    $_SESSION['Prize_Maximum'] = $_SESSION['Prize_Maximum'];
 
 
 $limit = 10; 
@@ -276,7 +146,7 @@ $_SESSION['fetchToPagination']=$sql1;
                                         ?>
                                         <div margin:0px auto; margin-top:30px;" >
                                                 <select id="city" class="chosen form-control" style="width:80%;" onchange="recp()">
-                                                <option value="-1"> Select City </option>
+                                                <option value="0"> Select City </option>
                                                 <?php
                                         $query ="SELECT City FROM dealerbikes Group by City  ";
                                         $result= mysql_query($query);
@@ -345,7 +215,7 @@ $_SESSION['fetchToPagination']=$sql1;
                                 </ul>
                             </div>
                             <!--/.list-filter-->
-                            <div class="locations-list  list-filter">
+                            <!-- <div class="locations-list  list-filter">
                                 <h5 class="list-title"><strong><a href="#">Condition</a></strong></h5>
                                 <ul class="browse-list list-unstyled long-list">
                                     <li><a href="">New <span class="count"><?php
@@ -359,7 +229,7 @@ $_SESSION['fetchToPagination']=$sql1;
                                     </li>
                                     <li><a href="">None </a></li>
                                 </ul>
-                            </div>
+                            </div> -->
                             <!--/.list-filter-->
                             <div style="clear:both"></div>
                         </div>
@@ -388,9 +258,9 @@ $_SESSION['fetchToPagination']=$sql1;
                                     <span class="badge badge-secondary" style="display:inline-block;">
                                     <?php
 
-                                          $count=mysql_query("SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['count'];
+                                          $result=mysql_query($filterQuery);
+                                           $res=mysql_num_rows($result);
+                                            echo  $res;
                                              ?>
                                                  
                                     </span>
@@ -413,9 +283,9 @@ $_SESSION['fetchToPagination']=$sql1;
                                  <a href="PersonalAds.php" class="nav-link" role="tab">Personal
                                     <span class="badge badge-secondary" style="display:inline-block;">
                              <?php
-                                              $count=mysql_query("SELECT COUNT(*) FROM usedbikes as count Where Status='UnBlock'");
-                                                $res=mysql_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
+                                              $result=mysql_query($filterQuery1);
+                                           $res=mysql_num_rows($result);
+                                            echo  $res;
                                     ?>
                                                  
                                     </span>
@@ -525,10 +395,16 @@ while($row=mysql_fetch_array($rs_result))
 <div>
 
 <div class="item-list">
-    <!-- <div class="cornerRibbons featuredAds" > -->
-        <!--<a href=""> Featured Ads</a>
-    </div> -->
-    <div class="row">
+    <?php
+      if($row['Amount']!=""){
+       
+  ?>
+    <div class="cornerRibbons featuredAds">
+        <a href=""> Dealer Ads</a>
+    </div>
+    <?php
+  }
+    ?>    <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
            <a href="used_bikes_view.php?filename=BusinessAds&usedbikeid=<?php echo $row['UsedBikeId']; ?> &userid=<?php echo $row['UserId']; ?> &brand=<?php echo $row['Brand']; ?> &category=<?php echo $row['BikeCategory']; ?>" role="button">

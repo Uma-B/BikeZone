@@ -31,7 +31,7 @@ $priceMax = $_GET['maxPrice'];
 
 
 
-$filter="select
+$filter1="select
   usedbikes.UsedBikeId as UsedBikeId,
   usedbikes.BikeCategory as BikeCategory,
   usedbikes.UsedBikeImage1 as UsedBikeImage1,
@@ -42,28 +42,49 @@ $filter="select
   usedbikes.UserId as UserId,
   usedbikes.UserName as UserName,
   usedbikes.ContactNumber as ContactNumber,
-  usedbikes.Prize as Prize
+  usedbikes.Prize as Prize,
+  usedbikes.Amount as Amount
 from
-  usedbikes  WHERE Status='UnBlock' and";
+  usedbikes WHERE Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock' AND";
 
-if($City != ""){
-  $filter=$filter. " usedbikes.City LIKE '$City' AND";
-  //$filter=$filter. " dealerbikes.City LIKE '$City' AND";
+
+
+$filter2="select
+  dealerbikes.DealerBikeId as UsedBikeId,
+  dealerbikes.BikeCategory as BikeCategory,
+  dealerbikes.DealerBikeImage1 as UsedBikeImage1,
+  dealerbikes.Brand as Brand,
+  dealerbikes.Model as Model,
+  dealerbikes.KilometreDriven as KilometreDriven,
+  dealerbikes.Location as Location,
+  dealerbikes.DealerId as UserId,
+  dealerbikes.UserName as UserName,
+  dealerbikes.ContactNumber as ContactNumber,
+  dealerbikes.Prize as Prize,
+  dealerbikes.Amount as Amount
+from
+  dealerbikes WHERE Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock' AND";
+
+if($City != "0"){
+  $filter1=$filter1. " usedbikes.City LIKE '$City' AND";
+  $filter2=$filter2. " dealerbikes.City LIKE '$City' AND";
 }
 if($priceMin != "" && $priceMax != ""){
-   // $filter = $filter." dealerbikes.Prize IN (SELECT Prize from dealerbikes WHERE Prize BETWEEN $priceMin AND $priceMax)";
-     $filter = $filter." usedbikes.Prize IN (SELECT Prize from usedbikes WHERE Prize BETWEEN $priceMin AND $priceMax)";
+    $filter2 = $filter2." dealerbikes.Prize IN (SELECT Prize from dealerbikes WHERE Prize BETWEEN $priceMin AND $priceMax)";
+     $filter1 = $filter1." usedbikes.Prize IN (SELECT Prize from usedbikes WHERE Prize BETWEEN $priceMin AND $priceMax)";
 }
 
 
-$split = explode(" ", $filter);
+$split = explode(" ", $filter1);
 if($split[count($split)-1] == "AND"){
-     //$filter = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter);
-    $filter = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter);
+     $filter1 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter1);
+    $filter2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter2);
 }
+
+$filter=$filter1. "UNION ". $filter2;
 
 $limit = 10; 
-$sql = $filter; 
+$sql = $filter1; 
 /*For No Of Rows Selected*/
 $result = $conn->query($sql);
 $rowcount = mysqli_num_rows($result);
@@ -81,8 +102,11 @@ if (isset($_GET["page"])) {
 }  
 
 $start_from = ($page-1) * $limit;
-$_SESSION['fetchToPagination']=$filter;
-$filterQuery=$filter." LIMIT $start_from, $limit";
+$_SESSION['fetchToPagination']=$filter1;
+$_SESSION['bike_sale_all']=$filter;
+$_SESSION['Bike_sale1']=$filter1;
+$_SESSION['Bike_sale2']=$filter2;
+$filterQuery=$filter1." LIMIT $start_from, $limit";
 $_SESSION['fetchToSort']=$filterQuery;
 //$_SESSION['fetchToPagination']=$filterQuery;
 
@@ -98,11 +122,10 @@ $_SESSION['fetchToSort']=$filterQuery;
                                    <a  href="bike_sale_all.php" class= "nav-link" role="tab" >All Ads  
                                     <span class="badge badge-secondary" style="display:inline-block;">
                                     <?php
-                                            $count=mysqli_query($conn,"SELECT (SELECT COUNT(*) FROM usedbikes Where Status='UnBlock') + (SELECT COUNT(*) FROM dealerbikes Where Status='UnBlock') as count");
-                                                $res=mysqli_fetch_array($count);
-                                             echo  $res['count'];
-                                    ?>
-                                                 
+                                            $rs_result = $conn->query($filter); 
+                                            $res=mysqli_num_rows($rs_result);
+                                            echo  $res;
+                                    ?>                                               
                                     </span>
                                     </a>
                                 </li>
@@ -111,9 +134,9 @@ $_SESSION['fetchToSort']=$filterQuery;
                                     <a  href="bike_sale_buisness.php" class= "nav-link" role="tab" >Business Ads 
                                     <span class="badge badge-secondary" style="display:inline-block;">
                                     <?php
-                                            $count=mysqli_query($conn,"SELECT COUNT(*) FROM dealerbikes as count Where Status='UnBlock'");
-                                                $res=mysqli_fetch_array($count);
-                                             echo  $res['COUNT(*)'];
+                                            $rs_result = $conn->query($filter2); 
+                                               $res=mysqli_num_rows($rs_result);
+                                            echo  $res;
                                     ?>
                                                  
                                     </span>
@@ -123,7 +146,8 @@ $_SESSION['fetchToSort']=$filterQuery;
                                  <a href="bike_sale_personal.php" class="nav-link" role="tab">Personal
                                     <span class="badge badge-secondary" style="display:inline-block;">
                              <?php
-                                         $res=mysqli_num_rows($rs_result);
+                                         $rs_result = $conn->query($filter1); 
+                                               $res=mysqli_num_rows($rs_result);
                                             echo  $res;
                                     ?>
                                                  
@@ -151,8 +175,16 @@ $_SESSION['fetchToSort']=$filterQuery;
 
 
 <div class="item-list">
-    <!-- <div class="cornerRibbons featuredAds" id="masterdiv">
-    </div> -->
+   <?php
+      if($row['Amount']!=""){
+       
+  ?>
+    <div class="cornerRibbons featuredAds">
+        <a href=""> Dealer Ads</a>
+    </div>
+    <?php
+  }
+    ?>
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>

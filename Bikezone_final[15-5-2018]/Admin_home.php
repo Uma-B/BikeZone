@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿<?php
+session_start();
+if(isset($_SESSION['email'])!="admin@gmail.com") {
+   header("Location: index.php");
+}
+?><!DOCTYPE html>
 <html lang="en" dir="ltr">
    <head>
       <meta charset="utf-8">
@@ -115,16 +120,15 @@
                                     </div>
                                     <!--/.photobox-->
                                     <div class="col-sm-7 add-desc-box">
-                                       <div class="ads-details">
-                                          <h2 class="add-title"><a href="view_customer.php">
-                                             VIew Customer Profile  </a>   
-                                          </h2>
-                                       </div>
+                                     <h2 class="add-title" style="margin-top: 70px; font-size: 38px;">  <div class="ads-details">
+                                          <a href="view_customer.php"><center>
+                                             View all Customer </center> </a>   
+                                         
+                                       </div> </h2>
                                     </div>
                                     <!--/.add-desc-box-->
                                     <div class="col-md-3 text-right  price-box">
-                                      <!--  <a class="btn btn-danger  btn-sm make-favorite"> <i class="fa fa-certificate"></i> <span>View Profile</span>
-                                       </a> <a class="btn btn-default  btn-sm make-favorite"> <i class="fa fa-heart"></i> <span>Block</span> </a> -->
+                                      
                                     </div>
                                     <!--/.add-desc-box-->
                                  </div>
@@ -139,8 +143,8 @@
                                     <!--/.photobox-->
                                     <div class="col-sm-7 add-desc-box">
                                        <div class="ads-details">
-                                          <h2 class="add-title"><a href="view_dealer.php">
-                                             VIew Dealer Profile  </a>   
+                                          <h2 class="add-title"  style="margin-top: 70px; font-size: 38px;"><center><a href="view_dealer.php">
+                                             View all Dealer </a></center>   
                                           </h2>
                                        </div>
                                     </div>
@@ -197,9 +201,7 @@
                </div>
             </div>
          </div>
-         <?php
-         include "footer.php";
-         ?>
+         
       </div>
       </div>
       </div>

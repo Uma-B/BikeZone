@@ -210,21 +210,7 @@ $_SESSION['fetchToPagination']=$sql1;
                                 </ul>
                             </div>
                             <!--/.list-filter-->
-                            <div class="locations-list  list-filter">
-                                <h5 class="list-title"><strong><a href="#">Condition</a></strong></h5>
-                                <ul class="browse-list list-unstyled long-list">
-                                    <li><a href="">New <span class="count"><?php
-
-                                            $count=mysql_query("SELECT UserId FROM usedbikes");
-                                                $num_rows=mysql_num_rows($count);
-                                             echo $num_rows+1;
-                                             ?></span></a>
-                                    </li>
-                                    <li><a href="">Used <span class="count">28,705</span></a>
-                                    </li>
-                                    <li><a href="">None </a></li>
-                                </ul>
-                            </div>
+                            
                             <!--/.list-filter-->
                             <div style="clear:both"></div>
                         </div>
@@ -358,9 +344,15 @@ while($row=mysql_fetch_array($rs_result))
 <div>
 
 <div class="item-list">
-    <!-- <div class="cornerRibbons featuredAds"> -->
-        <!--<a href=""> Featured Ads</a> -->
-    <!-- </div> -->
+    <?php
+      if($row['Amount']!=""){
+  ?>
+    <div class="cornerRibbons featuredAds">
+        <a href=""> Dealer Ads</a>
+    </div>
+    <?php
+  }
+    ?>
     <div class="row">
     <div class="col-md-2 no-padding photobox">
         <div class="add-image"><span class="photo-count"><i class="fa fa-camera"></i> 2 </span>
