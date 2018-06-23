@@ -110,7 +110,16 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
             <span class="info-row"> 
                 <span class="add-type business-ads tooltipHere" data-toggle="tooltip" data-placement="right" title="" data-original-title="Business Ads">B </span> 
 
-                <span class="date"><i> </i>KM's Driven (<?php echo $row['KilometreDriven']. ') - <i class="fa fa-map-marker"></i>'.$row['Location']  ?></span> 
+                 <span class="date">
+                    <?php
+                      if($row['KilometreDriven']!="0"){
+                    ?>
+                  <i class="icon-clock"> </i>KM's Driven (
+                  <?php 
+                  echo $row['KilometreDriven']?>) - <?php
+                              }
+                                ?><i class="fa fa-map-marker"></i>
+                  Location : <?php echo $row['Location'] ; ?></span>  
               <br><br> 
               <span class="category">Seller Name : <?php echo $row['UserName']  ?></span>
 

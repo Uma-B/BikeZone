@@ -28,6 +28,9 @@ $priceMax = $_GET['maxPrice'];
 //echo $Category;
 //echo $City;
 
+
+
+
 $filter1="select
 usedbikes.UsedBikeId as UsedBikeId,
 usedbikes.BikeCategory as BikeCategory,
@@ -46,10 +49,9 @@ usedbikes.KilometreDriven as KilometreDriven,
 usedbikes.Stroke as Stroke,
 usedbikes.Location as Location,
 usedbikes.PostalCode as PostalCode,
-dealerbikes.Amount as Amount
+usedbikes.Amount as Amount
 from
-usedbikes WHERE Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock' AND ";
-
+usedbikes WHERE Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock' AND";
 
 $filter2="select dealerbikes.DealerBikeId as UsedBikeId, dealerbikes.BikeCategory as BikeCategory, dealerbikes.DealerBikeImage1 as UsedBikeImage1, dealerbikes.Brand as Brand, dealerbikes.Model as Model, dealerbikes.DealerId as UserId, dealerbikes.Username as UserName, dealerbikes.ContactNumber as ContactNumber, dealerbikes.Prize as Prize, dealerbikes.Year as Year, dealerbikes.Transmission as Transmission, dealerbikes.FuelType as FuelType, dealerbikes.EngineSize as EngineSize, dealerbikes.KilometreDriven as KilometreDriven, dealerbikes.Stroke as Stroke, dealerbikes.Location as Location, dealerbikes.PostalCode as PostalCode, dealerbikes.Amount as Amount from dealerbikes WHERE Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock' AND";
 
@@ -63,13 +65,12 @@ if($priceMin != "" && $priceMax != ""){
 }
 
 
-$split = explode(" ", $filter2);
+$split = explode(" ", $filter1);
 if($split[count($split)-1] == "AND"){
-     $filter2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter2);
-    $filter1 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter1);
+     $filter1 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter1);
+    $filter2 = preg_replace('/\W\w+\s*(\W*)$/', '$1', $filter2);
 }
-
-$filter=$filter1. " UNION ". $filter2;
+$filter= $filter1. "UNION " .$filter2;
 
 $limit = 10; 
 $sql = $filter2; 
@@ -100,6 +101,7 @@ $_SESSION['fetchToSort']=$filterQuery;
 
 /*  $filterQuery= $sub." LIMIT $start_from, $limit ";*/
 ?>
+ 
  <div id="masterdiv">
  <div class="category-list" id="masterdiv">
 <div class="tab-box  oldList">
@@ -109,24 +111,24 @@ $_SESSION['fetchToSort']=$filterQuery;
                                 <li class=" nav-item">
                                     <a  href="Advance_Search_Find.php" class= "nav-link" role="tab">All Ads <span class="badge badge-secondary" style="display:inline-block;">
                                                           <?php
-                                                 $result = $conn->query($filter); 
-                                            $res=mysqli_num_rows($result);
-                                            echo $res;
-                                             ?>
+                                                $result = $conn->query($filter); 
+                                               $res=mysqli_num_rows($result);
+                                            echo  $res; ?>
                                                       </span></a>
                                 </li>
-                                <li class="active nav-item"><a  href="Advance_Business_Search.php" class= "nav-link" role="tab">Business Ads
+                                <li class="active  nav-item"><a  href="Advance_Business_Search.php" class= "nav-link" role="tab">Business Ads
                                     <span class="badge badge-secondary" style="display:inline-block;">
                                       <?php 
-                                            $result = $conn->query($sql); 
-                                            $res=mysqli_num_rows($result);
-                                            echo $res;
+                                        $result = $conn->query($filter2); 
+                                               $res=mysqli_num_rows($result);
+                                            echo  $res;
+                                               
                                       ?></span></a></li>
                                 <li class="nav-item"><a  href="Advance_Personal_Search.php" class= "nav-link" role="tab">Personal
                                     <span class="badge badge-secondary" style="display:inline-block;"><?php
-                                     $result = $conn->query($filter1); 
-                                            $res=mysqli_num_rows($result);
-                                            echo $res;
+                                      $result = $conn->query($filter1); 
+                                               $res=mysqli_num_rows($result);
+                                            echo  $res;
                                     ?></span></a></li>
                             </ul>
  <div class="tab-filter">
@@ -149,7 +151,7 @@ $_SESSION['fetchToSort']=$filterQuery;
 <br>
 <div>
 <div class="item-list">
-     <?php
+    <?php
       if($row['Amount']!=""){
        
   ?>
@@ -179,7 +181,16 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
                 <?php echo $row['Brand'].'-'.$row['Model'] ;  ?></a></h5>
             <span class="info-row"> 
                 <span class="add-type business-ads tooltipHere" data-toggle="tooltip" data-placement="right" title="" data-original-title="Business Ads">B </span> 
-                <span class="date"><i> </i>KM's Driven (<?php echo $row['KilometreDriven']. ') - <i class="fa fa-map-marker"></i>'.$row['Location']  ?></span> 
+                 <span class="date">
+                    <?php
+                      if($row['KilometreDriven']!="0"){
+                    ?>
+                  <i class=" icon-clock"> </i>KM's Driven (
+                  <?php 
+                  echo $row['KilometreDriven']?>) - <?php
+                              }
+                                ?><i class="fa fa-map-marker"></i>
+                  Location : <?php echo $row['Location'] ; ?></span>  
               <br><br> 
               <span class="category">Seller Name : <?php echo $row['UserName']  ?></span>
 
@@ -233,10 +244,10 @@ function myFunction() {
 
 <?php if(!empty($total_pages)):for($i=1; $i<=$total_pages; $i++):  
  if($i == 1):?>
-            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_advance_business_search.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
+            <li class="page-item active"  id="<?php echo $i;?>"><a class="page-link" href='pagination_advance_personal_search.php?page=<?php echo $i;?>'><?php echo $i;?></a></li> 
  <?php else:?>
 
- <li class="page-item" id="<?php echo $i;?>"><a href='pagination_advance_business_search.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
+ <li class="page-item" id="<?php echo $i;?>"><a href='pagination_advance_personal_search.php?page=<?php echo $i;?>'><?php echo $i;?></a></li>
 
  <?php endif;?> 
 <?php endfor;endif;?> 
@@ -254,7 +265,7 @@ $('.pagination').pagination({
         onPageClick : function(pageNumber) {
             jQuery('#masterdiv div').hide();
             jQuery("#target-content").html('loading...');
-            jQuery("#target-content").load("pagination_advance_business_search.php?page=" + pageNumber);
+            jQuery("#target-content").load("pagination_advance_personal_search.php?page=" + pageNumber);
         }
     });
 });

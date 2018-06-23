@@ -38,7 +38,7 @@ $filterQuery1 = "select
   usedbikes.Prize as Prize,
   usedbikes.Amount as Amount
 from
-  usedbikes Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock'
+  usedbikes Where Status LIKE 'UnBlock' AND Post_Status LIKE 'UnBlock'
 ";
 
 $filterQuery2 = "select
@@ -85,7 +85,7 @@ if (isset($_GET["page"])) {
 $start_from = ($page-1) * $limit;    
 $sql1 =  $filterQuery;
 $sql2="LIMIT $start_from, $limit";
-  $sql=$sql1." ".$sql2;
+$sql=$sql1." ".$sql2;
 
 $_SESSION['fetchToPagination']=$sql1;
 $_SESSION['fetchToSort']=$sql;  
@@ -466,7 +466,16 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
 
 
 
-                <span class="date"><i> </i>KM's Driven (<?php echo $row['KilometreDriven']. ') - <i class="fa fa-map-marker"></i>'.$row['Location']  ?></span> 
+                 <span class="date">
+                    <?php
+                      if($row['KilometreDriven']!="0"){
+                    ?>
+                  <i class=" icon-clock"> </i>KM's Driven (
+                  <?php 
+                  echo $row['KilometreDriven']?>) - <?php
+                              }
+                                ?><i class="fa fa-map-marker"></i>
+                  Location : <?php echo $row['Location'] ; ?></span> 
               <br><br> 
               <span class="category">Seller Name : <?php echo $row['UserName']  ?></span>
 

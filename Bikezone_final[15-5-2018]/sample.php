@@ -1,85 +1,62 @@
-
-  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<style type="text/css">
-  .btn-file {
-    position: relative;
-    overflow: hidden;
-}
-.btn-file input[type=file] {
-    position: absolute;
-    top: 0;
-    right: 0;
-    min-width: 100%;
-    min-height: 100%;
-    font-size: 100px;
-    text-align: right;
-    filter: alpha(opacity=0);
-    opacity: 0;
-    outline: none;
-    background: white;
-    cursor: inherit;
-    display: block;
-}
-
-#img-upload{
-    width: 100%;
-}
+<head>
+<style>
+  #image{
+    height: 300px;
+    width: 300px;
+  }
+  #image:hover{
+    border:2px solid black;
+  }
 </style>
-<!------ Include the above in your HEAD tag ---------->
+</head>
 <body>
-<div class="container">
-<div class="col-md-6">
-    <div class="form-group">
-        <label>Upload Image</label>
-        <div class="input-group">
-            <span class="input-group-btn">
-                <span class="btn btn-default btn-file">
-                    Browse… <input type="file" id="imgInp">
-                </span>
-            </span>
-            <input type="text" class="form-control" readonly>
-        </div>
-        <img id='img-upload'/>
-    </div>
-</div>
-</div>
+
+<input type="file" id="fileUpload" />
+<img id="image" src="images/bg.jpg"></img>
+<input type="button" value="Upload" onclick="return Upload()" />
 </body>
 <script type="text/javascript">
-  $(document).ready( function() {
-      $(document).on('change', '.btn-file :file', function() {
-    var input = $(this),
-      label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-    input.trigger('fileselect', [label]);
-    });
-
-    $('.btn-file :file').on('fileselect', function(event, label) {
-        
-        var input = $(this).parents('.input-group').find(':text'),
-            log = label;
-        
-        if( input.length ) {
-            input.val(log);
-        } else {
-            if( log ) alert(log);
-        }
-      
-    });
-    function readURL(input) {
-        if (input.files && input.files[0]) {
+function Upload() {
+    //Get reference of FileUpload.
+    var fileUpload = document.getElementById("fileUpload");
+ 
+    //Check whether the file is valid Image.
+    var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.jpg|.png|.gif)$");
+    if (regex.test(fileUpload.value.toLowerCase())) {
+ 
+        //Check whether HTML5 is supported.
+        if (typeof (fileUpload.files) != "undefined") {
+            //Initiate the FileReader object.
             var reader = new FileReader();
-            
+            //Read the contents of Image File.
+            reader.readAsDataURL(fileUpload.files[0]);
             reader.onload = function (e) {
-                $('#img-upload').attr('src', e.target.result);
+                //Initiate the JavaScript Image object.
+                var image = new Image();
+ 
+                //Set the Base64 string return from FileReader as source.
+                image.src = e.target.result;
+                       
+                //Validate the File Height and Width.
+                image.onload = function () {
+                    var height = this.height;
+                    var width = this.width;
+                    if (height===401 && width ===401) {
+                        alert("Height and Width must not exceed 100px.");
+                        return false;
+                    }
+                    alert("Uploaded image has valid Height and Width.");
+                    return true;
+                };
+ 
             }
-            
-            reader.readAsDataURL(input.files[0]);
+        } else {
+            alert("This browser does not support HTML5.");
+            return false;
         }
+    } else {
+        alert("Please select a valid Image file.");
+        return false;
     }
-
-    $("#imgInp").change(function(){
-        readURL(this);
-    });   
-  });
+}
 </script>

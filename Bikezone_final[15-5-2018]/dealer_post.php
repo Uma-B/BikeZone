@@ -31,7 +31,7 @@ session_start();
        $PostalCode=$_POST['PostalCode'];
        $Date=$_POST['Date'];
 
-       $sql="INSERT INTO dealerbikes(DealerId,BikeCategory,Brand, Model, Year, Transmission, FuelType, Stroke, EngineSize, Description, Details,Amount,WebSiteLink,KilometreDriven,DealerBikeImage1,DealerBikeImage2,DealerBikeImage3,DealerBikeImage4,Prize, UserName, ContactNumber, State, City, Location, PostalCode, Status, Date ) values ($DealerId,'$BikeCategory','$Brand','$Model','$Year','$Transmission','$FuelType','$Stroke','$EngineSize','$Description','$Details','$Prize','$WebSiteLink',$KilometreDriven,'{$DealerBikeImage1}','{$DealerBikeImage2}','{$DealerBikeImage3}','{$DealerBikeImage4}',$Amount ,'$UserName','$ContactNumber','$State','$City','$Location','$PostalCode','UnBlock','$Date')";
+       $sql="INSERT INTO dealerbikes(DealerId,BikeCategory,Brand, Model, Year, Transmission, FuelType, Stroke, EngineSize, Description, Details,Amount,WebSiteLink,KilometreDriven,DealerBikeImage1,DealerBikeImage2,DealerBikeImage3,DealerBikeImage4,Prize, UserName, ContactNumber, State, City, Location, PostalCode, Status, Date ) values ($DealerId,'$BikeCategory','$Brand','$Model','$Year','$Transmission','$FuelType','$Stroke','$EngineSize','$Description','$Details','$Prize','$WebSiteLink','$KilometreDriven','{$DealerBikeImage1}','{$DealerBikeImage2}','{$DealerBikeImage3}','{$DealerBikeImage4}',$Amount ,'$UserName','$ContactNumber','$State','$City','$Location','$PostalCode','UnBlock','$Date')";
        $insert=mysqli_query($link, $sql);
    
        if($insert){
@@ -108,10 +108,24 @@ session_start();
 
 </head>
 <body>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#category-group").change(function () {
+            if ($(this).val() == "Used Bikes") {
+                $("#km").show ();
+                $("#Text1").show();
+            } else {
+                $("#Text1").hide();
+                $("#km").hide();
+            }
+        });
+    });
+</script>
  <div id="wrapper">
 
          <?php
-          include "header.php";
+          //include "header.php";
          ?>
     <!-- /.header -->
     <body>
@@ -178,15 +192,15 @@ session_start();
                                     <div class="form-group row">
                                         <label  class="col-sm-3 col-form-label"> Year</label>
                                         <div class="col-sm-8">
-                                            <input type="text" name="Year" class="form-control" id="Text1" placeholder="Year">
+                                            <input type="text" name="Year" class="form-control" id="Text" placeholder="Year">
                                             
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label  class="col-sm-3 col-form-label"> Kilometre driven</label>
+                                        <label  class="col-sm-3 col-form-label" id="km"> Kilometre driven</label>
                                         <div class="col-sm-8">
                                             <input type="text" name="KilometreDriven" class="form-control" id="Text1" placeholder="Kilometre Driven">
-                                            
+                                           
                                         </div>
                                     </div>
                                      <div class="form-group row">
@@ -314,19 +328,19 @@ session_start();
                                         <label class="col-sm-3 col-form-label" for="textarea">Picture</label>
                                         <div class="col-lg-8">
                                             <div class="mb10">
-                                                <input class="file" data-preview-file-type="text" name="image" id="image" accept="image/JPEG" type="file">
+                                                <input class="form-control" data-preview-file-type="text" name="image" id="image" accept="image/JPEG" type="file">
                                                 ADS_1 in view page (pixel 400*400)
                                             </div>
                                             <div class="mb10">
-                                                <input class="file" data-preview-file-type="text" name="image2" id="image2" accept="image/JPEG" type="file">
+                                                <input class="form-control" data-preview-file-type="text" name="image2" id="image2" accept="image/JPEG" type="file">
                                                 ADS_2 in view page (pixel 400*400)
                                             </div>
                                             <div class="mb10">
-                                                <input class="file" data-preview-file-type="text" name="image3" id="image3" accept="image/JPEG" type="file">
+                                                <input class="form-control" data-preview-file-type="text" name="image3" id="image3" accept="image/JPEG" type="file">
                                                 ADS_3 in view page (pixel 400*400)
                                             </div>
                                             <div class="mb10">
-                                                <input class="file" data-preview-file-type="text" name="image4"  id="image4" accept="image/JPEG" type="file">
+                                                <input class="form-control" data-preview-file-type="text" name="image4"  id="image4" accept="image/JPEG" type="file">
                                                 ADS_4 in view page (pixel 400*400)
                                             </div>
                                            
@@ -706,8 +720,8 @@ include 'footer.php';
 </script></div>
 <script type="text/javascript">
      function validateForm() {
-          var x = document.forms['form1']['BikeCategory'].value;
-    if (x == "1") {
+          var a = document.forms['form1']['BikeCategory'].value;
+    if (a == "1") {
         alert("Bike category must be select out");
         document.form1.BikeCategory.focus();
         return false;
@@ -730,8 +744,9 @@ include 'footer.php';
         document.form1.Year.focus();
         return false;
     } 
+
     var x = document.forms["form1"]["KilometreDriven"].value;
-    if (x == "") {
+    if (x == "" && a=="Used Bikes") {
         alert("Kilometre driven must be filled out");
         document.form1.KilometreDriven.focus();
         return false;
