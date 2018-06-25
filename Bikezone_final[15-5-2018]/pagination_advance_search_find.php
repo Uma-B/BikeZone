@@ -138,7 +138,7 @@ echo '<img class="thumbnail no-margin" alt="no img is found" src="data:image/jpe
 
 
 
- <span class="date">
+              <span class="date">
                     <?php
                       if($row['KilometreDriven']!="0"){
                     ?>

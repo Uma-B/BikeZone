@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 
 include "db_connection.php";
@@ -80,7 +81,7 @@ $filterQuery = $filterQuery1." UNION ".$filterQuery2;
     $_SESSION['service_search_personal'] = $filterQuery1;  
 
 $limit = 10; 
-$sql = $filterQuery; 
+echo $sql = $filterQuery; 
 /*For No Of Rows Selected*/
 $result=mysql_query($sql);
 $rowcount = mysql_num_rows($result);

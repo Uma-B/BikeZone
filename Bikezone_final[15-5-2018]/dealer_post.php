@@ -73,8 +73,6 @@ session_start();
 
     <!-- bxSlider CSS file -->
     <link href="assets/plugins/bxslider/jquery.bxslider.css" rel="stylesheet"/>
-
-
     <!-- Just for debugging purposes. -->
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -103,9 +101,6 @@ session_start();
 
     </script>
     <script src="assets/js/pace.min.js"></script>
-
-
-
 </head>
 <body>
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
@@ -145,7 +140,7 @@ session_start();
                                         $link=mysqli_connect("localhost","root","","bikezone");
                                         if(isset($_SESSION['usr_id'])) {
                                             $UserId=$_SESSION['usr_id'];
-                                                                  }
+                                          }
                                         $show=mysqli_query($link, "SELECT * FROM dealerregistration WHERE DealerId='$UserId'");
                                         $res=mysqli_fetch_array($show);
                                         
@@ -329,18 +324,22 @@ session_start();
                                         <div class="col-lg-8">
                                             <div class="mb10">
                                                 <input class="form-control" data-preview-file-type="text" name="image" id="image" accept="image/JPEG" type="file">
+                                                <div id='result'></div>
                                                 ADS_1 in view page (pixel 400*400)
                                             </div>
                                             <div class="mb10">
                                                 <input class="form-control" data-preview-file-type="text" name="image2" id="image2" accept="image/JPEG" type="file">
+                                                 <div id='result2'></div>
                                                 ADS_2 in view page (pixel 400*400)
                                             </div>
                                             <div class="mb10">
                                                 <input class="form-control" data-preview-file-type="text" name="image3" id="image3" accept="image/JPEG" type="file">
+                                                <div id='result3'></div>
                                                 ADS_3 in view page (pixel 400*400)
                                             </div>
                                             <div class="mb10">
                                                 <input class="form-control" data-preview-file-type="text" name="image4"  id="image4" accept="image/JPEG" type="file">
+                                                <div id='result4'></div>
                                                 ADS_4 in view page (pixel 400*400)
                                             </div>
                                            
@@ -718,7 +717,126 @@ include 'footer.php';
     $("#input-upload-img4").fileinput();
     $("#input-upload-img5").fileinput();
 </script></div>
-<script type="text/javascript">
+<script>
+    $('#image').change(function() {
+     var img = new Image;
+    var fr = new FileReader;
+     
+        fr.onload = function() {
+            img.addEventListener('load', function() {
+            var height=this.naturalHeight;
+            var width=this.naturalWidth;
+        console.log('My width is: ', height);
+        console.log('My height is: ', this.naturalHeight);
+         if (height != 400 && width != 400) {
+                                alert("Height and Width must be 400X400");
+                                return false;
+                            }
+//I loaded the image and have complete control over all attributes, like width and src, which is the purpose of filereader.
+            $.ajax({url: img.src, async: false, success: function(result){
+                    $("#result").html("READING IMAGE, PLEASE WAIT...")
+                    $("#result").html("<img src='" + img.src + "' />");
+                console.log("Finished reading Image");
+                }});
+            return true;
+         });
+        img.src = fr.result;
+    };
+    
+    fr.readAsDataURL(this.files[0]);
+    
+});
+    //image2
+     $('#image2').change(function() {
+    var img = new Image;
+    var fr = new FileReader;
+     
+        fr.onload = function() {
+            img.addEventListener('load', function() {
+            var height=this.naturalHeight;
+            var width=this.naturalWidth;
+        console.log('My width is: ', height);
+        console.log('My height is: ', this.naturalHeight);
+         if (height != 400 && width != 400) {
+                                alert("Height and Width must be 400X400.");
+                                return false;
+                            }
+//I loaded the image and have complete control over all attributes, like width and src, which is the purpose of filereader.
+            $.ajax({url: img.src, async: false, success: function(result){
+                    $("#result2").html("READING IMAGE, PLEASE WAIT...")
+                    $("#result2").html("<img src='" + img.src + "' />");
+                console.log("Finished reading Image");
+                }});
+            return true;
+         });
+        img.src = fr.result;
+    };
+    
+    fr.readAsDataURL(this.files[0]);
+    
+});
+     //image3
+      $('#image3').change(function() {
+   var img = new Image;
+    var fr = new FileReader;
+     
+        fr.onload = function() {
+            img.addEventListener('load', function() {
+            var height=this.naturalHeight;
+            var width=this.naturalWidth;
+        console.log('My width is: ', height);
+        console.log('My height is: ', this.naturalHeight);
+         if (height != 400 && width != 400) {
+                                alert("Height and Width must be 400X400.");
+                                return false;
+                            }
+//I loaded the image and have complete control over all attributes, like width and src, which is the purpose of filereader.
+            $.ajax({url: img.src, async: false, success: function(result){
+                    $("#result3").html("READING IMAGE, PLEASE WAIT...")
+                    $("#result3").html("<img src='" + img.src + "' />");
+                console.log("Finished reading Image");
+                }});
+            return true;
+         });
+        img.src = fr.result;
+    };
+    
+    fr.readAsDataURL(this.files[0]);
+    
+});
+
+//image4
+ $('#image4').change(function() {
+   var img = new Image;
+    var fr = new FileReader;
+     
+        fr.onload = function() {
+            img.addEventListener('load', function() {
+            var height=this.naturalHeight;
+            var width=this.naturalWidth;
+        console.log('My width is: ', height);
+        console.log('My height is: ', this.naturalHeight);
+         if (height != 400 && width != 400) {
+              alert("Height and Width must be 400X400.");
+              return false;
+          }
+//I loaded the image and have complete control over all attributes, like width and src, which is the purpose of filereader.
+            $.ajax({url: img.src, async: false, success: function(result){
+                    $("#result4").html("READING IMAGE, PLEASE WAIT...")
+                    $("#result4").html("<img src='" + img.src + "' />");
+                console.log("Finished reading Image");
+                }});
+            return true;
+         });
+        img.src = fr.result;
+    };
+    
+    fr.readAsDataURL(this.files[0]);
+    
+});
+
+
+//validations
      function validateForm() {
           var a = document.forms['form1']['BikeCategory'].value;
     if (a == "1") {
@@ -845,9 +963,14 @@ include 'footer.php';
         document.form1.WebSiteLink.focus();
         return false;
     } 
-    var x = document.forms["form1"]["image"].value;
-    if (x == "") {
+    var i = document.forms["form1"]["image"].value;
+    if (i == "") {
         alert("All images must be select out");
+        document.form1.image.focus();
+        return false;
+    } 
+    if (i.height !=400 && i.width!=400) {
+        alert("image must be 400X400");
         document.form1.image.focus();
         return false;
     } 

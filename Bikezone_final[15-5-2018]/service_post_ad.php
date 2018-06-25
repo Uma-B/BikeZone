@@ -5,33 +5,21 @@ session_start();
    if (isset($_POST['BtnSubmit'])=='Submit'){
    
        $DealerId=$_SESSION['usr_id'];
-       $BikeCategory=$_POST['BikeCategory'];
-       $Brand=$_POST['Brand'];
-       $Model=$_POST['Model'];
-       $Year=$_POST['Year'];
-       $Transmission=$_POST['Transmission'];
-       $FuelType=$_POST['FuelType'];
-       $Stroke=$_POST['Stroke'];
-       $EngineSize=$_POST['EngineSize'];
-       $Description=$_POST['Description'];
-       $Details=$_POST['Details'];
-       $Prize=$_POST['Prize'];
-       $WebSiteLink=$_POST['WebSiteLink'];
-       $KilometreDriven=$_POST['KilometreDriven'];
-       $DealerBikeImage1=addslashes(file_get_contents($_FILES['image']['tmp_name'])); 
-       $DealerBikeImage2=addslashes(file_get_contents($_FILES['image2']['tmp_name'])); 
-       $DealerBikeImage3=addslashes(file_get_contents($_FILES['image3']['tmp_name'])); 
-       $DealerBikeImage4=addslashes(file_get_contents($_FILES['image4']['tmp_name'])); 
-       $Amount=$_POST['Amount'];
-       $UserName=$_POST['UserName'];
-       $ContactNumber=$_POST['ContactNumber'];
+       $DealerName=$_SESSION['usr_name'];
+       $MobileNumber=$_POST['MobileNumber'];
+       $Password=$_POST['Password'];
+       $ConfirmPassword=$_POST['ConfirmPassword'];
+       $Email=$_POST['Email'];
        $State=$_POST['State'];
        $City=$_POST['City'];
        $Location=$_POST['Location'];
        $PostalCode=$_POST['PostalCode'];
+       $DealerBikeImage1=addslashes(file_get_contents($_FILES['image']['tmp_name']));
+       $Price=$_POST['Price'];
        $Date=$_POST['Date'];
 
-       $sql="INSERT INTO dealerbikes(DealerId,BikeCategory,Brand, Model, Year, Transmission, FuelType, Stroke, EngineSize, Description, Details,Amount,WebSiteLink,KilometreDriven,DealerBikeImage1,DealerBikeImage2,DealerBikeImage3,DealerBikeImage4,Prize, UserName, ContactNumber, State, City, Location, PostalCode, Status, Date ) values ($DealerId,'$BikeCategory','$Brand','$Model','$Year','$Transmission','$FuelType','$Stroke','$EngineSize','$Description','$Details','$Prize','$WebSiteLink',$KilometreDriven,'{$DealerBikeImage1}','{$DealerBikeImage2}','{$DealerBikeImage3}','{$DealerBikeImage4}',$Amount ,'$UserName','$ContactNumber','$State','$City','$Location','$PostalCode','UnBlock','$Date')";
+       $sql="INSERT INTO bikeservicecenter(DealerId,DealerName,MobileNumber,Email,State, City, Location, PostalCode,Image,Prize,Status, Date) values ($DealerId,'$DealerName','$MobileNumber','$Email','$State','$City','$Location','$PostalCode','{$DealerBikeImage1}','$Price','UnBlock','$Date')";
+       
        $insert=mysqli_query($link, $sql);
    
        if($insert){
@@ -125,6 +113,28 @@ function validateForm() {
         document.form1.ServiceCenter.focus();
         return false;
     }  
+    var a = document.forms["form1"]["Password"].value;
+    if (a == "") {
+        alert("Password must be filled out");
+        document.form1.Password.focus();
+        return false;
+    }
+    if (a.length<8) {
+        alert("Password should not be less than 8 characters");
+        document.form1.Password.focus();
+        return false;
+    }   
+    var b = document.forms["form1"]["ConfirmPassword"].value;
+    if (b == "") {
+        alert("Confirm Password must be filled out");
+        document.form1.ConfirmPassword.focus();
+        return false;
+    } 
+    if (a!==b) {
+        alert("Password mismatch");
+        document.form1.ConfirmPassword.focus();
+        return false;
+    } 
     
     var c = document.forms["form1"]["MobileNumber"].value;
     if (c == "") {
@@ -137,7 +147,16 @@ function validateForm() {
         document.form1.MobileNumber.focus();
         return false;
     } 
+    if (c.length>20) {
+        alert("Phone number is invalid");
+        document.form1.MobileNumber.focus();
+        return false;
+    } 
     var x = document.forms["form1"]["Email"].value;
+    if(x==""){
+        alert("Email Id must be filled out");
+        return false;
+    }
      var atpos = x.indexOf("@");
     var dotpos = x.lastIndexOf(".");
     if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length) {
@@ -175,33 +194,13 @@ function validateForm() {
         document.form1.image.focus();
         return false;
     } 
-    var a = document.forms["form1"]["Password"].value;
-    if (a == "") {
-        alert("Password must be filled out");
-        document.form1.Password.focus();
-        return false;
-    }
-    if (a.length<8) {
-        alert("Password should not be less than 8 characters");
-        document.form1.Password.focus();
-        return false;
-    }   
-    var b = document.forms["form1"]["ConfirmPassword"].value;
-    if (b == "") {
-        alert("Confirm Password must be filled out");
-        document.form1.ConfirmPassword.focus();
-        return false;
-    } 
-    if (a!==b) {
-        alert("Password mismatch");
-        document.form1.ConfirmPassword.focus();
-        return false;
-    } 
-    var x = document.forms["form1"]["Amount"].value;
-    if (x == "") {
-        alert("Price must be filled out");
-        return false;
-    } 
+    
+    // var x = document.forms["form1"]["Price"].value;
+    // if (x == "") {
+    //     alert("Price must be filled out");
+    //     document.form1.Price.focus();
+    //     return false;
+    // } 
     return true;
   }
       </script>
@@ -211,7 +210,7 @@ function validateForm() {
  <div id="wrapper">
 
          <?php
-          include "header.php";
+          //include "header.php";
          ?>
     <!-- /.header -->
     <body>
@@ -245,7 +244,27 @@ function validateForm() {
                                             
                                         </div>
                                     </div>
-                                   
+                                   <div class="form-group row">
+                                        <label  class="col-sm-3 col-form-label">Password</label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group">
+                                               
+                                                <input type="password" name="Password" class="form-control" aria-label="Price" id="Text12">
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                     <div class="form-group row">
+                                        <label  class="col-sm-3 col-form-label">Confirm Password</label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group">
+                                                
+                                                <input type="password" name="ConfirmPassword" class="form-control" aria-label="Price" id="Text12">
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+
                                       <div class="form-group row">
                                         <label class="col-sm-3 col-form-label">Phone number</label>
                                         <div class="col-sm-8">
@@ -314,7 +333,7 @@ function validateForm() {
                                      <div class="form-group row">
                                         <label  class="col-sm-3 col-form-label">Postal Code</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" name="PostalCode" id="Text7" placeholder="Postal Code" value="">
+                                            <input type="text" class="form-control" name="PostalCode" id="Text7" placeholder="PostalCode" value="">
                                             
                                         </div>
                                     </div>
@@ -323,37 +342,24 @@ function validateForm() {
                                         <label class="col-sm-3 col-form-label" for="textarea">Picture</label>
                                         <div class="col-lg-8">
                                             <div class="mb10">
-                                                <input class="file" data-preview-file-type="text" name="image" id="image" accept="image/JPEG" type="file" id="Text9">
+                                                <input class="form-control" data-preview-file-type="text" name="image" id="image" accept="image/JPEG" type="file" id="Text9">
                                                 ADS_1 in view page (pixel 400*400)
                                             </div>
                                             
                                         </div>
                                     </div>
-                                    <div class="form-group row">
-                                        <label  class="col-sm-3 col-form-label">Password</label>
-                                        <div class="col-sm-8">
-                                            <input type="password" class="form-control" name="Password" id="Text10" placeholder="Password" value="">
-                                            
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label  class="col-sm-3 col-form-label">Confirm Password</label>
-                                        <div class="col-sm-8">
-                                            <input type="password" class="form-control" name="ConfirmPassword" id="Text11" placeholder="Confirm Password" value="">
-                                            
-                                        </div>
-                                    </div>
+                                    
                                     <div class="form-group row">
                                         <label  class="col-sm-3 col-form-label">Price</label>
                                         <div class="col-sm-4">
                                             <div class="input-group">
                                                 <span class="input-group-addon">Rs.</span>
-                                                <input type="text" name="Amount" class="form-control" aria-label="Price" id="Text12">
+                                                <input type="text" name="Price" class="form-control" aria-label="Price" id="Text12">
                                             </div>
                                         </div>
                                         
                                     </div>
-                                    <!-- Date-->
+                                                                         <!-- Date-->
                                  <div class="form-group row">
                                     <div class="col-sm-8">
                                        <input id="textinput-name" style="display: none;" name="Date"
@@ -361,7 +367,7 @@ function validateForm() {
                                     </div>
                                  </div>
 
-                                 <!--   <div class="form-group row">
+                                 <!--   <div class="form-group row">1
                                         <label class="col-sm-3 col-form-label" for="textarea">Picture</label>
                                         <div class="col-lg-8">
                                             <div class="mb10">
