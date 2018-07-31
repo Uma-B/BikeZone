@@ -47,7 +47,7 @@ if(isset($_SESSION['usr_id'])) {
       <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
       <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
       <link rel="shortcut icon" href="assets/ico/favicon.png">
-9      <title>Bikezone.com</title>
+      <title>Bikezone.com</title>
       <!-- Bootstrap core CSS -->
       <link href="assets/bootstrap/css/bootstrap.css" rel="stylesheet">
       <link href="assets/css/style.css" rel="stylesheet">
@@ -58,7 +58,7 @@ if(isset($_SESSION['usr_id'])) {
       <link href="assets/plugins/bxslider/jquery.bxslider.css" rel="stylesheet"/>
       <!-- session -->
       <script src="js/jquery-1.10.2.js"></script>
-      
+      <script src="js/jquery.js"></script>
 <script src="js/bootstrap.min.js"></script>
       <!-- Just for debugging purposes. -->
       <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
